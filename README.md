@@ -1,0 +1,1 @@
+This is a social platform for users to store and share pictures - it is a portfolio project built with ReactJS.
