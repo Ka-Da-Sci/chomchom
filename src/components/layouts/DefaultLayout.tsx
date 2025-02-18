@@ -1,4 +1,4 @@
-import DefaultNavbar from "../components/navbar";
+import DefaultNavbar from "../ui/DefaultNavbar";
 
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   return (

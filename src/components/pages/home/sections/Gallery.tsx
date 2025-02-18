@@ -1,7 +1,7 @@
 import { Card, CardBody, Image } from "@heroui/react";
 
-import guitar from "../../../assets/images/1728656699454.jpg";
-import loml from "../../../assets/images/loml.jpg";
+import guitar from "../../../../assets/images/1728656699454.jpg";
+import loml from "../../../../assets/images/loml.jpg";
 
 const Gallery = () => {
   const list = [
@@ -39,15 +39,15 @@ const Gallery = () => {
 
 
   return (
-    <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-md:grid-cols-2 md:grid-cols-4">
+    <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
       {list.map((item, index) => (
-        /* eslint-disable no-console */
+        /* eslint-disable no-console */        
         <Card
           key={index}
           isPressable
           shadow="sm"
           onPress={() => console.log("item pressed")}
-          className="w-full h-full max-w-[300px] aspect-square "
+          className="w-full h-full max-w-[300px] aspect-square bg-gray-500 "
         >
           <CardBody className="overflow-hidden w-full h-full max-w-full max-h-full p-0 flex items-center justify-center">
             <Image
@@ -64,8 +64,6 @@ const Gallery = () => {
           </CardFooter> */}
         </Card>
       ))}
-
-      {/* <img src={guitar} alt="guitar" /> */}
     </div>
   );
 };

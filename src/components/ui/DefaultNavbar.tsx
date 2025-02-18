@@ -13,8 +13,8 @@ import {
   Divider,
 } from "@heroui/react";
 // import clsx from "clsx";
-import BrandLogo from "./brandlogo";
-import SearchIcon from "./searchicon";
+import BrandLogo from "./BrandLogo";
+import SearchIcon from "./SearchIcon";
 
 
 const DefaultNavbar = () => {
@@ -35,7 +35,7 @@ const DefaultNavbar = () => {
         <NavbarContent justify="center" className="px-4 hidden md:flex gap-3">
           <NavbarItem isActive>
             <Link className="antialised" color="foreground" href="#">
-              Features
+              Chommy
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
@@ -45,7 +45,7 @@ const DefaultNavbar = () => {
               color="foreground"
               href="#"
             >
-              Customers
+              Chommy
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
@@ -55,7 +55,7 @@ const DefaultNavbar = () => {
               color="foreground"
               href="#"
             >
-              Integrations
+              Chommy
             </Link>
           </NavbarItem>
         </NavbarContent>

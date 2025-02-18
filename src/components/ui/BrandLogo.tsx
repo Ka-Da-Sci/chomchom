@@ -1,5 +1,5 @@
 import { Image } from "@heroui/react";
-import xalphabetLogo from "../assets/images/logo-trans.svg";
+import xalphabetLogo from '../../assets/images/logo-trans.svg';
 // import clsx from "clsx";
 
 const BrandLogo = () => {
