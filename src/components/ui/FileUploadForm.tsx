@@ -1,30 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Input, Button } from "@heroui/react";
 
-const FileUploadForm = () => {
+type FileUploadFormProps = {
+    onChangeProp: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    onSubmitProp: (event: React.FormEvent<HTMLFormElement>) => void,
+}
+
+const FileUploadForm = ({ onChangeProp, onSubmitProp }: FileUploadFormProps) => {
   const [action, setAction] = useState<string | null>(null);
+
+useEffect(() => {
+    if (action) {
+        const timer = setTimeout(() => {
+            setAction(null); // Reset the action state to null
+        }, 5000); // 5 seconds in milliseconds
+
+        return () => clearTimeout(timer);
+    }
+}, [action]);
 
   return (
     <Form
       className="w-full max-w-[300px] md:max-w-[400px] lg:max-w-[450px] flex justify-center flex-col gap-4"
       validationBehavior="native"
-      onReset={() => setAction("reset")}
-      onSubmit={(e) => {
-        e.preventDefault();
-        let data = Object.fromEntries(new FormData(e.currentTarget));
-
-        setAction(`submit ${JSON.stringify(data)}`);
-      }}
+      onReset={() => setAction("Done!")}
+      onSubmit={onSubmitProp}
     >   
         <h3 className="text-center font-inter font-light text-base sm:text-2xl md:text-3xl antialiased self-center">Upload Stock Image</h3>
 
       <Input
         className="font-montserrat font-semibold"
         isRequired
-        errorMessage="Please enter a valid title for your file(s)."
+        errorMessage="File name/title must be atleast 3 characters long."
         name="title"
         placeholder="Title"
         type="text"
+        validate={(value) => {
+            if (value.length < 3) {
+              return "Username must be at least 3 characters long";
+            }
+      
+            return value === "admin" ? "Nice try!" : null;
+          }}
+        onChange={onChangeProp}
       />
 
       <Input
@@ -34,7 +52,9 @@ const FileUploadForm = () => {
         name="upload-file"
         placeholder="No file chosen"
         type="file"
+        accept="image/*"
         multiple
+        onChange={onChangeProp}
       />
       <div className="flex justify-between max-sm:flex-wrap w-full gap-2">
         <Button className="self-center w-full" color="primary" type="submit">
@@ -44,10 +64,10 @@ const FileUploadForm = () => {
           Reset Changes
         </Button>
       </div>
-      {action && (
-        <div className="text-small text-default-500">
-          Action: <code>{action}</code>
-        </div>
+        {action && (
+          <div id="reset-message" className="text-small text-default-500">
+            <code>{action}</code>
+          </div>
       )}
     </Form>
   );
