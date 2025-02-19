@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
 
@@ -7,30 +7,55 @@ type FileUploadFormProps = {
   onSubmitProp: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
+const initialstate =  {
+    formAction: null,
+    filePath: null
+};
+
+interface State {
+    formAction: string | null;
+    filePath: string | null;
+}
+
+interface Action {
+    type: string;
+    payload: string | null;
+}
+
+const reducer = (state: State, action: Action): State => {
+    switch (action.type) {
+        case "setFormAction":
+            return { ...state, formAction: action.payload };
+        case "setFilePath":
+            return { ...state, filePath: action.payload };
+        default:
+            return state;
+    }
+};
+
 const FileUploadForm = ({
   onChangeProp,
   onSubmitProp,
 }: FileUploadFormProps) => {
-  const [action, setAction] = useState<string | null>(null);
-  const [filePath, setFilePath] = useState<string | null>(null);
+  const [state, dispatch] = useReducer(reducer, initialstate);
 
   const newUploadFilePath = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files
       ? URL.createObjectURL(event.target.files[0])
       : null;
-    setFilePath(file);
+    dispatch({type: "setFilePath", payload: file})
   };
 
   useEffect(() => {
-    if (action) {
+    if (state.formAction) {
       const timer = setTimeout(() => {
-        setAction(null); // Reset the action state to null
-        setFilePath(null);
-      }); // 5 seconds in milliseconds
+        dispatch({type: "setFilePath", payload: null})
+        dispatch({type: "setFormAction", payload: null})
+      });
 
       return () => clearTimeout(timer);
     }
-  }, [action]);
+  }, [state.formAction]);
 
   const Preview = ({ filePath }: { filePath: string }) => {
     return (
@@ -51,11 +76,11 @@ const FileUploadForm = ({
     <div className="flex flex-col items-center justify-center gap-4">
       <h3 className="text-center font-inter font-light text-base sm:text-2xl md:text-3xl antialiased self-center">Upload Stock Image</h3>
       <div className="flex flex-wrap items-center justify-center gap-4 w-full">
-        {filePath && <Preview filePath={filePath} />}
+        {state.filePath && <Preview filePath={state.filePath} />}
         <Form
           className="w-auto max-w-[300px] md:max-w-[400px] lg:max-w-[450px] flex justify-center flex-col gap-4"
           validationBehavior="native"
-          onReset={() => setAction("Done!")}
+          onReset={() => dispatch({type: "setFormAction", payload: "Done"})        }
           onSubmit={onSubmitProp}
         >
           <Input
@@ -101,11 +126,6 @@ const FileUploadForm = ({
               Reset Changes
             </Button>
           </div>
-          {/* {action && (
-            <div id="reset-message" className="text-small text-default-500">
-              <code>{action}</code>
-            </div>
-          )} */}
         </Form>
       </div>
     </div>

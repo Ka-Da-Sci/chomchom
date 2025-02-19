@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import DefaultLayout from "@/components/layouts/DefaultLayout";
 import Gallery from "./sections/Gallery";
 import Upload from "./sections/Upload";
@@ -38,20 +38,42 @@ const photosGal = [
     },
   ];
 
+  const initialState = {
+    input: {title: null, file: null, path:null},
+    photoItems: photosGal,
+  };
+  type State = {
+    input: { title: string | null; file: File | null; path: string | null };
+    photoItems: { title: string; path: string; file: File | null }[];
+  }
+
+  type Action = {
+    type: string;
+    payload: any;
+  }
+
+  const reducer = (state: State, action: Action): State => {
+    switch(action.type){
+        case "setInput":
+            return {...state, input: {...action.payload}};
+        case "setPhotoItems":
+            return { ...state, photoItems: [...state.photoItems, action.payload ] };
+        default:
+            return state;
+    }
+  }
+
 
 const HomePage = () => {
-    // const [action, setAction] = useState<string | null>(null);
-    const [input, setInput] = useState<{ title: string | null; file: File | null; path: string | null }>({title: null, file: null, path:null});
-    const [photoItems, setPhotoItems] = useState<{ title: string; path: string; file: File | null }[]>(photosGal);
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput({title: event.target.value, file: event.target.files ? event.target.files[0] : null, path: event.target.files ? URL.createObjectURL(event.target.files[0]) : null});
+        dispatch({type: "setInput", payload: {title: event.target.value, file: event.target.files ? event.target.files[0] : null, path: event.target.files ? URL.createObjectURL(event.target.files[0]) : null}})
     };
     const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        /* eslint-disable no-console */        
-        if (input.title && input.file && input.path) {
-            setPhotoItems([...photoItems, { title: input.title, file: input.file, path: input.path }]);
-            console.log(photoItems);
+        if (state.input.title && state.input.file && state.input.path) {
+            dispatch({type: "setPhotoItems", payload: { title: state.input.title, file: state.input.file, path: state.input.path }})
 
             // Clear the form inputs
             const form = event.target as HTMLFormElement;
@@ -67,7 +89,7 @@ const HomePage = () => {
             <section>
                 <div className="w-full max-w-full h-full flex flex-col gap-4 items-center py-8 sm:py-20">
                     <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold font-montserrat antialiased">Gallery</h1>
-                    <Gallery fileLog={photoItems} />
+                    <Gallery fileLog={state.photoItems} />
                 </div>                
             </section>
         </DefaultLayout>
