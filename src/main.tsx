@@ -5,13 +5,16 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import { Provider } from "./config/provider.tsx";
 import "@/styles/globals.css";
+import ContextProvider from "./config/context.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <ContextProvider>
+      <BrowserRouter>
+        <Provider>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ContextProvider>
   </React.StrictMode>,
 );
