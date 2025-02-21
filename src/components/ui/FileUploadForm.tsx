@@ -1,7 +1,10 @@
-import { useEffect, useReducer, useContext } from "react";
+import { useEffect, useReducer, useContext, useRef } from "react";
 import { miscContext } from "@/config/context";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
+import FireStore from "@/handlers/firestore";
+
+const { writeDoc } = FireStore;
 
 const initialstate = {
   formAction: null,
@@ -32,6 +35,8 @@ const reducer = (state: State, action: Action): State => {
 const FileUploadForm = () => {
   const [state, dispatch] = useReducer(reducer, initialstate);
   const context = useContext(miscContext);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
@@ -39,19 +44,23 @@ const FileUploadForm = () => {
   const { state: contextState, dispatch: contextDispatch } = context;
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     contextDispatch({
       type: "setInput",
       payload: {
-        title: event.target.value,
-        file: event.target.files ? event.target.files[0] : null,
-        path: event.target.files
-          ? URL.createObjectURL(event.target.files[0])
+        title: titleRef.current ? titleRef.current.value : null,
+        file: fileRef.current && fileRef.current.files ? fileRef.current.files[0] : null,
+        path: fileRef.current && fileRef.current.files
+          ? URL.createObjectURL(fileRef.current.files[0])
           : null,
       },
     });
   };
+
+  /* eslint-disable no-console */
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    writeDoc(contextState.input).then(console.log)
     if (contextState.input.title && contextState.input.file && contextState.input.path) {
       contextDispatch({
         type: "setPhotoItems",
@@ -65,6 +74,8 @@ const FileUploadForm = () => {
       // Clear the form inputs
       const form = event.target as HTMLFormElement;
       form.reset();
+
+      // dispatch({ type: "setFormAction", payload: "Done" })
     }
   };
 
@@ -123,6 +134,7 @@ const FileUploadForm = () => {
             name="title"
             placeholder="Title"
             type="text"
+            ref={titleRef}
             validate={(value) => {
               if (value.length < 3) {
                 return "Username must be at least 3 characters long";
@@ -140,6 +152,7 @@ const FileUploadForm = () => {
             name="upload-file"
             placeholder="No file chosen"
             type="file"
+            ref={fileRef}
             accept="image/*"
             onChange={(event) => {
               handleOnChange(event);

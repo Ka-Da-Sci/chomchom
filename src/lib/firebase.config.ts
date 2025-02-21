@@ -1,4 +1,7 @@
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -14,15 +17,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-/* eslint-disable no-console */
-const app = () => {
-    if (!firebaseConfig || !firebaseConfig.apiKey) {
-      console.log("Firebase Config:", firebaseConfig);
-        throw new Error('No firebase configuration provided.');
-    } else {
-      console.log('Firebase Initialized');
-    }
-    return initializeApp(firebaseConfig)
-};
-
+// /* eslint-disable no-console */
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const analytics = getAnalytics(app);
 export default app;
