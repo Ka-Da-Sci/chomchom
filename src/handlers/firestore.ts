@@ -1,5 +1,5 @@
 import { db } from "../lib/firebase.config";
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, collection, getDocs } from "firebase/firestore"; 
 
 type WriteDocInputs = {
     title: string | null;
@@ -13,6 +13,25 @@ type WriteDocInputs = {
 
 /* eslint-disable no-console */
 const FireStore = {
+    readDocs: (...args: string[]) => {
+        const [collection_name] = args;
+        let docs: Array<Record<string, any>> = [];
+        const docsRef = collection(db, `${collection_name ? collection_name : 'stocks'}`)
+        return new Promise(
+            async (resolve) => {
+                try {
+                    const querySnapshot = await getDocs(docsRef);
+                    querySnapshot.forEach(doc => {
+                        docs.push({...doc.data()})
+                    });
+                    resolve(docs);
+                } catch(error) {
+                    console.error("Error reading documents:", error)
+                }
+            }
+        )
+    },
+
     writeDoc: (...args: [WriteDocInputs]) => {
         const [inputs] = args;
         return new Promise(async resolve => {

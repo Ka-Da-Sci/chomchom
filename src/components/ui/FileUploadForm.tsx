@@ -50,7 +50,7 @@ const FileUploadForm = () => {
       payload: {
         title: titleRef.current ? titleRef.current.value : null,
         file: fileRef.current && fileRef.current.files ? fileRef.current.files[0] : null,
-        path: fileRef.current && fileRef.current.files
+        path: fileRef.current && fileRef.current.files && fileRef.current.files[0]
           ? URL.createObjectURL(fileRef.current.files[0])
           : null,
       },
@@ -63,7 +63,7 @@ const FileUploadForm = () => {
     writeDoc(contextState.input).then(console.log)
     if (contextState.input.title && contextState.input.file && contextState.input.path) {
       contextDispatch({
-        type: "setPhotoItems",
+        type: "setItems",
         payload: {
           title: contextState.input.title,
           file: contextState.input.file,
@@ -74,8 +74,6 @@ const FileUploadForm = () => {
       // Clear the form inputs
       const form = event.target as HTMLFormElement;
       form.reset();
-
-      // dispatch({ type: "setFormAction", payload: "Done" })
     }
   };
 
