@@ -1,7 +1,6 @@
 import { createContext, useReducer } from "react";
-import FireStore from "../handlers/firestore";
-
-const { readDocs} = FireStore;
+import SupaBaseDataBase from "@/handlers/supabase-database";
+const { readDocs} = SupaBaseDataBase;
 
 type State = {
   input: { title: string | null; file: File | null; path: string | null };

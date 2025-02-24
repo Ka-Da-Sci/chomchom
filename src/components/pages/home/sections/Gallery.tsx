@@ -10,8 +10,8 @@ const Gallery = () => {
   }
   const { state } = context;
 
-  // /* eslint-disable no-console */
-  // console.log(state.items);
+  /* eslint-disable no-console */
+  console.log(state.items);
 
   return (
     <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4">

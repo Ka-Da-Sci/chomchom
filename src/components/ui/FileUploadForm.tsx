@@ -2,9 +2,9 @@ import { useEffect, useReducer, useContext, useRef } from "react";
 import { miscContext } from "@/config/context";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
-import FireStore from "@/handlers/firestore";
+import SupaBaseDataBase from "@/handlers/supabase-database";
 
-const { writeDoc } = FireStore;
+const { writeDoc } = SupaBaseDataBase;
 
 const initialstate = {
   formAction: null,
