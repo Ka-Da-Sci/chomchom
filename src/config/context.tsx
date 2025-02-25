@@ -1,5 +1,5 @@
 import { createContext, useReducer } from "react";
-import SupaBaseDataBase from "@/handlers/supabase-database";
+import SupaBaseDataBase from "@/handlers/supadatabase";
 const { readDocs} = SupaBaseDataBase;
 
 type State = {

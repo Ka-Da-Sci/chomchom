@@ -2,8 +2,8 @@ import { useEffect, useReducer, useContext, useRef } from "react";
 import { miscContext } from "@/config/context";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
-import SupaBaseDataBase from "@/handlers/supabase-database";
-
+import SupaBaseDataBase from "@/handlers/supadatabase";
+import useUppyWithSupabase from "@/hooks/useUppyWithSupabase";
 const { writeDoc } = SupaBaseDataBase;
 
 const initialstate = {
@@ -33,10 +33,12 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const FileUploadForm = () => {
+  const bucketName ="chommie-bucket";
   const [state, dispatch] = useReducer(reducer, initialstate);
   const context = useContext(miscContext);
   const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const uppy = useUppyWithSupabase(bucketName);
 
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
@@ -49,34 +51,104 @@ const FileUploadForm = () => {
       type: "setInput",
       payload: {
         title: titleRef.current ? titleRef.current.value : null,
-        file: fileRef.current && fileRef.current.files ? fileRef.current.files[0] : null,
-        path: fileRef.current && fileRef.current.files && fileRef.current.files[0]
-          ? URL.createObjectURL(fileRef.current.files[0])
-          : null,
+        file:
+          fileRef.current && fileRef.current.files
+            ? fileRef.current.files[0]
+            : null,
+        path:
+          fileRef.current && fileRef.current.files && fileRef.current.files[0]
+            ? URL.createObjectURL(fileRef.current.files[0])
+            : null,
       },
     });
   };
 
   /* eslint-disable no-console */
-  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    writeDoc(contextState.input).then(console.log)
-    if (contextState.input.title && contextState.input.file && contextState.input.path) {
-      contextDispatch({
-        type: "setItems",
-        payload: {
-          title: contextState.input.title,
-          file: contextState.input.file,
-          path: contextState.input.path,
-        },
-      });
+  // const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
 
+  //   if (
+  //     contextState.input.title &&
+  //     contextState.input.file &&
+  //     contextState.input.path
+  //   ) {
+  //     uppy.cancelAll();
+  //     uppy.addFile({
+  //       name: contextState.input.title,
+  //       data: contextState.input.file,
+  //       type: contextState.input.file.type,
+  //     });
+  //     try {
+  //       uppy.upload()
+  //       .then(result => {result?.successful ? Promise.resolve(result) : Promise.reject(result?.failed)
+  //         // The path to the file is available in data.path
+  //         const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}//${contextState.input.title}`;
+  //         return publicUrl;
+  //     })
+  //     .then((publicUrl) => {
+  //       writeDoc({...contextState.input, path: publicUrl}).then(console.log);
+  //       return publicUrl;
+  //     })
+  //     .then(publicUrl => contextDispatch({
+  //       type: "setItems",
+  //       payload: {
+  //         title: contextState.input.title,
+  //         file: contextState.input.file,
+  //         path: publicUrl,
+  //       },})
+  //     )
+  //     } catch (error) {
+  //       Promise.resolve({ failed: [error] })
+  //     }
+
+  //     // Clear the form inputs
+  //     const form = event.target as HTMLFormElement;
+  //     form.reset();
+  //   }
+  // };
+
+  const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  
+    if (contextState.input.title && contextState.input.file && contextState.input.path) {
+      uppy.cancelAll();
+      
+      uppy.addFile({
+        name: contextState.input.title,
+        data: contextState.input.file,
+        type: contextState.input.file.type,
+      });
+  
+      try {
+        const result = await uppy.upload();
+  
+        if (result?.successful?.length === 0) {
+          throw new Error("Upload failed");
+        }
+  
+        const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${contextState.input.title}`;
+  
+        await writeDoc({ ...contextState.input, path: publicUrl });
+        
+        contextDispatch({
+          type: "setItems",
+          payload: {
+            title: contextState.input.title,
+            file: contextState.input.file,
+            path: publicUrl,
+          },
+        });
+  
+      } catch (error) {
+        console.error("Upload failed:", error);
+      }
+  
       // Clear the form inputs
       const form = event.target as HTMLFormElement;
       form.reset();
     }
   };
-
+  
   const newUploadFilePath = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files
       ? URL.createObjectURL(event.target.files[0])
