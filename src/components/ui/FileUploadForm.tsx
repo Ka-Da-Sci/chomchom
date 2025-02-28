@@ -1,10 +1,11 @@
 import { useEffect, useReducer, useContext, useRef } from "react";
-import { miscContext } from "@/config/context";
+import { miscContext } from "@/context/FileManagementContext";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 import useUppyWithSupabase from "@/hooks/useUppyWithSupabase";
 const { writeDoc } = SupaBaseDataBase;
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 const initialstate = {
   formAction: null,
@@ -39,6 +40,7 @@ const FileUploadForm = () => {
   const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const uppy = useUppyWithSupabase(bucketName);
+  const { session } = useAuthContext();
 
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
@@ -200,15 +202,16 @@ const FileUploadForm = () => {
           <Input
             className="font-montserrat font-semibold"
             isRequired
-            errorMessage="File name/title must be atleast 3 characters long."
             name="title"
             placeholder="Title"
             type="text"
             ref={titleRef}
+            disabled={!session}
             validate={(value) => {
               if (value.length < 3) {
-                return "Username must be at least 3 characters long";
+                return "File name/title must be atleast 3 characters long.";
               }
+
 
               return value === "admin" ? "Nice try!" : null;
             }}
@@ -218,27 +221,36 @@ const FileUploadForm = () => {
           <Input
             className="upload-file-input font-montserrat font-semibold text-[#685757]"
             isRequired
-            errorMessage="Please select valid file(s) for upload."
             name="upload-file"
             placeholder="No file chosen"
+            errorMessage={!session ? "You must be logged in!" : "Please select valid file(s) for upload."}
             type="file"
             ref={fileRef}
             accept="image/*"
+            disabled= {!session}
             onChange={(event) => {
               handleOnChange(event);
 
               newUploadFilePath(event);
             }}
           />
+          {!session && (
+          <div className="text-center text-red-500 text-sm">
+            You must be logged in!
+          </div>
+          )}
           <div className="flex justify-between max-sm:flex-wrap w-full gap-2">
-            <Button
-              className="self-center w-full"
+            <div className="relative w-full">
+              <Button
+              className="self-center w-full disabled:bg-default-500"
               color="primary"
               type="submit"
-            >
+              disabled={!session}
+              >
               Save Changes
-            </Button>
-            <Button className="self-center w-full" type="reset" variant="flat">
+              </Button>
+            </div>
+            <Button className="self-center w-full" type="reset" variant="flat" disabled={!session}>
               Reset Changes
             </Button>
           </div>

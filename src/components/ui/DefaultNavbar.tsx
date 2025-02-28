@@ -11,13 +11,23 @@ import {
   DropdownMenu,
   Avatar,
   Divider,
+  Button,
+  DropdownSection,
 } from "@heroui/react";
 // import clsx from "clsx";
 import BrandLogo from "./BrandLogo";
 import SearchIcon from "./SearchIcon";
+import authenticateUser from "@/handlers/supabase-authentication";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import userIcon from '@/assets/images/user-icon.jpeg'
 
+const { signInWithGooglePopup, signOutGoogle } = authenticateUser;
 
+/* eslint-disable no-console */
 const DefaultNavbar = () => {
+  const { session, setSession } = useAuthContext();
+  console.log(session?.user);
+
   return (
     <Navbar maxWidth="full" className="bg-white">
       <NavbarContent className="md:container md:mx-auto">
@@ -86,25 +96,60 @@ const DefaultNavbar = () => {
                 className="transition-transform w-full h-full max-w-8 max-h-8"
                 color="secondary"
                 name="Jason Hughes"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src={
+                  session
+                    ? `${session?.user?.user_metadata.avatar_url}`
+                    : userIcon
+                }
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">zoey@example.com</p>
+              <DropdownItem
+                key="profile"
+                textValue="Profile"
+                className="gap-2"
+              >
+                {!session && (
+                  <Button
+                    className="capitalize w-full"
+                    onPress={async () => {
+                      await signInWithGooglePopup();
+                    }}
+                  >
+                    Sign in
+                  </Button>
+                )}
+                {session && (
+                  <div className="flex flex-col gap-2 h-full items-center font-inter text-default-500 dark:text-default-400">
+                    <p className="capitalize">Signed in as</p>
+                    <p>{session ? session?.user?.user_metadata.name : ""}</p>
+                    <p>{session ? session?.user?.user_metadata.email : ""}</p>
+                  </div>
+                )}
               </DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
-              <DropdownItem key="team_settings">Team Settings</DropdownItem>
-              <DropdownItem key="analytics">Analytics</DropdownItem>
-              <DropdownItem key="system">System</DropdownItem>
-              <DropdownItem key="configurations">Configurations</DropdownItem>
-              <DropdownItem key="help_and_feedback">
-                Help & Feedback
-              </DropdownItem>
-              <DropdownItem key="logout" color="danger">
-                Log Out
-              </DropdownItem>
+              { session && (<DropdownSection className="font-poppins font-bold">
+                <DropdownItem key="divider" >
+                  <Divider key="hrule" />
+                </DropdownItem>
+                <DropdownItem key="settings">Settings</DropdownItem>
+                <DropdownItem key="analytics">Analytics</DropdownItem>
+                <DropdownItem key="help_and_feedback">
+                  Help & Feedback
+                </DropdownItem>
+                <DropdownItem key="signout" color="danger">
+                  <Button
+                    color="danger"
+                    className="capitalize w-full"
+                    onPress={async () => {
+                      await signOutGoogle().then((resolve) =>
+                        setSession(resolve)
+                      );
+                    }}
+                  >
+                    Sign out
+                  </Button>
+                </DropdownItem>
+              </DropdownSection>)}
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>

@@ -1,6 +1,6 @@
 import { Card, CardBody, Image } from "@heroui/react";
 import { useContext } from "react";
-import { miscContext } from "@/config/context";
+import { miscContext } from "@/context/FileManagementContext";
 
 const Gallery = () => {
   
