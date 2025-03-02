@@ -6,6 +6,7 @@ import SupaBaseDataBase from "@/handlers/supadatabase";
 import useUppyWithSupabase from "@/hooks/useUppyWithSupabase";
 const { writeDoc } = SupaBaseDataBase;
 import { useAuthContext } from "@/hooks/useAuthContext";
+import supabase from "@/lib/supabase.config";
 
 const initialstate = {
   formAction: null,
@@ -45,7 +46,7 @@ const FileUploadForm = () => {
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
   }
-  const { state: contextState, dispatch: contextDispatch } = context;
+  const { state: contextState, dispatch: contextDispatch, readDatabaseItems } = context;
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -66,51 +67,13 @@ const FileUploadForm = () => {
   };
 
   /* eslint-disable no-console */
-  // const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   if (
-  //     contextState.input.title &&
-  //     contextState.input.file &&
-  //     contextState.input.path
-  //   ) {
-  //     uppy.cancelAll();
-  //     uppy.addFile({
-  //       name: contextState.input.title,
-  //       data: contextState.input.file,
-  //       type: contextState.input.file.type,
-  //     });
-  //     try {
-  //       uppy.upload()
-  //       .then(result => {result?.successful ? Promise.resolve(result) : Promise.reject(result?.failed)
-  //         // The path to the file is available in data.path
-  //         const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}//${contextState.input.title}`;
-  //         return publicUrl;
-  //     })
-  //     .then((publicUrl) => {
-  //       writeDoc({...contextState.input, path: publicUrl}).then(console.log);
-  //       return publicUrl;
-  //     })
-  //     .then(publicUrl => contextDispatch({
-  //       type: "setItems",
-  //       payload: {
-  //         title: contextState.input.title,
-  //         file: contextState.input.file,
-  //         path: publicUrl,
-  //       },})
-  //     )
-  //     } catch (error) {
-  //       Promise.resolve({ failed: [error] })
-  //     }
-
-  //     // Clear the form inputs
-  //     const form = event.target as HTMLFormElement;
-  //     form.reset();
-  //   }
-  // };
 
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const { user} = (await supabase.auth.getUser()).data;
+    const user_full_name = user?.user_metadata.full_name || "Unknown User";
+    const user_name = user?.email!.split("@")[0] || "unknown";
+    console.log(user_full_name, user_name);
   
     if (contextState.input.title && contextState.input.file && contextState.input.path) {
       uppy.cancelAll();
@@ -119,10 +82,16 @@ const FileUploadForm = () => {
         name: contextState.input.title,
         data: contextState.input.file,
         type: contextState.input.file.type,
+        // user_full_name,
+        // user_name,
+
       });
   
       try {
-        const result = await uppy.upload();
+        const result = await uppy.upload().catch(error => {
+          console.error("Upload error:", error);
+          throw error;
+        });
   
         if (result?.successful?.length === 0) {
           throw new Error("Upload failed");
@@ -130,16 +99,9 @@ const FileUploadForm = () => {
   
         const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${contextState.input.title}`;
   
-        await writeDoc({ ...contextState.input, path: publicUrl });
-        
-        contextDispatch({
-          type: "setItems",
-          payload: {
-            title: contextState.input.title,
-            file: contextState.input.file,
-            path: publicUrl,
-          },
-        });
+        await writeDoc({ ...contextState.input, path: publicUrl, user_fullnames: user_full_name, user_name: user_name });
+
+          context && readDatabaseItems().then(() => console.log(state));
   
       } catch (error) {
         console.error("Upload failed:", error);

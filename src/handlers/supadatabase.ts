@@ -4,11 +4,9 @@ type WriteDocInputs = {
   title: string | null;
   path: string | null;
   file: File | null;
+  user_name: string,
+  user_fullnames: string,
 };
-
-// interface FireStoreType {
-//     writeDoc: (...args: [WriteDocInputs]) => Promise<void>;
-// }
 
 /* eslint-disable no-console */
 const SupaBaseDataBase = {
@@ -38,6 +36,8 @@ const SupaBaseDataBase = {
           title: inputs.title,
           path: inputs.path,
           created_at: new Date().toISOString(),
+          user_fullnames: inputs.user_fullnames,
+          user_name: inputs.user_name
         };
 
         const { data } = await supabase

@@ -120,8 +120,7 @@ const DefaultNavbar = () => {
                   </Button>
                 )}
                 {session && (
-                  <div className="flex flex-col gap-2 h-full items-center font-inter text-default-500 dark:text-default-400">
-                    <p className="capitalize">Signed in as</p>
+                  <div className="antialiased flex flex-col gap-2 h-full items-center font-inter text-default-500 dark:text-default-400">
                     <p>{session ? session?.user?.user_metadata.name : ""}</p>
                     <p>{session ? session?.user?.user_metadata.email : ""}</p>
                   </div>
@@ -131,9 +130,9 @@ const DefaultNavbar = () => {
                 <DropdownItem key="divider" >
                   <Divider key="hrule" />
                 </DropdownItem>
-                <DropdownItem key="settings">Settings</DropdownItem>
-                <DropdownItem key="analytics">Analytics</DropdownItem>
-                <DropdownItem key="help_and_feedback">
+                <DropdownItem className="antialiased" key="settings">Settings</DropdownItem>
+                <DropdownItem className="antialiased" key="analytics">Analytics</DropdownItem>
+                <DropdownItem className="antialiased" key="help_and_feedback">
                   Help & Feedback
                 </DropdownItem>
                 <DropdownItem key="signout" color="danger">
