@@ -31,14 +31,6 @@ const App = () => {
   }, [setSession]);
 
   return (
-    // <div>
-    //   {!supabaseSession ? (
-    //     <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
-    //   ) : (
-    //     <div>Logged in!</div>
-    //     // <Route element={<HomePage />} path={"/"} />
-    //   )}
-    // </div>
     <Routes>
       <Route element={<HomePage />} path={"/"} />
     </Routes>
