@@ -57,7 +57,15 @@ const DefaultNavbar = () => {
               Personal Gallery
             </Link>
           </NavbarItem>)}
-
+          {session && (<NavbarItem isActive>
+            <Link
+              className="antialised"
+              aria-current="page"
+              to={'/'}
+            >
+              Profile
+            </Link>
+          </NavbarItem>)}
         </NavbarContent>
 
         <NavbarContent
