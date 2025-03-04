@@ -3,7 +3,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Input,
   DropdownItem,
   DropdownTrigger,
@@ -20,6 +19,7 @@ import SearchIcon from "./SearchIcon";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import userIcon from '@/assets/images/user-icon.jpeg'
+import { Link } from "react-router-dom";
 
 const { signInWithGooglePopup, signOutGoogle } = authenticateUser;
 
@@ -33,7 +33,7 @@ const DefaultNavbar = () => {
       <NavbarContent className="md:container md:mx-auto">
         <NavbarContent className="w-full overflow-hidden" justify="start">
           <NavbarBrand>
-            <Link className="flex w-full items-center" href="/">
+            <Link className="flex w-full items-center" to="/">
               <BrandLogo />
               <p className="hidden sm:block font-bold text-inherit antialiased">
                 Chommie
@@ -44,26 +44,24 @@ const DefaultNavbar = () => {
 
         <NavbarContent justify="center" className="px-4 hidden md:flex gap-3">
           <NavbarItem isActive>
-            <Link className="antialised" color="foreground" href="#">
-              Chommy
+            <Link className="antialised" to={'/'}>
+              Home
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
             <Link
               className="antialised"
               aria-current="page"
-              color="foreground"
-              href="#"
+              to={'/my-chommie-stocks'}
             >
-              Chommy
+              My Chommies
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
             <Link
               className="antialised"
               aria-current="page"
-              color="foreground"
-              href="#"
+              to={'/'}
             >
               Chommy
             </Link>

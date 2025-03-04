@@ -4,7 +4,7 @@ const { readDocs} = SupaBaseDataBase;
 
 type State = {
   input: { title: string | null; file: File | null; path: string | null };
-  items: { title: string; path: string; file: File | null; user_name: string; user_fullnames: string; created_at: string }[];
+  items: { id: number | string | null; title: string; path: string; file: File | null; user_name: string; user_fullnames: string; created_at: string }[];
 };
 
 type Action = {
@@ -22,7 +22,7 @@ export const miscContext = createContext<MiscContextType | null>(null);
 
 
 const initialState = {
-  input: { title: null, file: null, path: null, user_name: "", user_fullnames: "", created_at: ""},
+  input: { id: null, title: null, file: null, path: null, user_name: "", user_fullnames: "", created_at: ""},
   items: [],
 };
 

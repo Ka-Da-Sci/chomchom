@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./components/pages/home/Index";
+import HomePage from "./components/routes/home/Index";
+import SingleImage from './components/routes/SingleImage';
 import "./styles/globals.css";
 import { useEffect, useContext } from "react";
 import { miscContext } from "./context/FileManagementContext";
@@ -33,6 +34,7 @@ const App = () => {
   return (
     <Routes>
       <Route element={<HomePage />} path={"/"} />
+      <Route element={<SingleImage />} path={"/image/:id"} />
     </Routes>
   );
 };
