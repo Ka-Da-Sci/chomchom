@@ -1,22 +1,24 @@
 import { Card, CardBody, Image, CardFooter, Button} from "@heroui/react";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { miscContext } from "@/context/FileManagementContext";
 
-const Gallery = () => {
-  const context = useContext(miscContext);
-  const navigate = useNavigate();
-  if (!context) {
-    throw new Error("miscContext must be used within a Provider");
-  }
-  const { state: contextState } = context;
+interface Item {
+  id: string | number | null;
+  title: string;
+  path: string;
+  user_fullnames: string;
+  user_name: string;
+  created_at: string;
+}
 
+const DefaultGallery = ({ items }: { items: Item[] }) => {
+
+    const navigate = useNavigate();
   /* eslint-disable no-console */
-  console.log(contextState.items);
+  console.log(items);
 
   return (
     <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-      {contextState.items.map((item, index) => (
+      {items.map((item, index) => (
         <Card
           key={index}
           shadow="sm"
@@ -52,4 +54,4 @@ const Gallery = () => {
   );
 };
 
-export default Gallery;
+export default DefaultGallery;

@@ -1,10 +1,11 @@
-import { Card, CardBody, Image, CardFooter } from "@heroui/react";
+import { Card, CardBody, Image, CardFooter, Button } from "@heroui/react";
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { miscContext } from "@/context/FileManagementContext";
 import DefaultLayout from "../layouts/DefaultLayout";
 
 const SingleImage = () => {
+    const navigate = useNavigate();
   const context = useContext(miscContext);
   const { state } = useLocation();
   if (!context) {
@@ -19,7 +20,8 @@ const SingleImage = () => {
 
   return (
     <DefaultLayout>
-      <div className="container m-auto h-full flex justify-center items-center gap-10 relative">
+      <div className="container m-auto mt-10  h-full flex flex-col justify-center items-center gap-10 relative">
+        <Button onPress={() => navigate(-1)} className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-blue-500" >Back</Button>
         <Card shadow="sm" className="w-full h-max max-w-[300px] sm:max-w-[400px] max-h-[400px] sm:max-h-[500px]">
           <CardBody className="w-full h-max max-w-full p-4 max-h-full items-center justify-normal">
             <Image

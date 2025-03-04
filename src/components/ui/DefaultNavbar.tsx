@@ -48,24 +48,16 @@ const DefaultNavbar = () => {
               Home
             </Link>
           </NavbarItem>
-          <NavbarItem isActive>
+          {session && (<NavbarItem isActive>
             <Link
               className="antialised"
               aria-current="page"
               to={'/my-chommie-stocks'}
             >
-              My Chommies
+              Personal Gallery
             </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link
-              className="antialised"
-              aria-current="page"
-              to={'/'}
-            >
-              Chommy
-            </Link>
-          </NavbarItem>
+          </NavbarItem>)}
+
         </NavbarContent>
 
         <NavbarContent

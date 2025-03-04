@@ -7,11 +7,12 @@ import { miscContext } from "./context/FileManagementContext";
 // import useSupabaseSession from "./hooks/useSupabaseSession";
 import { useAuthContext } from "./hooks/useAuthContext";
 import supabase from "./lib/supabase.config";
+import PrivateGallery from "./components/routes/PrivateGallery";
 
 /* eslint-disable no-console */
 const App = () => {
   const context = useContext(miscContext);
-  const { setSession } = useAuthContext();
+  const { session, setSession } = useAuthContext();
 
   useEffect(() => {
     if (context) {
@@ -35,6 +36,7 @@ const App = () => {
     <Routes>
       <Route element={<HomePage />} path={"/"} />
       <Route element={<SingleImage />} path={"/image/:id"} />
+      {session && (<Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />)}
     </Routes>
   );
 };
