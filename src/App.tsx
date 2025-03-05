@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./components/routes/home/Index";
-import SingleImage from './components/routes/SingleImage';
+import SingleItemGallery from './components/routes/SingleIItemGallery';
 import "./styles/globals.css";
 import { useEffect, useContext } from "react";
 import { miscContext } from "./context/FileManagementContext";
@@ -13,7 +13,7 @@ import NotFound from "./components/routes/NotFound";
 /* eslint-disable no-console */
 const App = () => {
   const context = useContext(miscContext);
-  const { session, setSession } = useAuthContext();
+  const { setSession } = useAuthContext();
 
   useEffect(() => {
     if (context) {
@@ -33,11 +33,12 @@ const App = () => {
     return () => setSession(null);
   }, [setSession]);
 
+  {/* {session && (<Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />)} */}
   return (
     <Routes>
       <Route element={<HomePage />} path={"/"} />
-      <Route element={<SingleImage />} path={"/image"} />
-      {session && (<Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />)}
+      <Route element={<SingleItemGallery />} path={"/image/:id"} />
+      <Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />
       <Route element={<NotFound />} path="*" />
     </Routes>
   );

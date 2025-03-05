@@ -1,5 +1,7 @@
-import { Card, CardBody, Image, CardFooter, Button} from "@heroui/react";
+import { Card, CardBody, Image, CardFooter, Button, Spinner} from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+import { miscContext } from "@/context/FileManagementContext";
+import { useContext, useEffect } from "react";
 
 interface Item {
   id: string | number | null;
@@ -13,11 +15,34 @@ interface Item {
 const DefaultGallery = ({ items }: { items: Item[] }) => {
 
     const navigate = useNavigate();
+  const context = useContext(miscContext);
+  if (!context) {
+    throw new Error("miscContext must be used within a Provider");
+  }
+
+  const { isLoading, setIsLoading, contextLoaded } = context;
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    if (contextLoaded){
+        setIsLoading(false);
+    }
+  }, [contextLoaded])
+
+  // Show loading state while waiting for data (Using HeroUI Spinner)
+  if (isLoading || !contextLoaded) {
+    return (
+        <div className="flex justify-center items-center h-screen">
+          <Spinner size="lg" color="current" />
+        </div>
+    );
+  }
   /* eslint-disable no-console */
   console.log(items);
 
   return (
-    <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+    <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-sm:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
       {items.map((item, index) => (
         <Card
           key={index}
@@ -25,9 +50,9 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
           className="w-full h-full"
           >
           <Card as={Button} onPress={() => {
-            navigate(`/image?image-id=${item.id}`)
+            navigate(`/image/${item.id}`)
           }} isPressable className="overflow-hidden w-full h-full max-w-full max-h-full p-4 rounded-none flex items-center justify-normal">
-            <CardBody className="overflow-hidden w-full h-full max-w-full max-h-full items-center justify-normal">
+            <CardBody className="overflow-hidden p-0 w-full h-full max-w-full max-h-full items-center justify-normal">
               <Image
                 alt={item && item.title ? item.title : "image"}
                 className="object-cover object-right-top w-full h-full max-h-[400px]"

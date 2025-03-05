@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 const { readDocs} = SupaBaseDataBase;
 
@@ -16,6 +16,10 @@ type MiscContextType = {
   state: State;
   dispatch: React.Dispatch<Action>;
   readDatabaseItems: any;
+  contextLoaded: boolean;
+  setContextLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const miscContext = createContext<MiscContextType | null>(null);
@@ -44,12 +48,16 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
+
   const readDatabaseItems = async () => {
     const items = await readDocs('stocks');
     dispatch({ type: "setItemsFromDb", payload: { items } });
+    setContextLoaded(true);
   }
   return (
-    <miscContext.Provider value={{ state, dispatch, readDatabaseItems }}>{children}</miscContext.Provider>
+    <miscContext.Provider value={{ state, dispatch, readDatabaseItems, contextLoaded, setContextLoaded, isLoading, setIsLoading }}>{children}</miscContext.Provider>
   );
 };
 

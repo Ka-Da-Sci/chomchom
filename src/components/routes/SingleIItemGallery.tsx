@@ -1,22 +1,21 @@
 import { Card, CardBody, Image, CardFooter, Button, Spinner } from "@heroui/react";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { miscContext } from "@/context/FileManagementContext";
 import DefaultLayout from "../layouts/DefaultLayout";
 import NotFound from "./NotFound";
 
 // /* eslint-disable no-console */
-const SingleImage = () => {
+const SingleItemGallery = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const itemInViewId = searchParams.get("image-id");
+  const { id: itemInViewId } = useParams();
 
   const context = useContext(miscContext);
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
   }
 
-  const { state: contextState } = context;
+  const { state: contextState, isLoading, setIsLoading, contextLoaded } = context;
 
   const [itemInView, setItemInView] = useState<{
     id: string | number | null;
@@ -28,15 +27,15 @@ const SingleImage = () => {
     created_at: string;
   } | null>(null);
 
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
-  const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
+  // const [isLoading, setIsLoading] = useState(true); // Track loading state
+  // const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
 
-  // Check if context has items (to prevent premature NotFound rendering)
-  useEffect(() => {
-    if (contextState.items.length > 0) {
-      setContextLoaded(true);
-    }
-  }, [contextState.items]);
+  // // Check if context has items (to prevent premature NotFound rendering)
+  // useEffect(() => {
+  //   if (contextState.items.length > 0) {
+  //     setContextLoaded(true);
+  //   }
+  // }, [contextState.items]);
 
   useEffect(() => {
     setIsLoading(true); // Start loading
@@ -53,16 +52,27 @@ const SingleImage = () => {
     }
   }, [contextState.items, itemInViewId, contextLoaded]);
 
-  // Show loading state while waiting for data
+  // Show loading state while waiting for data (Using HeroUI Spinner)
   if (isLoading || !contextLoaded) {
     return (
       <DefaultLayout>
         <div className="flex justify-center items-center h-screen">
-          <Spinner size="lg" color="primary" />
+          <Spinner size="lg" color="current" />
         </div>
       </DefaultLayout>
     );
   }
+
+  //   // Show loading state while waiting for data (Using Tailwind CSS Default Spin Animation)
+  // if (isLoading || !contextLoaded) {
+  //   return (
+  //     <DefaultLayout>
+  //       <div className="flex justify-center items-center h-screen">
+  //         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+  //       </div>
+  //     </DefaultLayout>
+  //   );
+  // }  
   
 
   // If the item isn't found *after* context is loaded, show NotFound
@@ -119,4 +129,4 @@ const SingleImage = () => {
   );
 };
 
-export default SingleImage;
+export default SingleItemGallery;
