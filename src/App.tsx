@@ -36,7 +36,7 @@ const App = () => {
   return (
     <Routes>
       <Route element={<HomePage />} path={"/"} />
-      <Route element={<SingleImage />} path={"/image/:id"} />
+      <Route element={<SingleImage />} path={"/image"} />
       {session && (<Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />)}
       <Route element={<NotFound />} path="*" />
     </Routes>

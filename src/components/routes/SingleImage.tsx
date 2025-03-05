@@ -1,35 +1,92 @@
-import { Card, CardBody, Image, CardFooter, Button } from "@heroui/react";
-import { useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Card, CardBody, Image, CardFooter, Button, Spinner } from "@heroui/react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { miscContext } from "@/context/FileManagementContext";
 import DefaultLayout from "../layouts/DefaultLayout";
+import NotFound from "./NotFound";
 
+// /* eslint-disable no-console */
 const SingleImage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const itemInViewId = searchParams.get("image-id");
+
   const context = useContext(miscContext);
-  const { state } = useLocation();
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
   }
+
   const { state: contextState } = context;
 
-  const itemInView = contextState.items.find((item) => item.id === state.id);
+  const [itemInView, setItemInView] = useState<{
+    id: string | number | null;
+    title: string;
+    path: string;
+    file: File | null;
+    user_name: string;
+    user_fullnames: string;
+    created_at: string;
+  } | null>(null);
 
-  /* eslint-disable no-console */
-  console.log(itemInView);
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
+
+  // Check if context has items (to prevent premature NotFound rendering)
+  useEffect(() => {
+    if (contextState.items.length > 0) {
+      setContextLoaded(true);
+    }
+  }, [contextState.items]);
+
+  useEffect(() => {
+    setIsLoading(true); // Start loading
+
+    if (contextLoaded) {
+      const itemReferenced = itemInViewId
+        ? contextState.items.find(
+            (item) => item.id === parseInt(itemInViewId as string)
+          ) || null
+        : null;
+
+      setItemInView(itemReferenced);
+      setIsLoading(false); // End loading
+    }
+  }, [contextState.items, itemInViewId, contextLoaded]);
+
+  // Show loading state while waiting for data
+  if (isLoading || !contextLoaded) {
+    return (
+      <DefaultLayout>
+        <div className="flex justify-center items-center h-screen">
+          <Spinner size="lg" color="primary" />
+        </div>
+      </DefaultLayout>
+    );
+  }
+  
+
+  // If the item isn't found *after* context is loaded, show NotFound
+  if (itemInView === null) {
+    return <NotFound />;
+  }
 
   return (
     <DefaultLayout>
-      <div className="container m-auto mt-10  h-full flex flex-col justify-center items-center gap-10 relative">
-        <Button onPress={() => navigate(-1)} className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-blue-500" >Back</Button>
-        <Card shadow="sm" className="w-full h-max max-w-[300px] sm:max-w-[400px] max-h-[400px] sm:max-h-[500px]">
+      <div className="container m-auto mt-10 h-full flex flex-col justify-center items-center gap-10 relative">
+        <Button
+          onPress={() => navigate(-1)}
+          className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-blue-500"
+        >
+          Back
+        </Button>
+        <Card
+          shadow="sm"
+          className="w-full h-max max-w-[300px] sm:max-w-[400px] max-h-[400px] sm:max-h-[500px]"
+        >
           <CardBody className="w-full h-max max-w-full p-4 max-h-full items-center justify-normal">
             <Image
-              alt={
-                itemInView && itemInView?.title ? itemInView?.title : "image"
-              }
+              alt={itemInView?.title ?? "image"}
               className="object-cover object-right-top w-full h-full max-h-full"
-
               src={itemInView?.path}
             />
           </CardBody>

@@ -25,7 +25,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
           className="w-full h-full"
           >
           <Card as={Button} onPress={() => {
-            navigate(`/image/${item.id}`, { state: { id: item.id } })
+            navigate(`/image?image-id=${item.id}`)
           }} isPressable className="overflow-hidden w-full h-full max-w-full max-h-full p-4 rounded-none flex items-center justify-normal">
             <CardBody className="overflow-hidden w-full h-full max-w-full max-h-full items-center justify-normal">
               <Image
