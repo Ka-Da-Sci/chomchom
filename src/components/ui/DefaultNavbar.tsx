@@ -19,13 +19,14 @@ import SearchIcon from "./SearchIcon";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import userIcon from '@/assets/images/user-icon.jpeg'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const { signInWithGooglePopup, signOutGoogle } = authenticateUser;
 
 /* eslint-disable no-console */
 const DefaultNavbar = () => {
   const { session, setSession } = useAuthContext();
+  const { pathname } = useLocation();
   console.log(session?.user);
 
   return (
@@ -35,7 +36,7 @@ const DefaultNavbar = () => {
           <NavbarBrand>
             <Link className="flex w-full items-center" to="/">
               <BrandLogo />
-              <p className="hidden sm:block font-bold text-inherit antialiased">
+              <p className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/' ? 'text-primary-500' : ''}`}>
                 Chommie
               </p>
             </Link>
@@ -44,13 +45,13 @@ const DefaultNavbar = () => {
 
         <NavbarContent justify="center" className="px-4 hidden md:flex gap-3">
           <NavbarItem isActive>
-            <Link className="antialised" to={'/'}>
+            <Link className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/' ? 'text-primary-500' : ''}`} to={'/'}>
               Home
             </Link>
           </NavbarItem>
           {session && (<NavbarItem isActive>
             <Link
-              className="antialised"
+              className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/my-chommie-stocks' ? 'text-primary-500' : ''}`}
               aria-current="page"
               to={'/my-chommie-stocks'}
             >
@@ -59,9 +60,9 @@ const DefaultNavbar = () => {
           </NavbarItem>)}
           {session && (<NavbarItem isActive>
             <Link
-              className="antialised"
+              className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/profile' ? 'text-primary-500' : ''}`}
               aria-current="page"
-              to={'/'}
+              to={'/profile'}
             >
               Profile
             </Link>
@@ -125,7 +126,7 @@ const DefaultNavbar = () => {
                 )}
               </DropdownItem>
               { session && (<DropdownSection className="font-poppins font-bold">
-                <DropdownItem key="divider" >
+                <DropdownItem key="divider" textValue="divider" >
                   <Divider key="hrule" />
                 </DropdownItem>
                 <DropdownItem className="antialiased" key="settings">Settings</DropdownItem>

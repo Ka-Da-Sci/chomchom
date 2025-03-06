@@ -9,6 +9,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import supabase from "./lib/supabase.config";
 import PrivateGallery from "./components/routes/PrivateGallery";
 import NotFound from "./components/routes/NotFound";
+import Profile from "./components/routes/Profile";
 
 /* eslint-disable no-console */
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
       <Route element={<HomePage />} path={"/"} />
       <Route element={<SingleItemGallery />} path={"/image/:id"} />
       <Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />
+      <Route element={<Profile />} path="/profile"/>
       <Route element={<NotFound />} path="*" />
     </Routes>
   );
