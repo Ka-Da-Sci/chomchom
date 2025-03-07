@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useContext, useRef } from "react";
+import { useEffect, useReducer, useContext, useRef, useState } from "react";
 import { miscContext } from "@/context/FileManagementContext";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
@@ -36,6 +36,7 @@ const reducer = (state: State, action: Action): State => {
 
 const FileUploadForm = () => {
   const bucketName ="chommie-bucket";
+  const [isUploading, setIsUploading] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialstate);
   const context = useContext(miscContext);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -70,6 +71,7 @@ const FileUploadForm = () => {
 
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsUploading(true);
     const { user} = (await supabase.auth.getUser()).data;
     const user_full_name = user?.user_metadata.full_name || "Unknown User";
     const user_name = user?.email!.split("@")[0] || "unknown";
@@ -106,7 +108,8 @@ const FileUploadForm = () => {
       } catch (error) {
         console.error("Upload failed:", error);
       }
-  
+      
+      setIsUploading(false);
       // Clear the form inputs
       const form = event.target as HTMLFormElement;
       form.reset();
@@ -204,12 +207,13 @@ const FileUploadForm = () => {
           <div className="flex justify-between max-sm:flex-wrap w-full gap-2">
             <div className="relative w-full">
               <Button
+              isLoading={isUploading}
               className="self-center w-full disabled:bg-default-500"
               color="primary"
               type="submit"
               disabled={!session}
               >
-              Save Changes
+              Save And Upload
               </Button>
             </div>
             <Button className="self-center w-full" type="reset" variant="flat" disabled={!session}>

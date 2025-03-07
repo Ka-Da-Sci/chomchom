@@ -44,19 +44,19 @@ const Profile = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto flex flex-col gap-12 items-center justify-center mt-20">
-        <div className="flex self-start items-start gap-4">
-          <div className="rounded-sm shadow-lg px-8 py-4">
+        <div className="flex self-start items-start gap-4 max-sm:flex-col">
+          <div className="rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
             <Image
               className="w-max h-max max-h-20 max-w-20 rounded-full"
               src={currentUser?.user_metadata.avatar_url}
             />
             <p>{currentUser?.user_metadata.full_name}</p>
           </div>
-          <div className="grid grid-cols-2 gap-y-6 rounded-sm shadow-lg px-8 py-4">
+          <div className="grid grid-cols-2 gap-y-6 rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
             <h3>Email:</h3>
             <p>{currentUser?.user_metadata.email}</p>
             <h3>Last Login:</h3>
-            <p>{currentUser?.updated_at?.split("T")[0]}</p>
+            <p>{new Date(currentUser?.updated_at ?? "").toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
           </div>
         </div>
         {/* <h1 className="text-left w-full capitalize text-2xl">Uploads</h1> */}

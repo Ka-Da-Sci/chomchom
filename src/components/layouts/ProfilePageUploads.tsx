@@ -5,9 +5,11 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
+import { useNavigate } from "react-router-dom";
 
 // /* eslint-disable no-console */
 const ProfilePageUploads = () => {
+  const navigate = useNavigate();
   const { signInWithGooglePopup } = authenticateUser;
   const { session } = useAuthContext();
   const context = useContext(miscContext);
@@ -21,6 +23,7 @@ const ProfilePageUploads = () => {
     setIsLoading,
     isLoading,
     contextLoaded,
+    setToggleForm,
   } = context;
 
   const [myStocks, setMyStocks] = useState<
@@ -75,14 +78,24 @@ const ProfilePageUploads = () => {
     );
   }
 
-//   if (!session) 
   return (
-    <div className="mb-10 flex flex-col justify-center items-center gap-6">
-      <h1 className="text-left w-full text-xl md:text-2xl font-semibold font-montserrat antialiased">
-        Uploads
-      </h1>
+    <section className="mb-10 flex flex-col justify-center items-center gap-6 w-full">
+      <div className="w-full flex items-center justify-between">
+        <h1 className="text-left w-full text-default-500 text-xl md:text-2xl font-semibold font-montserrat antialiased">
+          Uploads
+        </h1>
+        <Button
+          className="bg-white border border-solid border-primary-500 px-6 text-default-500 font-semibold font-montserrat"
+          onPress={() => {
+            setToggleForm(true);
+            navigate("/my-chommie-stocks");
+          }}
+        >
+          Add New Photo
+        </Button>
+      </div>
       <DefaultGallery items={myStocks} />
-    </div>
+    </section>
   );
 };
 

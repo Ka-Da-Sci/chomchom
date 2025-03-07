@@ -5,6 +5,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
+import Upload from "./home/sections/Upload";
 
 // /* eslint-disable no-console */
 const PrivateGallery = () => {
@@ -21,21 +22,23 @@ const PrivateGallery = () => {
     contextLoaded,
   } = context;
 
-  // Request is not logged in and attempt to access this route. 
+  // Request is not logged in and attempt to access this route.
   if (!session) {
     return (
       <DefaultLayout>
-        <div className="flex flex-col gap-8 justify-center items-center h-  h-3/4 max-h-screen">
-          <h1>You must be logged in!</h1>
-          <Button
-            className="capitalize px-8 font-poppins"
-            onPress={async () => {
-              await signInWithGooglePopup();
-            }}
-          >
-            Sign in
-          </Button>
-        </div>
+        <section>
+          <div className="flex flex-col gap-8 justify-center items-center h-  h-3/4 max-h-screen">
+            <h1>You must be logged in!</h1>
+            <Button
+              className="capitalize px-8 font-poppins"
+              onPress={async () => {
+                await signInWithGooglePopup();
+              }}
+            >
+              Sign in
+            </Button>
+          </div>
+        </section>
       </DefaultLayout>
     );
   }
@@ -75,12 +78,17 @@ const PrivateGallery = () => {
 
   return (
     <DefaultLayout>
+       <section className="flex justify-center">
+          <Upload />
+        </section>
+    <section>
       <div className="mt-20 mb-10 flex flex-col justify-center items-center gap-6">
-        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold font-montserrat antialiased">
+        {/* <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold font-montserrat antialiased">
           Personal Gallery
-        </h1>
+        </h1> */}
         <DefaultGallery items={[...myStocks]} />
       </div>
+    </section>
     </DefaultLayout>
   );
 };

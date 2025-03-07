@@ -18,7 +18,7 @@ import BrandLogo from "./BrandLogo";
 import SearchIcon from "./SearchIcon";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import userIcon from '@/assets/images/user-icon.jpeg'
+import userIcon from "@/assets/images/user-icon.jpeg";
 import { Link, useLocation } from "react-router-dom";
 
 const { signInWithGooglePopup, signOutGoogle } = authenticateUser;
@@ -36,35 +36,42 @@ const DefaultNavbar = () => {
           <NavbarBrand>
             <Link className="flex w-full items-center" to="/">
               <BrandLogo />
-              <p className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/' ? 'text-primary-500' : ''}`}>
+              <p
+                className={`hidden sm:block font-bold text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
+              >
                 Chommie
               </p>
             </Link>
           </NavbarBrand>
         </NavbarContent>
 
-        <NavbarContent justify="center" className="px-4 hidden md:flex gap-3">
+        <NavbarContent justify="center" className="px-4 flex gap-3">
           <NavbarItem isActive>
-            <Link className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/' ? 'text-primary-500' : ''}`} to={'/'}>
+            <Link
+              className={`hidden sm:block font-bold text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
+              to={"/"}
+            >
               Home
             </Link>
           </NavbarItem>
-          {session && (<NavbarItem isActive>
-            <Link
-              className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/my-chommie-stocks' ? 'text-primary-500' : ''}`}
-              aria-current="page"
-              to={'/my-chommie-stocks'}
-            >
-              Personal Gallery
-            </Link>
-          </NavbarItem>)}
+          {session && (
+            <NavbarItem isActive>
+              <Link
+                className={`hidden sm:block font-bold text-inherit antialiased ${pathname === "/my-chommie-stocks" ? "text-primary-500" : ""}`}
+                aria-current="page"
+                to={"/my-chommie-stocks"}
+              >
+                My Gallery
+              </Link>
+            </NavbarItem>
+          )}
           {session && (<NavbarItem isActive>
             <Link
               className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/profile' ? 'text-primary-500' : ''}`}
               aria-current="page"
               to={'/profile'}
             >
-              Profile
+              Account
             </Link>
           </NavbarItem>)}
         </NavbarContent>
@@ -93,8 +100,8 @@ const DefaultNavbar = () => {
                 isBordered
                 as="button"
                 className="transition-transform w-full h-full max-w-8 max-h-8"
-                color="secondary"
-                name="Jason Hughes"
+                color={`${pathname === '/profile' ? "primary" : "default"}`}
+                name={session ? session?.user?.user_metadata.name : ""}
                 src={
                   session
                     ? `${session?.user?.user_metadata.avatar_url}`
@@ -103,11 +110,7 @@ const DefaultNavbar = () => {
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem
-                key="profile"
-                textValue="Profile"
-                className="gap-2"
-              >
+              <DropdownItem key="user" textValue="user" className={`gap-2 ${session ? "pointer-events-none" : ""}`}>
                 {!session && (
                   <Button
                     className="capitalize w-full"
@@ -125,29 +128,62 @@ const DefaultNavbar = () => {
                   </div>
                 )}
               </DropdownItem>
-              { session && (<DropdownSection className="font-poppins font-bold">
-                <DropdownItem key="divider" textValue="divider" >
-                  <Divider key="hrule" />
-                </DropdownItem>
-                <DropdownItem className="antialiased" key="settings">Settings</DropdownItem>
-                <DropdownItem className="antialiased" key="analytics">Analytics</DropdownItem>
-                <DropdownItem className="antialiased" key="help_and_feedback">
-                  Help & Feedback
-                </DropdownItem>
-                <DropdownItem key="signout" color="danger">
-                  <Button
-                    color="danger"
-                    className="capitalize w-full"
-                    onPress={async () => {
-                      await signOutGoogle().then((resolve) =>
-                        setSession(resolve)
-                      );
-                    }}
+              {session && (
+                <DropdownSection className="font-poppins font-bold">
+                  <DropdownItem
+                    key="divider"
+                    textValue="divider"
+                    className="pointer-events-none"
                   >
-                    Sign out
-                  </Button>
-                </DropdownItem>
-              </DropdownSection>)}
+                    <Divider key="hrule" />
+                  </DropdownItem>
+                  <DropdownItem
+                    className="antialiased"
+                    key="account"
+                    textValue="account"
+                  >
+                    <Link
+                      className={`block text-inherit antialiased ${pathname === "/profile" ? "text-primary-500 font-bold" : "text-default-500"}`}
+                      aria-current="page"
+                      to={"/profile"}
+                    >
+                      My Account
+                    </Link>
+                  </DropdownItem>
+                  {/* <DropdownItem
+                    className="antialiased"
+                    key="analytics"
+                    textValue="analytics"
+                  >
+                    Analytics
+                  </DropdownItem>
+                  <DropdownItem
+                    className="antialiased"
+                    key="help_and_feedback"
+                    textValue="help_and_feedback"
+                  >
+                    Help & Feedback
+                  </DropdownItem> */}
+                  <DropdownItem
+                    textValue="signout"
+                    key="signout"
+                    color="danger"
+                    className="mt-10"
+                  >
+                    <Button
+                      color="danger"
+                      className="capitalize w-full"
+                      onPress={async () => {
+                        await signOutGoogle().then((resolve) =>
+                          setSession(resolve)
+                        );
+                      }}
+                    >
+                      Sign out
+                    </Button>
+                  </DropdownItem>
+                </DropdownSection>
+              )}
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>

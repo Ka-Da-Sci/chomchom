@@ -1,6 +1,6 @@
 import { createContext, useReducer, useState } from "react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
-const { readDocs} = SupaBaseDataBase;
+
 
 type State = {
   input: { title: string | null; file: File | null; path: string | null };
@@ -20,9 +20,12 @@ type MiscContextType = {
   setContextLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleForm: boolean;
+  setToggleForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const miscContext = createContext<MiscContextType | null>(null);
+const { readDocs} = SupaBaseDataBase;
 
 
 const initialState = {
@@ -47,6 +50,7 @@ const reducer = (state: State, action: Action): State => {
 const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
+  const [toggleForm, setToggleForm] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
@@ -57,7 +61,7 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
     setContextLoaded(true);
   }
   return (
-    <miscContext.Provider value={{ state, dispatch, readDatabaseItems, contextLoaded, setContextLoaded, isLoading, setIsLoading }}>{children}</miscContext.Provider>
+    <miscContext.Provider value={{ toggleForm, setToggleForm, state, dispatch, readDatabaseItems, contextLoaded, setContextLoaded, isLoading, setIsLoading }}>{children}</miscContext.Provider>
   );
 };
 
