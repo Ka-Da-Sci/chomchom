@@ -3,7 +3,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Input,
   DropdownItem,
   DropdownTrigger,
   Dropdown,
@@ -15,11 +14,12 @@ import {
 } from "@heroui/react";
 // import clsx from "clsx";
 import BrandLogo from "./BrandLogo";
-import SearchIcon from "./SearchIcon";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import userIcon from "@/assets/images/user-icon.jpeg";
 import { Link, useLocation } from "react-router-dom";
+import NavBarLink from "./NavBarLink";
+import Search from "./Search";
 
 const { signInWithGooglePopup, signOutGoogle } = authenticateUser;
 
@@ -37,7 +37,7 @@ const DefaultNavbar = () => {
             <Link className="flex w-full items-center" to="/">
               <BrandLogo />
               <p
-                className={`hidden sm:block font-bold text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
+                className={`hidden md:block font-normal text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
               >
                 Chommie
               </p>
@@ -46,34 +46,27 @@ const DefaultNavbar = () => {
         </NavbarContent>
 
         <NavbarContent justify="center" className="px-4 flex gap-3">
-          <NavbarItem isActive>
-            <Link
-              className={`hidden sm:block font-bold text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
-              to={"/"}
-            >
-              Home
-            </Link>
+          <NavbarItem className="hidden sm:block ">
+            <NavBarLink pathName="/" toProp="/" lintText="Home" />
           </NavbarItem>
           {session && (
-            <NavbarItem isActive>
-              <Link
-                className={`hidden sm:block font-bold text-inherit antialiased ${pathname === "/my-chommie-stocks" ? "text-primary-500" : ""}`}
-                aria-current="page"
-                to={"/my-chommie-stocks"}
-              >
-                My Gallery
-              </Link>
+            <NavbarItem className="hidden sm:block ">
+              <NavBarLink
+                pathName="/my-chommie-stocks"
+                toProp="/my-chommie-stocks"
+                lintText="My Gallery"
+              />
             </NavbarItem>
           )}
-          {session && (<NavbarItem isActive>
-            <Link
-              className={`hidden sm:block font-bold text-inherit antialiased ${pathname === '/profile' ? 'text-primary-500' : ''}`}
-              aria-current="page"
-              to={'/profile'}
-            >
-              Account
-            </Link>
-          </NavbarItem>)}
+          {session && (
+            <NavbarItem className="hidden sm:block ">
+              <NavBarLink
+                pathName="/profile"
+                toProp="/profile"
+                lintText="Account"
+              />
+            </NavbarItem>
+          )}
         </NavbarContent>
 
         <NavbarContent
@@ -81,26 +74,14 @@ const DefaultNavbar = () => {
           className="items-center px-2  [@media(min-width:350px)]:min-w-[200px] [@media(max-width:490px)]:min-w-0"
           justify="end"
         >
-          <Input
-            classNames={{
-              base: "max-w-full sm:max-w-[10rem] h-10 [@media(max-width:350px)]:hidden",
-              mainWrapper: "h-full",
-              input: "text-small",
-              inputWrapper:
-                "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-            }}
-            placeholder="Search..."
-            size="sm"
-            startContent={<SearchIcon width={18} height={18} size={18} />}
-            type="search"
-          />
-          <Dropdown placement="bottom-end">
+          <Search />
+          <Dropdown className="rounded-sm">
             <DropdownTrigger>
               <Avatar
                 isBordered
                 as="button"
                 className="transition-transform w-full h-full max-w-8 max-h-8"
-                color={`${pathname === '/profile' ? "primary" : "default"}`}
+                color={`${pathname === "/profile" ? "primary" : "default"}`}
                 name={session ? session?.user?.user_metadata.name : ""}
                 src={
                   session
@@ -110,7 +91,11 @@ const DefaultNavbar = () => {
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="user" textValue="user" className={`gap-2 ${session ? "pointer-events-none" : ""}`}>
+              <DropdownItem
+                key="user"
+                textValue="user"
+                className={`gap-2 ${session ? "pointer-events-none" : ""}`}
+              >
                 {!session && (
                   <Button
                     className="capitalize w-full"
@@ -137,18 +122,35 @@ const DefaultNavbar = () => {
                   >
                     <Divider key="hrule" />
                   </DropdownItem>
+
                   <DropdownItem
-                    className="antialiased"
+                    className="antialiased block sm:hidden"
+                    key="home"
+                    textValue="home"
+                  >
+                    <NavBarLink pathName="/" toProp="/" lintText="Home" />
+                  </DropdownItem>
+                  <DropdownItem
+                    className="antialiased block sm:hidden"
+                    key="my gallery"
+                    textValue="my gallery"
+                  >
+                    <NavBarLink
+                      pathName="/my-chommie-stocks"
+                      toProp="/my-chommie-stocks"
+                      lintText="My Gallery"
+                    />
+                  </DropdownItem>
+                  <DropdownItem
+                    className="antialiased block sm:hidden"
                     key="account"
                     textValue="account"
                   >
-                    <Link
-                      className={`block text-inherit antialiased ${pathname === "/profile" ? "text-primary-500 font-bold" : "text-default-500"}`}
-                      aria-current="page"
-                      to={"/profile"}
-                    >
-                      My Account
-                    </Link>
+                    <NavBarLink
+                      pathName="/profile"
+                      toProp="/profile"
+                      lintText="Account"
+                    />
                   </DropdownItem>
                   {/* <DropdownItem
                     className="antialiased"

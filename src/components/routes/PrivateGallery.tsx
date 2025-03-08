@@ -7,14 +7,15 @@ import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
 import Upload from "./home/sections/Upload";
 
-// /* eslint-disable no-console */
 const PrivateGallery = () => {
   const { signInWithGooglePopup } = authenticateUser;
-  const { session } = useAuthContext();
-  const context = useContext(miscContext);
+  const { session } = useAuthContext(); // ✅ Always called before conditionals
+  const context = useContext(miscContext); // ✅ Always called before conditionals
+
   if (!context) {
     throw new Error("miscContext must be used within a Provider");
   }
+
   const {
     state: contextState,
     setIsLoading,
@@ -22,12 +23,37 @@ const PrivateGallery = () => {
     contextLoaded,
   } = context;
 
-  // Request is not logged in and attempt to access this route.
+  const [myStocks, setMyStocks] = useState<
+    Array<{
+      id: string | number | null;
+      title: string;
+      path: string;
+      file: File | null;
+      user_name: string;
+      user_fullnames: string;
+      created_at: string;
+    }>
+  >([]);
+
+  useEffect(() => {
+    if (!session) return; // ✅ Prevents unnecessary execution
+
+    setIsLoading(true);
+    const userUserName = session?.user?.email?.split("@")[0].toLowerCase();
+    const updatedStocksCollection = contextState.items.filter(
+      (item) => item.user_name === userUserName
+    );
+
+    setMyStocks(updatedStocksCollection);
+    setIsLoading(false);
+  }, [contextState.items, session]); // ✅ Now depends on `session`
+
+  // ✅ Handle case where user is not logged in AFTER hooks execution
   if (!session) {
     return (
       <DefaultLayout>
         <section>
-          <div className="flex flex-col gap-8 justify-center items-center h-  h-3/4 max-h-screen">
+          <div className="flex flex-col gap-8 justify-center items-center h-3/4 max-h-screen">
             <h1>You must be logged in!</h1>
             <Button
               className="capitalize px-8 font-poppins"
@@ -43,31 +69,6 @@ const PrivateGallery = () => {
     );
   }
 
-  const { user } = session;
-  const userUserName = user?.email?.split("@")[0].toLowerCase();
-  const [myStocks, setMyStocks] = useState<
-    Array<{
-      id: string | number | null;
-      title: string;
-      path: string;
-      file: File | null;
-      user_name: string;
-      user_fullnames: string;
-      created_at: string;
-    }>
-  >([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const updatedStocksCollection = contextState.items.filter((item) => {
-      return item.user_name === userUserName;
-    });
-
-    setMyStocks(updatedStocksCollection);
-    setIsLoading(false);
-  }, [contextState.items, userUserName]);
-
-  // Show loading state while waiting for data (Using HeroUI Spinner)
   if (isLoading || !contextLoaded) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -78,17 +79,14 @@ const PrivateGallery = () => {
 
   return (
     <DefaultLayout>
-       <section className="flex justify-center">
-          <Upload />
-        </section>
-    <section>
-      <div className="mt-20 mb-10 flex flex-col justify-center items-center gap-6">
-        {/* <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold font-montserrat antialiased">
-          Personal Gallery
-        </h1> */}
-        <DefaultGallery items={[...myStocks]} />
-      </div>
-    </section>
+      <section className="flex justify-center">
+        <Upload />
+      </section>
+      <section>
+        <div className="mt-20 mb-10 flex flex-col justify-center items-center gap-6">
+          <DefaultGallery items={myStocks} />
+        </div>
+      </section>
     </DefaultLayout>
   );
 };

@@ -1,10 +1,26 @@
 import { createContext, useReducer, useState } from "react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 
-
 type State = {
   input: { title: string | null; file: File | null; path: string | null };
-  items: { id: number | string | null; title: string; path: string; file: File | null; user_name: string; user_fullnames: string; created_at: string }[];
+  items: {
+    id: number | string | null;
+    title: string;
+    path: string;
+    file: File | null;
+    user_name: string;
+    user_fullnames: string;
+    created_at: string;
+  }[];
+  placeholderItems: {
+    id: number | string | null;
+    title: string;
+    path: string;
+    file: File | null;
+    user_name: string;
+    user_fullnames: string;
+    created_at: string;
+  }[];
 };
 
 type Action = {
@@ -18,19 +34,28 @@ type MiscContextType = {
   readDatabaseItems: any;
   contextLoaded: boolean;
   setContextLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  searchItems: any;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   toggleForm: boolean;
   setToggleForm: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 export const miscContext = createContext<MiscContextType | null>(null);
-const { readDocs} = SupaBaseDataBase;
-
+const { readDocs } = SupaBaseDataBase;
 
 const initialState = {
-  input: { id: null, title: null, file: null, path: null, user_name: "", user_fullnames: "", created_at: ""},
+  input: {
+    id: null,
+    title: null,
+    file: null,
+    path: null,
+    user_name: "",
+    user_fullnames: "",
+    created_at: "",
+  },
   items: [],
+  placeholderItems: [],
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -38,9 +63,18 @@ const reducer = (state: State, action: Action): State => {
     case "setInput":
       return { ...state, input: { ...action.payload } };
     case "setItemsFromDb":
-      return { ...state, items: [...action.payload.items] };
+      return {
+        ...state,
+        items: [...action.payload.items],
+        placeholderItems: [...action.payload.items],
+      };
     case "setItems":
-      return { ...state, items: [...state.items, action.payload] };
+      return {
+        ...state,
+        items: [...state.items, action.payload],
+      };
+    case "setSearchResults":
+      return { ...state, items: [...action.payload] };
     default:
       return state;
   }
@@ -56,12 +90,52 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
 
   const readDatabaseItems = async () => {
-    const items = await readDocs('stocks');
+    const items = await readDocs("stocks");
     dispatch({ type: "setItemsFromDb", payload: { items } });
     setContextLoaded(true);
-  }
+  };
+
+  /* eslint-disable no-console */
+  const searchItems = (searchInput: string): void => {
+    console.log(searchInput.trim() === "", !searchInput);
+    if (searchInput.trim() === "" || !searchInput) {
+      console.log("Emptyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      console.log(state.placeholderItems);
+      dispatch({ type: "setSearchResults", payload: [...state.placeholderItems] });
+      return;
+    }
+
+    const searchInputText = searchInput.trim().toLowerCase();
+    const searchList = state.placeholderItems.flat();
+    console.log(searchList.length);
+    const searchResult = searchList.filter((searchItem: { title: string }) => {
+      console.log(searchItem);
+      const searchItemTitle = searchItem.title.toLowerCase();
+      return searchItemTitle.indexOf(searchInputText) > -1;
+    });
+
+    dispatch({
+      type: "setSearchResults",
+      payload: [ ...searchResult ],
+    });
+  };
   return (
-    <miscContext.Provider value={{ toggleForm, setToggleForm, state, dispatch, readDatabaseItems, contextLoaded, setContextLoaded, isLoading, setIsLoading }}>{children}</miscContext.Provider>
+    <miscContext.Provider
+      value={{
+        toggleForm,
+        setToggleForm,
+        state,
+        dispatch,
+        readDatabaseItems,
+        searchItems,
+        contextLoaded,
+        setContextLoaded,
+        isLoading,
+        setIsLoading,
+      }}
+    >
+      {children}
+    </miscContext.Provider>
   );
 };
 
