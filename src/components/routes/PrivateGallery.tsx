@@ -5,7 +5,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
-import Upload from "./home/sections/Upload";
+import Upload from "../ui/Upload";
 
 const PrivateGallery = () => {
   const { signInWithGooglePopup } = authenticateUser;

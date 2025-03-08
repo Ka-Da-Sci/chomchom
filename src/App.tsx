@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./components/routes/home/Index";
+import PublicGallery from "./components/routes/Index";
 import SingleItemGallery from './components/routes/SingleIItemGallery';
 import "./styles/globals.css";
 import { useEffect, useContext } from "react";
@@ -37,7 +37,7 @@ const App = () => {
   {/* {session && (<Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />)} */}
   return (
     <Routes>
-      <Route element={<HomePage />} path={"/"} />
+      <Route element={<PublicGallery />} path={"/"} />
       <Route element={<SingleItemGallery />} path={"/image/:id"} />
       <Route element={<PrivateGallery />} path={'/my-chommie-stocks'} />
       <Route element={<Profile />} path="/profile"/>
