@@ -6,4 +6,11 @@
     .upload-file-input:hover input{
         cursor: pointer;
     }
+
+    @screen custom-minwidth-500 {
+        .custom-grid-col2-500-min{
+            @apply grid-cols-2
+        }
+    }
+
 }

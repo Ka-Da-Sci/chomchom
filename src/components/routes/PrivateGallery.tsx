@@ -6,8 +6,10 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
 import Upload from "../ui/Upload";
+import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
 
 const PrivateGallery = () => {
+    useAssignAccessLevel('private');
   const { signInWithGooglePopup } = authenticateUser;
   const { session } = useAuthContext(); // ✅ Always called before conditionals
   const context = useContext(miscContext); // ✅ Always called before conditionals

@@ -39,6 +39,8 @@ type MiscContextType = {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   toggleForm: boolean;
   setToggleForm: React.Dispatch<React.SetStateAction<boolean>>;
+  access: string;
+  setAccess: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const miscContext = createContext<MiscContextType | null>(null);
@@ -88,6 +90,7 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isLoading, setIsLoading] = useState(true); // Track loading state
   const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
+  const [access, setAccess] = useState('');
 
   const readDatabaseItems = async () => {
     const items = await readDocs("stocks");
@@ -132,6 +135,8 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
         setContextLoaded,
         isLoading,
         setIsLoading,
+        access,
+        setAccess
       }}
     >
       {children}

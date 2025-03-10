@@ -6,9 +6,11 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useNavigate } from "react-router-dom";
+import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
 
 // /* eslint-disable no-console */
 const ProfilePageUploads = () => {
+    useAssignAccessLevel("private");
   const navigate = useNavigate();
   const { signInWithGooglePopup } = authenticateUser;
   const { session } = useAuthContext();

@@ -9,12 +9,22 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    'custom-maxwidth-520',
+    'custom-flex-direction-520-max',
+    'custom-grid-col2-500-min',
+  ],
   theme: {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+      },
+
+      screens: {
+        'custom-maxwidth-520': {'max': '520px'},
+        'custom-minwidth-500': '500px',
       },
     },
   },

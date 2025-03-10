@@ -1,7 +1,8 @@
-import { Card, CardBody, Image, CardFooter, Button, Spinner, Pagination} from "@heroui/react";
+import { Card, CardBody, Image, Button, Spinner, Pagination} from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { miscContext } from "@/context/FileManagementContext";
 import { useContext, useEffect, useState } from "react";
+import useGalleryFooter from "@/hooks/useGalleryFooter";
 
 interface Item {
   id: string | number | null;
@@ -17,6 +18,7 @@ interface Item {
 const DefaultGallery = ({ items }: { items: Item[] }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const { pathname } = useLocation();
+    const {CompatibleFooter} = useGalleryFooter();
 
     const itemsPerPage = pathname === "/profile" ? 3 : 6;
 
@@ -58,7 +60,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
 
   return (
     <div className="container mx-auto ">
-        <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 max-md:grid-cols-2 md:grid-cols-3">
+        <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 custom-grid-col2-500-min md:grid-cols-3">
         {currentItems.map((item, index) => (
             <Card
             key={index}
@@ -76,19 +78,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
                 />
                 </CardBody>
             </Card>
-            <CardFooter className="flex flex-col gap-3 items-start w-full pb-6 overflow-visible cursor-auto">
-                <p className="font-inter font-semibold text-left antialiased">{item.title}</p>
-                <div className="flex justify-between flex-wrap gap-4 items-center w-full">
-                <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-default-400 text-small text-left">{item.user_fullnames}</span>
-                    <i className="text-default-400 text-small text-left">@{item.user_name}</i>
-                </div>
-                <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-default-400 text-small text-left">Date Posted</span>
-                    <i className="text-default-400 text-small text-left">{item.created_at.split('T')[0]}</i>
-                </div>
-                </div>
-            </CardFooter>
+            <CompatibleFooter item={ {...item} }/>
             </Card>
         ))}
         </div>
