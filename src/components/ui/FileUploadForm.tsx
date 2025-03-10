@@ -103,7 +103,7 @@ const FileUploadForm = () => {
   
         await writeDoc({ ...contextState.input, path: publicUrl, user_fullnames: user_full_name, user_name: user_name });
 
-          context && readDatabaseItems().then(() => console.log(state));
+          // context && readDatabaseItems().then(() => console.log(state));
   
       } catch (error) {
         console.error("Upload failed:", error);

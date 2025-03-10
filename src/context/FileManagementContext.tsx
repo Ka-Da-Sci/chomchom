@@ -71,6 +71,12 @@ const reducer = (state: State, action: Action): State => {
         placeholderItems: [...action.payload.items],
       };
     case "setItems":
+      if (action.payload.many){
+        return {
+          ...state,
+          items: [...action.payload.many],
+        };
+      }
       return {
         ...state,
         items: [...state.items, action.payload],
@@ -102,8 +108,6 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const searchItems = (searchInput: string): void => {
     console.log(searchInput.trim() === "", !searchInput);
     if (searchInput.trim() === "" || !searchInput) {
-      console.log("Emptyyyyyyyyyyyyyyyyyyyyyyyyyy");
-      console.log(state.placeholderItems);
       dispatch({ type: "setSearchResults", payload: [...state.placeholderItems] });
       return;
     }
