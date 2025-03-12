@@ -1,5 +1,5 @@
 import { Session, AuthError } from "@supabase/supabase-js";
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 interface AuthContextType {
     session: any;
@@ -27,4 +27,4 @@ const AuthContextProvider = ({ children }: {children: React.ReactNode}) => {
     )
 }
 
-export default AuthContextProvider;
+export default React.memo(AuthContextProvider);

@@ -1,18 +1,23 @@
 import DefaultLayout from "../layouts/DefaultLayout";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { Button, Image } from "@heroui/react";
+import { Button, Image, Spinner } from "@heroui/react";
 import ProfilePageUploads from "../layouts/ProfilePageUploads";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 // /* eslint-disable no-console */
 const Profile = () => {
     const { session } = useAuthContext();
   const { signInWithGooglePopup } = authenticateUser;
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const { isLoading, contextLoaded, setIsLoading } = useFileManagementContext();
 
   useEffect(() => {
+    if (!session) return;
+
+    setIsLoading(true);
     const getCurrentUser = async () => {
       if (session) {
         const { user } = session;
@@ -21,7 +26,16 @@ const Profile = () => {
     };
 
     getCurrentUser();
+    setIsLoading(false);
   }, [session]);
+
+  if (isLoading || !contextLoaded) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="lg" color="current" />
+      </div>
+    );
+  }
 
   if (!session) {
     return (

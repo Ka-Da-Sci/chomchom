@@ -61,42 +61,6 @@ const useUppyWithSupabase = (bucketName: string) => {
     // Initialize Uppy with Supabase settings
     initializeUppy();
 
-    // uppy.use(Tus, {
-    //   endpoint: `${projectUrl}/storage/v1/upload/resumable`,
-    //   retryDelays: [0, 3000, 5000, 10000, 20000],
-    //   headers: {
-    //     Authorization: `Bearer ${supabaseKey}`,
-    //     apikey: supabaseKey,
-    //   },
-    //   uploadDataDuringCreation: true,
-    //   removeFingerprintOnSuccess: true,
-    //   chunkSize: 6 * 1024 * 1024,
-    //   allowedMetaFields: [
-    //     "bucketName",
-    //     "objectName",
-    //     "contentType",
-    //     "cacheControl",
-    //   ],
-    // });
-
-    // // Adding bucketName as a metadata field
-    // uppy.on("file-added", (file) => {
-    //   file.meta = {
-    //     ...file.meta,
-    //     bucketName,
-    //     objectName: file.name,
-    //     contentType: file.type,
-    //   };
-    // });
-
-    // uppy.on("upload-success", (file, response) => {
-    //   console.log("✅ Upload successful!", file, response);
-    // });
-
-    // uppy.on("upload-error", (file, error) => {
-    //   console.error("❌ Upload error:", file, error);
-    // });
-
     return () => {
       uppy.cancelAll(); // Stop any ongoing uploads
       const tusPlugin = uppy.getPlugin("Tus");

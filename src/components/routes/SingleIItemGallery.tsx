@@ -1,21 +1,16 @@
 import { Card, CardBody, Image, CardFooter, Button, Spinner } from "@heroui/react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { miscContext } from "@/context/FileManagementContext";
 import DefaultLayout from "../layouts/DefaultLayout";
 import NotFound from "./NotFound";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 // /* eslint-disable no-console */
 const SingleItemGallery = () => {
   const navigate = useNavigate();
   const { id: itemInViewId } = useParams();
 
-  const context = useContext(miscContext);
-  if (!context) {
-    throw new Error("miscContext must be used within a Provider");
-  }
-
-  const { state: contextState, isLoading, setIsLoading, contextLoaded } = context;
+  const { state: contextState, isLoading, setIsLoading, contextLoaded } = useFileManagementContext();
 
   const [itemInView, setItemInView] = useState<{
     id: string | number | null;
@@ -26,16 +21,6 @@ const SingleItemGallery = () => {
     user_fullnames: string;
     created_at: string;
   } | null>(null);
-
-  // const [isLoading, setIsLoading] = useState(true); // Track loading state
-  // const [contextLoaded, setContextLoaded] = useState(false); // Check if context is populated
-
-  // // Check if context has items (to prevent premature NotFound rendering)
-  // useEffect(() => {
-  //   if (contextState.items.length > 0) {
-  //     setContextLoaded(true);
-  //   }
-  // }, [contextState.items]);
 
   useEffect(() => {
     setIsLoading(true); // Start loading

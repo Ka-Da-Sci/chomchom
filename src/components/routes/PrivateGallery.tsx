@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { miscContext } from "@/context/FileManagementContext";
+import { useEffect, useState } from "react";
 import DefaultGallery from "@/components/layouts/DefaultGallery";
 import DefaultLayout from "../layouts/DefaultLayout";
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -7,23 +6,21 @@ import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
 import Upload from "../ui/Upload";
 import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
+
+/* eslint-disable no-console */
 const PrivateGallery = () => {
     useAssignAccessLevel('private');
   const { signInWithGooglePopup } = authenticateUser;
-  const { session } = useAuthContext(); // ✅ Always called before conditionals
-  const context = useContext(miscContext); // ✅ Always called before conditionals
-
-  if (!context) {
-    throw new Error("miscContext must be used within a Provider");
-  }
+  const { session } = useAuthContext(); 
 
   const {
     state: contextState,
     setIsLoading,
     isLoading,
     contextLoaded,
-  } = context;
+  } = useFileManagementContext();
 
   const [myStocks, setMyStocks] = useState<
     Array<{
@@ -48,7 +45,16 @@ const PrivateGallery = () => {
 
     setMyStocks(updatedStocksCollection);
     setIsLoading(false);
-  }, [contextState.items, session]); // ✅ Now depends on `session`
+    console.log(updatedStocksCollection);
+  }, [contextState.items, session]); 
+
+  if (isLoading || !contextLoaded) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="lg" color="current" />
+      </div>
+    );
+  }
 
   // ✅ Handle case where user is not logged in AFTER hooks execution
   if (!session) {
@@ -68,14 +74,6 @@ const PrivateGallery = () => {
           </div>
         </section>
       </DefaultLayout>
-    );
-  }
-
-  if (isLoading || !contextLoaded) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Spinner size="lg" color="current" />
-      </div>
     );
   }
 

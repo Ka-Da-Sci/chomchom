@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { miscContext } from "@/context/FileManagementContext";
+import { useEffect, useState } from "react";
 import DefaultGallery from "@/components/layouts/DefaultGallery";
 import DefaultLayout from "../layouts/DefaultLayout";
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -7,18 +6,14 @@ import { Button, Spinner } from "@heroui/react";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useNavigate } from "react-router-dom";
 import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
-// /* eslint-disable no-console */
+/* eslint-disable no-console */
 const ProfilePageUploads = () => {
-    useAssignAccessLevel("private");
+  useAssignAccessLevel("private");
   const navigate = useNavigate();
   const { signInWithGooglePopup } = authenticateUser;
   const { session } = useAuthContext();
-  const context = useContext(miscContext);
-
-  if (!context) {
-    throw new Error("miscContext must be used within a Provider");
-  }
 
   const {
     state: contextState,
@@ -26,7 +21,7 @@ const ProfilePageUploads = () => {
     isLoading,
     contextLoaded,
     setToggleForm,
-  } = context;
+  } = useFileManagementContext();
 
   const [myStocks, setMyStocks] = useState<
     Array<{
@@ -41,16 +36,17 @@ const ProfilePageUploads = () => {
   >([]);
 
   useEffect(() => {
-    if (session) {
-      setIsLoading(true);
-      const userUserName = session?.user?.email?.split("@")[0].toLowerCase();
-      const updatedStocksCollection = contextState.items.filter((item) => {
-        return item.user_name === userUserName;
-      });
+    if (!session) return;
 
-      setMyStocks(updatedStocksCollection);
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    const userUserName = session?.user?.email?.split("@")[0].toLowerCase();
+    const updatedStocksCollection = contextState.items.filter((item) => {
+      return item.user_name === userUserName;
+    });
+    
+    console.log(" Yeahhhhhhhhhhhhhhhhhhh: ", updatedStocksCollection)
+    setMyStocks(updatedStocksCollection);
+    setIsLoading(false);
   }, [contextState.items, session]);
 
   if (!session) {

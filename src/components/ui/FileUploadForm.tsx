@@ -1,5 +1,4 @@
-import { useEffect, useReducer, useContext, useRef, useState } from "react";
-import { miscContext } from "@/context/FileManagementContext";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { Form, Input, Button } from "@heroui/react";
 import { Image } from "@heroui/react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
@@ -7,6 +6,7 @@ import useUppyWithSupabase from "@/hooks/useUppyWithSupabase";
 const { writeDoc } = SupaBaseDataBase;
 import { useAuthContext } from "@/hooks/useAuthContext";
 import supabase from "@/lib/supabase.config";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 const initialstate = {
   formAction: null,
@@ -38,16 +38,11 @@ const FileUploadForm = () => {
   const bucketName ="chommie-bucket";
   const [isUploading, setIsUploading] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialstate);
-  const context = useContext(miscContext);
   const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const uppy = useUppyWithSupabase(bucketName);
   const { session } = useAuthContext();
-
-  if (!context) {
-    throw new Error("miscContext must be used within a Provider");
-  }
-  const { state: contextState, dispatch: contextDispatch, readDatabaseItems } = context;
+  const { state: contextState, dispatch: contextDispatch } = useFileManagementContext();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -102,8 +97,6 @@ const FileUploadForm = () => {
         const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${contextState.input.title}`;
   
         await writeDoc({ ...contextState.input, path: publicUrl, user_fullnames: user_full_name, user_name: user_name });
-
-          // context && readDatabaseItems().then(() => console.log(state));
   
       } catch (error) {
         console.error("Upload failed:", error);

@@ -14,7 +14,7 @@ const SupaBaseDataBase = {
     const [collection_name] = args;
     let docs: Array<Record<string, any>> = [];
     const valid_collection_name =
-      `${collection_name ? collection_name : "stocks"}` as "stocks";
+      `${collection_name ? collection_name : "safe_stocks"}` as "stocks";
     return new Promise(async (resolve) => {
       try {
         const { data } = await supabase.from(valid_collection_name).select();

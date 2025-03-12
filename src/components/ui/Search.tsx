@@ -1,21 +1,17 @@
 import { Input } from "@heroui/input";
 import SearchIcon from "./SearchIcon";
-import { useContext, useEffect, useRef } from "react";
-import { miscContext } from "@/context/FileManagementContext";
+import { useEffect, useRef } from "react";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 // /* eslint-disable no-console */
 const Search = () => {
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const context = useContext(miscContext);
 
     useEffect(() => {
         searchItems("");
     }, [])
 
-    if (!context){
-        throw new Error("miscontext must be used within a provider.")
-    }
-    const { searchItems } = context;
+    const { searchItems } = useFileManagementContext();
 
 
     const handleOnChange = () => {

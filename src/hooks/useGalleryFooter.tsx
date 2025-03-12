@@ -1,8 +1,11 @@
 import { Button, CardFooter } from "@heroui/react";
 import useFileManagementContext from "./useFileManagementContext";
+import supabase from "@/lib/supabase.config";
+import { useRef } from "react";
 // import '../styles/globals.css';
 
 type Item = {
+  id?: any;
   title?: string;
   user_fullnames?: string;
   user_name?: string;
@@ -11,6 +14,36 @@ type Item = {
 
 export const useGalleryFooter = () => {
   const { access } = useFileManagementContext();
+  const deleteButtonUseRef = useRef<HTMLButtonElement | null>(null);
+
+
+  /* eslint-disable no-console*/
+  const handleOnClickDeleteButton = async () => {
+    try {
+      const itemId = deleteButtonUseRef?.current?.id;
+      
+      if (!itemId) {
+        console.error("Item ID is undefined or null.");
+        return;
+      }
+  
+      console.log("Deleting item with ID:", itemId, "Type:", typeof itemId);
+  
+      const { error } = await supabase
+        .from("stocks")
+        .delete()
+        .eq("id", Number(itemId)); // Ensure itemId is a number
+  
+      if (error) {
+        throw new Error(`Failed to delete item: ${error.message}`);
+      }
+  
+      console.log("Item deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+  
 
   const galleryFooter = {
     private: ({ item }: { item: Item }) => {
@@ -28,7 +61,7 @@ export const useGalleryFooter = () => {
                 {item.created_at?.split("T")[0]}
               </i>
             </div>
-            <Button className="rounded-md bg-transparent border border-solid border-danger-500 font-poppins font-medium antialiased text-default-400" >Delete</Button>
+            <Button onPress={handleOnClickDeleteButton} ref={deleteButtonUseRef} id={item.id} className="rounded-md bg-transparent border border-solid border-danger-500 font-poppins font-medium antialiased text-default-400" >Delete</Button>
           </div>
         </CardFooter>
       );

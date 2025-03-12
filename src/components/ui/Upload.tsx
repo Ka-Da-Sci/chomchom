@@ -1,14 +1,9 @@
 import FileUploadForm from "@/components/ui/FileUploadForm";
 import { Button } from "@heroui/react";
-import { useContext } from "react";
-import { miscContext } from "@/context/FileManagementContext";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 const Upload = () => {
-    const context = useContext(miscContext);
-    if(!context){
-        throw new Error("miscContext must be used within a Provider")
-    }
-    const {toggleForm, setToggleForm} = context;
+    const {toggleForm, setToggleForm} = useFileManagementContext();
 
     return(
         <div className="flex flex-col gap-4 w-full">

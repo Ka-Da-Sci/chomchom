@@ -10,9 +10,6 @@ const authenticateUser = {
         if (error) {
             console.error("Login failed:", error.message);
         } 
-        // const session = await supabase.auth.getSession();
-        // console.log(session);
-        // return new Promise((resolve) => resolve(session));
     },
     signOutGoogle: async () => {
         const { error } = await supabase.auth.signOut();

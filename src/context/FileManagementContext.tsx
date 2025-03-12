@@ -1,6 +1,8 @@
 import { createContext, useReducer, useState } from "react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 
+/* eslint-disable no-console */
+
 type State = {
   input: { title: string | null; file: File | null; path: string | null };
   items: {
@@ -72,9 +74,11 @@ const reducer = (state: State, action: Action): State => {
       };
     case "setItems":
       if (action.payload.many){
+        console.log("Updated state items:", action.payload.many);
         return {
           ...state,
           items: [...action.payload.many],
+          placeholderItems: [...action.payload.many],
         };
       }
       return {
@@ -99,7 +103,7 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const [access, setAccess] = useState('');
 
   const readDatabaseItems = async () => {
-    const items = await readDocs("stocks");
+    const items = await readDocs("safe_stocks");
     dispatch({ type: "setItemsFromDb", payload: { items } });
     setContextLoaded(true);
   };

@@ -1,17 +1,12 @@
-import { useContext } from "react";
-import { miscContext } from "@/context/FileManagementContext";
 import DefaultGallery from "@/components/layouts/DefaultGallery";
 import DefaultLayout from "@/components/layouts/DefaultLayout";
 import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 
 const PublicGallery = () => {
   useAssignAccessLevel('public');
-  const context = useContext(miscContext);
-  if (!context) {
-    throw new Error("miscContext must be used within a Provider");
-  }
-  const { state: contextState } = context;
+  const { state: contextState } = useFileManagementContext();
 
   /* eslint-disable no-console */
   console.log(contextState.items);
