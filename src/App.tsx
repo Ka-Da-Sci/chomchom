@@ -97,8 +97,8 @@ const App = () => {
   return (
     <Routes>
       <Route element={<PublicGallery />} path={"/"} />
-      <Route element={<SingleItemGallery />} path={"/image/:id/"} />
-      <Route element={<PrivateGallery />} path={"/my-chommie-stocks/"} />
+      <Route element={<SingleItemGallery />} path={"/fotox/:id/"} />
+      <Route element={<PrivateGallery />} path={"/my-fotox/"} />
       <Route element={<Profile />} path="/profile/" />
       <Route element={<NotFound />} path="*" />
     </Routes>

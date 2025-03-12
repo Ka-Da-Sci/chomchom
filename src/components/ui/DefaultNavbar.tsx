@@ -39,7 +39,7 @@ const DefaultNavbar = () => {
               <p
                 className={`hidden md:block font-normal text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
               >
-                Chommie
+                Fotox
               </p>
             </Link>
           </NavbarBrand>
@@ -52,9 +52,9 @@ const DefaultNavbar = () => {
           {session && (
             <NavbarItem className="hidden sm:block ">
               <NavBarLink
-                pathName="/my-chommie-stocks"
-                toProp="/my-chommie-stocks"
-                lintText="My Gallery"
+                pathName="/my-fotox"
+                toProp="/my-fotox"
+                lintText="My Fotox"
               />
             </NavbarItem>
           )}
@@ -132,13 +132,13 @@ const DefaultNavbar = () => {
                   </DropdownItem>
                   <DropdownItem
                     className="antialiased block sm:hidden"
-                    key="my gallery"
-                    textValue="my gallery"
+                    key="my fotox"
+                    textValue="my fotox"
                   >
                     <NavBarLink
-                      pathName="/my-chommie-stocks"
-                      toProp="/my-chommie-stocks"
-                      lintText="My Gallery"
+                      pathName="/my-fotox"
+                      toProp="/my-fotox"
+                      lintText="My fotox"
                     />
                   </DropdownItem>
                   <DropdownItem

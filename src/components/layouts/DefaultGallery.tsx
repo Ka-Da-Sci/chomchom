@@ -84,7 +84,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
             <Card
               as={Button}
               onPress={() => {
-                navigate(`/image/${item.id}`);
+                navigate(`/fotox/${item.id}`);
               }}
               isPressable
               className="overflow-hidden w-full h-full max-w-full max-h-full p-4 rounded-none flex items-center justify-normal"
