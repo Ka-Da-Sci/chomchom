@@ -78,12 +78,12 @@ const ProfilePageUploads = () => {
 
   return (
     <section className="mb-10 flex flex-col justify-center items-center gap-6 w-full">
-      <div className="w-full flex items-center justify-between">
-        <h1 className="text-left w-full text-default-500 text-xl md:text-2xl font-semibold font-montserrat antialiased">
-          My Fotox
+      <div className="w-full flex items-center justify-between flex-wrap-reverse gap-8">
+        <h1 className="text-left text-default-500 text-xl md:text-2xl font-semibold font-montserrat antialiased">
+          Fotox
         </h1>
         <Button
-          className="bg-white border border-solid border-primary-500 px-6 text-default-500 font-semibold font-montserrat"
+          className="bg-white  rounded-md border border-solid border-primary-500 px-3 sm:px-6 text-default-500 font-semibold font-montserrat"
           onPress={() => {
             setToggleForm(true);
             navigate("/my-fotox");

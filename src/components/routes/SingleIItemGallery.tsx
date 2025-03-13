@@ -1,4 +1,11 @@
-import { Card, CardBody, Image, CardFooter, Button, Spinner } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  Image,
+  CardFooter,
+  Button,
+  Spinner,
+} from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DefaultLayout from "../layouts/DefaultLayout";
@@ -10,7 +17,13 @@ const SingleItemGallery = () => {
   const navigate = useNavigate();
   const { id: itemInViewId } = useParams();
 
-  const { state: contextState, isLoading, setIsLoading, contextLoaded } = useFileManagementContext();
+  const {
+    state: contextState,
+    isLoading,
+    setIsLoading,
+    contextLoaded,
+    setContextLoaded
+  } = useFileManagementContext();
 
   const [itemInView, setItemInView] = useState<{
     id: string | number | null;
@@ -20,12 +33,14 @@ const SingleItemGallery = () => {
     user_name: string;
     user_fullnames: string;
     created_at: string;
-  } | null>(null);
+  } | null>({ id: 0, title: "", path: "", file: null, user_name: "", user_fullnames: "", created_at: ""} );
 
   useEffect(() => {
-    setIsLoading(true); // Start loading
 
-    if (contextLoaded) {
+    if (contextState.items.length !== 0){
+
+      setContextLoaded(false);
+    }
       const itemReferenced = itemInViewId
         ? contextState.items.find(
             (item) => item.id === parseInt(itemInViewId as string)
@@ -33,8 +48,23 @@ const SingleItemGallery = () => {
         : null;
 
       setItemInView(itemReferenced);
-      setIsLoading(false); // End loading
-    }
+      if (itemReferenced !== null && itemInView !== null) {
+        setContextLoaded(true);
+        setIsLoading(false);
+      } else if (itemReferenced === null && contextState.items.length !== 0 && Object.keys(contextState.items[0]).length !== 1){
+        // console.log(Object.keys(contextState.items[0]).length);
+        // console.log(itemReferenced);
+        // console.log(contextState.items);
+        setContextLoaded(true);
+        setIsLoading(false);
+      } else if (itemReferenced === null && contextState.items.length === 0 && contextLoaded){
+        // console.log(itemReferenced);
+        // console.log(contextState.items);
+        // console.log(contextLoaded);
+        // debugger;
+        setContextLoaded(true);
+        setIsLoading(false);
+      }
   }, [contextState.items, itemInViewId, contextLoaded]);
 
   // Show loading state while waiting for data (Using HeroUI Spinner)
@@ -57,8 +87,7 @@ const SingleItemGallery = () => {
   //       </div>
   //     </DefaultLayout>
   //   );
-  // }  
-  
+  // }
 
   // If the item isn't found *after* context is loaded, show NotFound
   if (itemInView === null) {
@@ -67,7 +96,7 @@ const SingleItemGallery = () => {
 
   return (
     <DefaultLayout>
-      <div className="container m-auto mt-10 h-full flex flex-col justify-center items-center gap-10 relative">
+      <div className="container mx-auto m-10 z-0 flex flex-col justify-center items-center gap-10 relative">
         <Button
           onPress={() => navigate(-1)}
           className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-blue-500"

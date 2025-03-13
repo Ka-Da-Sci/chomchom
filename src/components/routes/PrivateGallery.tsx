@@ -84,6 +84,7 @@ const PrivateGallery = () => {
       </section>
       <section>
         <div className="mt-20 mb-10 flex flex-col justify-center items-center gap-6">
+          <p className="self-start font-inter font-medium text-left text-sm sm:text-base">You have {myStocks.length} Fotox.</p>
           <DefaultGallery items={myStocks} />
         </div>
       </section>

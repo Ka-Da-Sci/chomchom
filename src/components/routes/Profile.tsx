@@ -58,19 +58,19 @@ const Profile = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto flex flex-col gap-12 items-center justify-center mt-20">
-        <div className="flex self-start items-start gap-4 max-sm:flex-col">
-          <div className="rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
+        <div className="flex self-start items-start gap-4 flex-col sm:flex-row">
+          <div className="flex items-center justify-center flex-col gap-4 rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
             <Image
               className="w-max h-max max-h-20 max-w-20 rounded-full"
               src={currentUser?.user_metadata.avatar_url}
             />
-            <p>{currentUser?.user_metadata.full_name}</p>
+            <p className="font-normal font-poppins antialiased text-sm sm:text-base text-default-900">{currentUser?.user_metadata.full_name}</p>
           </div>
-          <div className="grid grid-cols-2 gap-y-6 rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
-            <h3>Email:</h3>
-            <p>{currentUser?.user_metadata.email}</p>
-            <h3>Last Login:</h3>
-            <p>{new Date(currentUser?.updated_at ?? "").toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
+          <div className="overflow-auto grid grid-cols-1 sm:grid-cols-2 gap-y-1 sm:gap-y-4 rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
+            <h3 className="font-semibold font-poppins antialiased text-sm sm:text-base text-default-900">Email:</h3>
+            <p className="font-normal font-poppins antialiased text-sm sm:text-base text-default-600">{currentUser?.user_metadata.email}</p>
+            <h3 className="mt-4 sm:mt-0 font-semibold font-poppins antialiased text-sm sm:text-base text-default-900">Last Login:</h3>
+            <p className="font-normal font-poppins antialiased text-sm sm:text-base text-default-600">{new Date(currentUser?.updated_at ?? "").toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p>
           </div>
         </div>
         {/* <h1 className="text-left w-full capitalize text-2xl">Uploads</h1> */}
