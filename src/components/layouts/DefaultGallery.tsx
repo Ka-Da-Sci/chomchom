@@ -83,7 +83,8 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
           <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-h-[350px]">
             <Card
               as={Button}
-              onPress={() => {
+              onPress={(event) => {
+                event.target.classList.add('hidden');
                 navigate(`/fotox/${item.id}`);
               }}
               isPressable

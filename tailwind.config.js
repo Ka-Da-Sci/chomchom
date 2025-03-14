@@ -4,10 +4,8 @@ import {heroui} from "@heroui/theme"
 module.exports = {
   content: [
     "./index.html",
-    './src/layouts/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{html,js,ts,jsx,tsx}',
+    "./public/index.html",
+    "./src/**/*.{html,js,ts,jsx,tsx,mdx}",
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
