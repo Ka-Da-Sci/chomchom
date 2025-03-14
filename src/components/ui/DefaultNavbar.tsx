@@ -30,7 +30,7 @@ const DefaultNavbar = () => {
   console.log(session?.user);
 
   return (
-    <Navbar maxWidth="full" className="bg-white">
+    <Navbar maxWidth="full" className="bg-white z-40">
       <NavbarContent className="md:container md:mx-auto">
         <NavbarContent className="w-full overflow-hidden" justify="start">
           <NavbarBrand>

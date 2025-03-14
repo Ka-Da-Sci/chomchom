@@ -7,12 +7,13 @@ module.exports = {
     './src/layouts/**/*.{js,ts,jsx,tsx,mdx}',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{html,js,ts,jsx,tsx}',
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
     'custom-maxwidth-520',
     'custom-flex-direction-520-max',
-    'custom-grid-col2-500-min',
+    'custom-grid-col2-400-min',
   ],
   theme: {
     extend: {
@@ -24,7 +25,7 @@ module.exports = {
 
       screens: {
         'custom-maxwidth-520': {'max': '520px'},
-        'custom-minwidth-500': '500px',
+        'custom-minwidth-400': '400px',
       },
     },
   },

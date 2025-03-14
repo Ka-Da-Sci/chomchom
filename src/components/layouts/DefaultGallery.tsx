@@ -5,6 +5,7 @@ import {
   Button,
   Spinner,
   Pagination,
+  Skeleton,
 } from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -20,7 +21,6 @@ type Item = {
   created_at: string;
 };
 
-
 const DefaultGallery = ({ items }: { items: Item[] }) => {
   const { pathname } = useLocation();
   const { isLoading, setIsLoading, contextLoaded } = useFileManagementContext();
@@ -29,7 +29,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
-  const itemsPerPage = 6;
+  const itemsPerPage = pathname === '/profile' ? 4 : 8;
 
   useEffect(() => {
     setTotalPages(Math.ceil(items.length / itemsPerPage));
@@ -77,10 +77,10 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
   console.log(pathname, items);
 
   return (
-    <div className="container mx-auto ">
-      <div className="w-full place-items-center gap-10 grid [@media(max-width:450px)]:grid-cols-1 custom-grid-col2-500-min md:grid-cols-3">
+    <div className="w-full mx-auto sm:container">
+      <div className="w-full place-items-center gap-4 grid [@media(max-width:499px)]:grid-cols-1 custom-grid-col2-400-min md:grid-cols-3 lg:grid-cols-4">
         {currentItems.map((item, index) => (
-          <Card key={index} shadow="sm" className="w-full h-full">
+          <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-h-[350px]">
             <Card
               as={Button}
               onPress={() => {
@@ -97,7 +97,12 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
                 />
               </CardBody>
             </Card>
-            <CompatibleFooter item={{ ...item }} />
+            <Skeleton
+              className={`w-full h-max ${item.id ? "" : "blur-2xl"}`}
+              isLoaded={contextLoaded}
+            >
+              <CompatibleFooter item={{ ...item }} />
+            </Skeleton>
           </Card>
         ))}
       </div>

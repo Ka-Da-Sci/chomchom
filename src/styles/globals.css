@@ -7,8 +7,8 @@
         cursor: pointer;
     }
 
-    @screen custom-minwidth-500 {
-        .custom-grid-col2-500-min{
+    @screen custom-minwidth-400 {
+        .custom-grid-col2-400-min{
             @apply grid-cols-2
         }
     }

@@ -1,21 +1,30 @@
 import { Route, Routes } from "react-router-dom";
-import PublicGallery from "./components/routes/Index";
-import SingleItemGallery from "./components/routes/SingleIItemGallery";
 import "./styles/globals.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useAuthContext } from "./hooks/useAuthContext";
 import supabase from "./lib/supabase.config";
-import PrivateGallery from "./components/routes/PrivateGallery";
-import NotFound from "./components/routes/NotFound";
-import Profile from "./components/routes/Profile";
 import { realtimeDatabaseSubscription } from "./lib/supabase.config";
 import useFileManagementContext from "./hooks/useFileManagementContext";
+import { Spinner } from "@heroui/react";
+const PublicGallery = lazy(() => import("./components/routes/Index"));
+// import PublicGallery from "./components/routes/Index";
+
+const PrivateGallery = lazy(() => import("./components/routes/PrivateGallery"));
+const NotFound = lazy(() => import("./components/routes/NotFound"));
+const Profile = lazy(() => import("./components/routes/Profile"));
+
+const SingleItemGallery = lazy(
+  () => import("./components/routes/SingleIItemGallery")
+);
 
 /* eslint-disable no-console */
 const App = () => {
-  const { readDatabaseItems, state, dispatch, setContextLoaded } = useFileManagementContext();
+  const { readDatabaseItems, state, dispatch, setContextLoaded } =
+    useFileManagementContext();
   const { setSession } = useAuthContext();
-  const [latestUpdatedItem, setLatestupdatedItem] = useState<{ id: any }>({ id: '' });
+  const [latestUpdatedItem, setLatestupdatedItem] = useState<{ id: any }>({
+    id: "",
+  });
   const [latestChangeType, setLatestChangeType] = useState("");
   const [latestUpdatedItemId, setLatestUlatestUpdatedItemId] = useState();
 
@@ -25,8 +34,6 @@ const App = () => {
     setLatestupdatedItem(updatedItem);
     setLatestChangeType(payloadData.eventType);
     setLatestUlatestUpdatedItemId(payloadData.old.id);
-
-    
   };
 
   // Fetch the session on mount and set session in context
@@ -66,11 +73,13 @@ const App = () => {
         break;
 
       case "DELETE":
-        updatedStateItems = state.items.filter(item => item.id !== latestUpdatedItemId);
+        updatedStateItems = state.items.filter(
+          (item) => item.id !== latestUpdatedItemId
+        );
         break;
 
       case "UPDATE":
-        updatedStateItems = state.items.map(item =>
+        updatedStateItems = state.items.map((item) =>
           item.id === latestUpdatedItemId ? latestUpdatedItem : item
         );
         break;
@@ -95,15 +104,16 @@ const App = () => {
   }, [state.items]);
 
   return (
-    <Routes>
-      <Route element={<PublicGallery />} path={"/"} />
-      <Route element={<SingleItemGallery />} path={"/fotox/:id/"} />
-      <Route element={<PrivateGallery />} path={"/my-fotox/"} />
-      <Route element={<Profile />} path="/profile/" />
-      <Route element={<NotFound />} path="*" />
-    </Routes>
+    <Suspense fallback={<Spinner className="container m-auto flex flex-col justify-center items-center" />}>
+      <Routes>
+        <Route element={<PublicGallery />} path={"/"} />
+        <Route element={<SingleItemGallery />} path={"/fotox/:id/"} />
+        <Route element={<PrivateGallery />} path={"/my-fotox/"} />
+        <Route element={<Profile />} path="/profile/" />
+        <Route element={<NotFound />} path="*" />
+      </Routes>
+    </Suspense>
   );
 };
 
 export default App;
-
