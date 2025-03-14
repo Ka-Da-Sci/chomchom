@@ -85,7 +85,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
               as={Button}
               onPress={(event) => {
                 event.target.classList.add('hidden');
-                navigate(`/fotox/${item.id}`);
+                // navigate(`/fotox/${item.id}`);
               }}
               isPressable
               className="overflow-hidden w-full h-full max-w-full max-h-full p-4 rounded-none flex items-center justify-normal"
