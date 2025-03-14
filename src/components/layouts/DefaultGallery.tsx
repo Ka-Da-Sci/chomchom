@@ -86,7 +86,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
               role="button"
               tabIndex={0}
               onPress={() => {
-                navigate(`/fotox/${item.id}`);
+                navigate(`/profile`);
               }}
               isPressable
               className="overflow-hidden w-full h-full max-w-full max-h-full p-4 rounded-none flex items-center justify-normal"
