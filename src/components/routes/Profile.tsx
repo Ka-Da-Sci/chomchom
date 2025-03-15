@@ -29,7 +29,7 @@ const Profile = () => {
     setIsLoading(false);
   }, [session]);
 
-  if (isLoading || !contextLoaded) {
+  if ( session !== null && isLoading || !contextLoaded) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner size="lg" color="current" />
@@ -40,7 +40,7 @@ const Profile = () => {
   if (!session) {
     return (
       <DefaultLayout>
-        <div className="flex flex-col gap-8 justify-center items-center h-3/4 max-h-screen">
+        <div className="flex flex-col gap-8 justify-center items-center max-h-screen">
           <h1>You must be logged in!</h1>
           <Button
             className="capitalize px-8 font-poppins"

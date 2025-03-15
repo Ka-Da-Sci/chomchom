@@ -48,7 +48,7 @@ const PrivateGallery = () => {
     console.log(updatedStocksCollection);
   }, [contextState.items, session]); 
 
-  if (isLoading || !contextLoaded) {
+  if ( session !== null && isLoading || !contextLoaded) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner size="lg" color="current" />

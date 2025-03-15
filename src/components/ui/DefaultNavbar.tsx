@@ -116,63 +116,71 @@ const DefaultNavbar = () => {
                   </div>
                 )}
               </DropdownItem>
-              <DropdownItem
-                    key="divider"
-                    textValue="divider"
-                    className="pointer-events-none -mt-2"
-                  >
-                    <Divider key="hrule" />
-                  </DropdownItem>
-
               {session && <DropdownItem
-                className="antialiased block sm:hidden max-h-min"
-                key="home"
-                textValue="home"
+                key="divider"
+                textValue="divider"
+                className="pointer-events-none -mt-2"
               >
-                <NavBarLink pathName="/" toProp="/" lintText="Home" />
-              </DropdownItem>}
-              {session && <DropdownItem
-                className="antialiased block sm:hidden max-h-min"
-                key="my fotox"
-                textValue="my fotox"
-              >
-                <NavBarLink
-                  pathName="/my-fotox"
-                  toProp="/my-fotox"
-                  lintText="My fotox"
-                />
+                <Divider key="hrule" />
               </DropdownItem>}
 
-              {session && <DropdownItem
-                className="antialiased block sm:hidden max-h-min"
-                key="account"
-                textValue="account"
-              >
-                <NavBarLink
-                  pathName="/profile"
-                  toProp="/profile"
-                  lintText="Account"
-                />
-              </DropdownItem>}
-
-              {session && <DropdownItem
-                textValue="signout"
-                key="signout"
-                color="danger"
-                className="mb-28 h-min absolute bottom-0 left-0"
-              >
-                <Button
-                  color="danger"
-                  className="capitalize w-full"
-                  onPress={async () => {
-                    await signOutGoogle().then((resolve) =>
-                      setSession(resolve)
-                    );
-                  }}
+              {session && (
+                <DropdownItem
+                  className="antialiased block sm:hidden max-h-min"
+                  key="home"
+                  textValue="home"
                 >
-                  Sign out
-                </Button>
-              </DropdownItem>}
+                  <NavBarLink pathName="/" toProp="/" lintText="Home" />
+                </DropdownItem>
+              )}
+              {session && (
+                <DropdownItem
+                  className="antialiased block sm:hidden max-h-min"
+                  key="my fotox"
+                  textValue="my fotox"
+                >
+                  <NavBarLink
+                    pathName="/my-fotox"
+                    toProp="/my-fotox"
+                    lintText="My fotox"
+                  />
+                </DropdownItem>
+              )}
+
+              {session && (
+                <DropdownItem
+                  className="antialiased block sm:hidden max-h-min"
+                  key="account"
+                  textValue="account"
+                >
+                  <NavBarLink
+                    pathName="/profile"
+                    toProp="/profile"
+                    lintText="Account"
+                  />
+                </DropdownItem>
+              )}
+
+              {session && (
+                <DropdownItem
+                  textValue="signout"
+                  key="signout"
+                  color="danger"
+                  className="mb-28 h-min absolute bottom-0 left-0"
+                >
+                  <Button
+                    color="danger"
+                    className="capitalize w-full"
+                    onPress={async () => {
+                      await signOutGoogle().then((resolve) =>
+                        setSession(resolve)
+                      );
+                    }}
+                  >
+                    Sign out
+                  </Button>
+                </DropdownItem>
+              )}
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>
