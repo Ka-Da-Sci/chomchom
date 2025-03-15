@@ -159,7 +159,7 @@ const DefaultNavbar = () => {
                 textValue="signout"
                 key="signout"
                 color="danger"
-                className="mb-20 h-min absolute bottom-0 left-0"
+                className="mb-28 h-min absolute bottom-0 left-0"
               >
                 <Button
                   color="danger"
