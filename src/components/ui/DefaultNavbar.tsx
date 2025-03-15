@@ -10,7 +10,6 @@ import {
   Avatar,
   Divider,
   Button,
-  DropdownSection,
 } from "@heroui/react";
 // import clsx from "clsx";
 import BrandLogo from "./BrandLogo";
@@ -74,8 +73,8 @@ const DefaultNavbar = () => {
           className="items-center px-2  [@media(min-width:350px)]:min-w-[200px] [@media(max-width:490px)]:min-w-0"
           justify="end"
         >
-          {!pathname.includes("/fotox/") ? <Search /> : ''}
-          <Dropdown className="rounded-sm">
+          {!pathname.includes("/fotox/") ? <Search /> : ""}
+          <Dropdown className="rounded-sm h-screen relative mt-2">
             <DropdownTrigger>
               <Avatar
                 isBordered
@@ -90,11 +89,15 @@ const DefaultNavbar = () => {
                 }
               />
             </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownMenu
+              aria-label="Profile Actions"
+              variant="flat"
+              className={`h-full relative  ${session ? "" : "flex flex-col justify-center"}`}
+            >
               <DropdownItem
                 key="user"
                 textValue="user"
-                className={`gap-2 ${session ? "pointer-events-none" : ""}`}
+                className={`gap-2 max-h-min ${session ? "pointer-events-none" : ""}`}
               >
                 {!session && (
                   <Button
@@ -113,79 +116,63 @@ const DefaultNavbar = () => {
                   </div>
                 )}
               </DropdownItem>
-              {session && (
-                <DropdownSection className="font-poppins font-bold">
-                  <DropdownItem
+              <DropdownItem
                     key="divider"
                     textValue="divider"
-                    className="pointer-events-none"
+                    className="pointer-events-none -mt-2"
                   >
                     <Divider key="hrule" />
                   </DropdownItem>
 
-                  <DropdownItem
-                    className="antialiased block sm:hidden"
-                    key="home"
-                    textValue="home"
-                  >
-                    <NavBarLink pathName="/" toProp="/" lintText="Home" />
-                  </DropdownItem>
-                  <DropdownItem
-                    className="antialiased block sm:hidden"
-                    key="my fotox"
-                    textValue="my fotox"
-                  >
-                    <NavBarLink
-                      pathName="/my-fotox"
-                      toProp="/my-fotox"
-                      lintText="My fotox"
-                    />
-                  </DropdownItem>
-                  <DropdownItem
-                    className="antialiased block sm:hidden"
-                    key="account"
-                    textValue="account"
-                  >
-                    <NavBarLink
-                      pathName="/profile"
-                      toProp="/profile"
-                      lintText="Account"
-                    />
-                  </DropdownItem>
-                  {/* <DropdownItem
-                    className="antialiased"
-                    key="analytics"
-                    textValue="analytics"
-                  >
-                    Analytics
-                  </DropdownItem>
-                  <DropdownItem
-                    className="antialiased"
-                    key="help_and_feedback"
-                    textValue="help_and_feedback"
-                  >
-                    Help & Feedback
-                  </DropdownItem> */}
-                  <DropdownItem
-                    textValue="signout"
-                    key="signout"
-                    color="danger"
-                    className="mt-10"
-                  >
-                    <Button
-                      color="danger"
-                      className="capitalize w-full"
-                      onPress={async () => {
-                        await signOutGoogle().then((resolve) =>
-                          setSession(resolve)
-                        );
-                      }}
-                    >
-                      Sign out
-                    </Button>
-                  </DropdownItem>
-                </DropdownSection>
-              )}
+              {session && <DropdownItem
+                className="antialiased block sm:hidden max-h-min"
+                key="home"
+                textValue="home"
+              >
+                <NavBarLink pathName="/" toProp="/" lintText="Home" />
+              </DropdownItem>}
+              {session && <DropdownItem
+                className="antialiased block sm:hidden max-h-min"
+                key="my fotox"
+                textValue="my fotox"
+              >
+                <NavBarLink
+                  pathName="/my-fotox"
+                  toProp="/my-fotox"
+                  lintText="My fotox"
+                />
+              </DropdownItem>}
+
+              {session && <DropdownItem
+                className="antialiased block sm:hidden max-h-min"
+                key="account"
+                textValue="account"
+              >
+                <NavBarLink
+                  pathName="/profile"
+                  toProp="/profile"
+                  lintText="Account"
+                />
+              </DropdownItem>}
+
+              {session && <DropdownItem
+                textValue="signout"
+                key="signout"
+                color="danger"
+                className="mb-14 h-min absolute bottom-0 left-0"
+              >
+                <Button
+                  color="danger"
+                  className="capitalize w-full"
+                  onPress={async () => {
+                    await signOutGoogle().then((resolve) =>
+                      setSession(resolve)
+                    );
+                  }}
+                >
+                  Sign out
+                </Button>
+              </DropdownItem>}
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>

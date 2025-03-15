@@ -17,7 +17,7 @@ const SupaBaseDataBase = {
       `${collection_name ? collection_name : "safe_stocks"}` as "stocks";
     return new Promise(async (resolve) => {
       try {
-        const { data } = await supabase.from(valid_collection_name).select();
+        const { data } = await supabase.from(valid_collection_name).select().order("created_at", {ascending: false});
         data?.map((doc) => docs.push(doc));
         resolve(docs);
       } catch (error) {
