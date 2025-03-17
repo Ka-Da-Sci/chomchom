@@ -21,8 +21,7 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         <Divider className="bg-default-400 mt-4" />
         <p className="font-montserrat font-medium text-xs text-default-900">
-          @{<span>{new Date().getFullYear()}</span>} Fotox Inc. All rights
-          reserved.
+          Copyright ©{<span>{new Date().getFullYear()}</span>} Xalphabet Inc. All rights reserved.
         </p>
       </CardFooter>
     </Card>
