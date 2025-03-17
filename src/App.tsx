@@ -69,7 +69,7 @@ const App = () => {
 
     switch (latestChangeType) {
       case "INSERT":
-        updatedStateItems = [...state.items, latestUpdatedItem];
+        updatedStateItems = [latestUpdatedItem, ...state.items];
         break;
 
       case "DELETE":

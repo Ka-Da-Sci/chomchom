@@ -61,7 +61,7 @@ const Profile = () => {
         <div className="flex self-start items-start gap-4 flex-col sm:flex-row">
           <div className="flex items-center justify-center flex-col gap-4 rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
             <Image
-              className="w-max h-max max-h-20 max-w-20 rounded-full"
+              className="z-0 w-max h-max max-h-20 max-w-20 rounded-full"
               src={currentUser?.user_metadata.avatar_url}
             />
             <p className="font-normal font-poppins antialiased text-sm sm:text-base text-default-900">{currentUser?.user_metadata.full_name}</p>
