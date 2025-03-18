@@ -80,17 +80,17 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
     <div className="w-full mx-auto sm:container">
       <div className="w-full place-items-center gap-4 grid [@media(max-width:499px)]:grid-cols-1 custom-grid-col2-400-min md:grid-cols-3 lg:grid-cols-4">
         {currentItems.map((item, index) => (
-          <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-h-[350px]">
+          <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-w-[600px] max-h-[500px] [@media(min-width:500px)]:max-h-[350px]">
             <Button
               onPress={() => {
                 navigate(`/fotox/${item.id}`);
               }}
-              className="overflow-hidden w-full h-full max-w-full max-h-full p-4 rounded-none flex items-center justify-normal bg-transparent"
+              className="overflow-hidden w-full h-full max-w-full max-h-full p-2 rounded-none flex items-center justify-normal bg-transparent"
             >
               <CardBody className="overflow-hidden p-0 w-full h-full max-w-full max-h-full items-center justify-normal">
                 <Image
                   alt={item && item.title ? item.title : "image"}
-                  className="object-cover object-right-top w-full h-full max-h-[400px]"
+                  className="object-cover object-right-top w-full h-full"
                   src={item.path}
                 />
               </CardBody>
