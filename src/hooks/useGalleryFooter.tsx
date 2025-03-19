@@ -7,6 +7,7 @@ import { useRef } from "react";
 type Item = {
   id?: any;
   title?: string;
+  path?: string;
   user_fullnames?: string;
   user_name?: string;
   created_at?: string;
@@ -16,34 +17,41 @@ export const useGalleryFooter = () => {
   const { access } = useFileManagementContext();
   const deleteButtonUseRef = useRef<HTMLButtonElement | null>(null);
 
-
   /* eslint-disable no-console*/
-  const handleOnClickDeleteButton = async () => {
+  const handleOnClickDeleteButton = async (itemPath?: string) => {
     try {
       const itemId = deleteButtonUseRef?.current?.id;
-      
+
       if (!itemId) {
         console.error("Item ID is undefined or null.");
         return;
       }
-  
+
       console.log("Deleting item with ID:", itemId, "Type:", typeof itemId);
-  
+
       const { error } = await supabase
         .from("stocks")
         .delete()
         .eq("id", Number(itemId)); // Ensure itemId is a number
-  
+
       if (error) {
         throw new Error(`Failed to delete item: ${error.message}`);
       }
-  
+
+      // console.log("Item path:", itemPath?.split('public/chommie-bucket/')[1]);
+
+      const { error: deleteError } = await supabase.storage
+        .from("chommie-bucket")
+        .remove([`${itemPath?.split('public/chommie-bucket/')[1]}`]);
+      if (deleteError){
+        throw new Error(`{Failed to delete file:  ${itemPath}}`)
+      };
+
       console.log("Item deleted successfully!");
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
-  
 
   const galleryFooter = {
     private: ({ item }: { item: Item }) => {
@@ -61,7 +69,14 @@ export const useGalleryFooter = () => {
                 {item.created_at?.split("T")[0]}
               </i>
             </div>
-            <Button onPress={handleOnClickDeleteButton} ref={deleteButtonUseRef} id={item.id} className="rounded-md bg-transparent border border-solid border-danger-500 font-poppins font-medium antialiased text-default-400" >Delete</Button>
+            <Button
+              onPress={() => handleOnClickDeleteButton(item.path)}
+              ref={deleteButtonUseRef}
+              id={item.id}
+              className="rounded-md bg-transparent border border-solid border-danger-500 font-poppins font-medium antialiased text-default-400"
+            >
+              Delete
+            </Button>
           </div>
         </CardFooter>
       );
@@ -97,15 +112,13 @@ export const useGalleryFooter = () => {
 
   let CompatibleFooter;
 
-  switch(access){
+  switch (access) {
     case "private":
-      CompatibleFooter = galleryFooter['private'];
+      CompatibleFooter = galleryFooter["private"];
       break;
     default:
-      CompatibleFooter = galleryFooter['public'];
+      CompatibleFooter = galleryFooter["public"];
   }
-
-
 
   return { CompatibleFooter };
 };

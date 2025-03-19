@@ -13,10 +13,10 @@ const initialstate = {
   filePath: null,
 };
 
-interface State {
+type State = {
   formAction: string | null;
   filePath: string | null;
-}
+};
 
 interface Action {
   type: string;
@@ -34,15 +34,53 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
+/* eslint-disable no-console */
+/** Function to check if a file path exists and generate a new unique path */
+const generateUniquePath = async (
+  folderPath: string,
+  filePath: string,
+  bucketName: string
+): Promise<string> => {
+  console.log("Entered");
+  let newPath = filePath;
+  const min = 10n ** 9n; // 1 billion
+  const max = 10n ** 15n; // 1 quadrillion
+
+  while (true) {
+    const { data, error } = await supabase.storage
+      .from(bucketName)
+      .list(folderPath, {
+        limit: 100,
+        offset: 0,
+        sortBy: { column: "name", order: "asc" },
+      });
+
+    if (error) {
+      console.error("Error checking file existence:", error.message);
+      return filePath; // Fallback to original path
+    }
+
+    
+    if (!data?.some((file) => file.name === newPath)) break; // File doesn't exist, use it
+    
+    // Append a counter to create a new unique filename
+    newPath = `${filePath}-${(min + BigInt(Math.floor(Math.random() * Number(max - min)))).toLocaleString().replace(/,/g, "-")}`;
+  }
+
+  console.log("Returning path:", newPath);
+  return `${folderPath}/${newPath}`;
+};
+
 const FileUploadForm = () => {
-  const bucketName ="chommie-bucket";
+  const bucketName = "chommie-bucket";
   const [isUploading, setIsUploading] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialstate);
   const titleRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const uppy = useUppyWithSupabase(bucketName);
   const { session } = useAuthContext();
-  const { state: contextState, dispatch: contextDispatch } = useFileManagementContext();
+  const { state: contextState, dispatch: contextDispatch } =
+    useFileManagementContext();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -62,53 +100,64 @@ const FileUploadForm = () => {
     });
   };
 
-  /* eslint-disable no-console */
-
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsUploading(true);
-    const { user} = (await supabase.auth.getUser()).data;
+    const { user } = (await supabase.auth.getUser()).data;
     const user_full_name = user?.user_metadata.full_name || "Unknown User";
     const user_name = user?.email!.split("@")[0] || "unknown";
+    const folderPath = session.user.id;
     console.log(user_full_name, user_name);
-  
-    if (contextState.input.title && contextState.input.file && contextState.input.path) {
+
+    if (
+      contextState.input.title &&
+      contextState.input.file &&
+      contextState.input.path
+    ) {
       uppy.cancelAll();
-      
+
+      let fileName = `${await generateUniquePath(folderPath, contextState.input.title.replace(" ", "").slice(0, 10).toLowerCase(), bucketName)}`;
       uppy.addFile({
-        name: contextState.input.title,
+        name: fileName,
         data: contextState.input.file,
         type: contextState.input.file.type,
         // user_full_name,
         // user_name,
-
       });
-  
+
       try {
-        const result = await uppy.upload().catch(error => {
+        const result = await uppy.upload().catch((error) => {
           console.error("Upload error:", error);
           throw error;
         });
-  
+
         if (result?.successful?.length === 0) {
           throw new Error("Upload failed");
         }
-  
-        const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${contextState.input.title}`;
-  
-        await writeDoc({ ...contextState.input, path: publicUrl, user_fullnames: user_full_name, user_name: user_name });
-  
+
+        const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName);
+
+
+        const publicUrl = data.publicUrl;
+        // const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${contextState.input.title}`;
+
+        await writeDoc({
+          ...contextState.input,
+          path: publicUrl,
+          user_fullnames: user_full_name,
+          user_name: user_name,
+        });
       } catch (error) {
         console.error("Upload failed:", error);
       }
-      
+
       setIsUploading(false);
       // Clear the form inputs
       const form = event.target as HTMLFormElement;
       form.reset();
     }
   };
-  
+
   const newUploadFilePath = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files
       ? URL.createObjectURL(event.target.files[0])
@@ -170,7 +219,6 @@ const FileUploadForm = () => {
                 return "File name/title must be atleast 3 characters long.";
               }
 
-
               return value === "admin" ? "Nice try!" : null;
             }}
             onChange={handleOnChange}
@@ -181,11 +229,15 @@ const FileUploadForm = () => {
             isRequired
             name="upload-file"
             placeholder="No file chosen"
-            errorMessage={!session ? "You must be logged in!" : "Please select valid file(s) for upload."}
+            errorMessage={
+              !session
+                ? "You must be logged in!"
+                : "Please select valid file(s) for upload."
+            }
             type="file"
             ref={fileRef}
             accept="image/*"
-            disabled= {!session}
+            disabled={!session}
             onChange={(event) => {
               handleOnChange(event);
 
@@ -193,23 +245,28 @@ const FileUploadForm = () => {
             }}
           />
           {!session && (
-          <div className="text-center text-red-500 text-sm">
-            You must be logged in!
-          </div>
+            <div className="text-center text-red-500 text-sm">
+              You must be logged in!
+            </div>
           )}
           <div className="flex justify-between max-sm:flex-wrap w-full gap-2">
             <div className="relative w-full">
               <Button
-              isLoading={isUploading}
-              className="self-center w-full disabled:bg-default-500"
-              color="primary"
-              type="submit"
-              disabled={!session}
+                isLoading={isUploading}
+                className="self-center w-full disabled:bg-default-500"
+                color="primary"
+                type="submit"
+                disabled={!session}
               >
-              Save And Upload
+                Save And Upload
               </Button>
             </div>
-            <Button className="self-center w-full" type="reset" variant="flat" disabled={!session}>
+            <Button
+              className="self-center w-full"
+              type="reset"
+              variant="flat"
+              disabled={!session}
+            >
               Reset Changes
             </Button>
           </div>
