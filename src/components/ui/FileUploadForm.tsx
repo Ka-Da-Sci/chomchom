@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import { Form, Input, Button } from "@heroui/react";
+import { Form, Input, Button, Alert } from "@heroui/react";
 import { Image } from "@heroui/react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 import useUppyWithSupabase from "@/hooks/useUppyWithSupabase";
@@ -42,10 +42,10 @@ const generateUniquePath = async (
   bucketName: string
 ): Promise<string> => {
   console.log("Entered");
-  let newPath = filePath;
   const min = 10n ** 9n; // 1 billion
   const max = 10n ** 15n; // 1 quadrillion
-
+  let newPath = `${filePath}-${(min + BigInt(Math.floor(Math.random() * Number(max - min)))).toLocaleString().replace(/,/g, "-")}`;
+  
   while (true) {
     const { data, error } = await supabase.storage
       .from(bucketName)
@@ -60,9 +60,8 @@ const generateUniquePath = async (
       return filePath; // Fallback to original path
     }
 
-    
     if (!data?.some((file) => file.name === newPath)) break; // File doesn't exist, use it
-    
+
     // Append a counter to create a new unique filename
     newPath = `${filePath}-${(min + BigInt(Math.floor(Math.random() * Number(max - min)))).toLocaleString().replace(/,/g, "-")}`;
   }
@@ -79,8 +78,23 @@ const FileUploadForm = () => {
   const fileRef = useRef<HTMLInputElement>(null);
   const uppy = useUppyWithSupabase(bucketName);
   const { session } = useAuthContext();
+  const [reUpload, setReUpload] = useState(false);
+  const [validate, setValidate] = useState(false);
   const { state: contextState, dispatch: contextDispatch } =
     useFileManagementContext();
+
+
+const ReUploadAlert = () => {
+  const title = "Failed to upload!";
+  const description = "Refresh the page and retry.";
+
+  return (
+    <div className="flex items-center justify-center w-full">
+      <Alert description={description} title={title} />
+    </div>
+  );
+}
+
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -103,10 +117,12 @@ const FileUploadForm = () => {
   const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsUploading(true);
+    const form = event.target as HTMLFormElement;
     const { user } = (await supabase.auth.getUser()).data;
     const user_full_name = user?.user_metadata.full_name || "Unknown User";
     const user_name = user?.email!.split("@")[0] || "unknown";
     const folderPath = session.user.id;
+    setValidate(true);
     console.log(user_full_name, user_name);
 
     if (
@@ -116,7 +132,20 @@ const FileUploadForm = () => {
     ) {
       uppy.cancelAll();
 
-      let fileName = `${await generateUniquePath(folderPath, contextState.input.title.replace(" ", "").slice(0, 10).toLowerCase(), bucketName)}`;
+      if (user_name === "unknown" || user_full_name === "Unknown User"){
+        uppy.cancelAll()
+        form.reset();
+        setIsUploading(false);
+        setReUpload(true);
+      }
+
+      let fileName = `${await generateUniquePath(folderPath, contextState.input.title.replace(/ /g, "").slice(0, 10).toLowerCase(), bucketName)}`;
+
+      if (!fileName || typeof fileName !== "string") {
+        console.log("Failef To Make The Post...");
+        return;
+      }
+
       uppy.addFile({
         name: fileName,
         data: contextState.input.file,
@@ -135,8 +164,9 @@ const FileUploadForm = () => {
           throw new Error("Upload failed");
         }
 
-        const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName);
-
+        const { data } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(fileName);
 
         const publicUrl = data.publicUrl;
         // const publicUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucketName}/${contextState.input.title}`;
@@ -153,7 +183,6 @@ const FileUploadForm = () => {
 
       setIsUploading(false);
       // Clear the form inputs
-      const form = event.target as HTMLFormElement;
       form.reset();
     }
   };
@@ -178,14 +207,17 @@ const FileUploadForm = () => {
 
   const Preview = ({ filePath }: { filePath: string }) => {
     return (
-      <div className="max-w-[200px]">
-        <Image
-          className="object-cover w-max h-max max-sm:max-w-full max-w-[200px] aspect-square"
-          radius="sm"
-          shadow="sm"
-          src={filePath}
-          alt="preview"
-        />
+      <div className="max-w-[200px] aspect-square">
+        <div className="w-full aspect-square overflow-y-auto overflow-x-hidden rounded-sm">
+          <Image
+            className="object-cover w-max h-max max-sm:max-w-full max-w-[200px]"
+            radius="sm"
+            shadow="sm"
+            src={filePath}
+            alt="preview"
+          />
+
+        </div>
         <p className="w-full text-center font-montserrat font-normal text-sm text-[#000000] antialiased capitalize">
           Preview
         </p>
@@ -215,7 +247,8 @@ const FileUploadForm = () => {
             ref={titleRef}
             disabled={!session}
             validate={(value) => {
-              if (value.length < 3) {
+              if (value.length < 3 && validate) {
+                setValidate(true);
                 return "File name/title must be atleast 3 characters long.";
               }
 
@@ -262,6 +295,14 @@ const FileUploadForm = () => {
               </Button>
             </div>
             <Button
+              onPress={(e) => {
+                setValidate(false);
+                const formButton = e.target as HTMLFormElement;
+                const form = formButton?.closest("form");
+                uppy.cancelAll();
+                form?.closest("form")?.reset();
+                setIsUploading(false);
+              }}
               className="self-center w-full"
               type="reset"
               variant="flat"
@@ -270,6 +311,7 @@ const FileUploadForm = () => {
               Reset Changes
             </Button>
           </div>
+          {reUpload && <ReUploadAlert />}
         </Form>
       </div>
     </div>
