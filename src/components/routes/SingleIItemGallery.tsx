@@ -11,6 +11,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import DefaultLayout from "../layouts/DefaultLayout";
 import NotFound from "./NotFound";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
+import CommentInput from "../comments/CommentInput";
+import CommentsSection from "../comments/CommentsSection";
 
 // /* eslint-disable no-console */
 const SingleItemGallery = () => {
@@ -22,7 +24,7 @@ const SingleItemGallery = () => {
     isLoading,
     setIsLoading,
     contextLoaded,
-    setContextLoaded
+    setContextLoaded,
   } = useFileManagementContext();
 
   const [itemInView, setItemInView] = useState<{
@@ -33,38 +35,52 @@ const SingleItemGallery = () => {
     user_name: string;
     user_fullnames: string;
     created_at: string;
-  } | null>({ id: 0, title: "", path: "", file: null, user_name: "", user_fullnames: "", created_at: ""} );
+  } | null>({
+    id: 0,
+    title: "",
+    path: "",
+    file: null,
+    user_name: "",
+    user_fullnames: "",
+    created_at: "",
+  });
 
   useEffect(() => {
-
-    if (contextState.items.length !== 0){
-
+    if (contextState.items.length !== 0) {
       setContextLoaded(false);
     }
-      const itemReferenced = itemInViewId
-        ? contextState.items.find(
-            (item) => item.id === parseInt(itemInViewId as string)
-          ) || null
-        : null;
+    const itemReferenced = itemInViewId
+      ? contextState.items.find(
+          (item) => item.id === parseInt(itemInViewId as string)
+        ) || null
+      : null;
 
-      setItemInView(itemReferenced);
-      if (itemReferenced !== null && itemInView !== null) {
-        setContextLoaded(true);
-        setIsLoading(false);
-      } else if (itemReferenced === null && contextState.items.length !== 0 && Object.keys(contextState.items[0]).length !== 1){
-        // console.log(Object.keys(contextState.items[0]).length);
-        // console.log(itemReferenced);
-        // console.log(contextState.items);
-        setContextLoaded(true);
-        setIsLoading(false);
-      } else if (itemReferenced === null && contextState.items.length === 0 && contextLoaded){
-        // console.log(itemReferenced);
-        // console.log(contextState.items);
-        // console.log(contextLoaded);
-        // debugger;
-        setContextLoaded(true);
-        setIsLoading(false);
-      }
+    setItemInView(itemReferenced);
+    if (itemReferenced !== null && itemInView !== null) {
+      setContextLoaded(true);
+      setIsLoading(false);
+    } else if (
+      itemReferenced === null &&
+      contextState.items.length !== 0 &&
+      Object.keys(contextState.items[0]).length !== 1
+    ) {
+      // console.log(Object.keys(contextState.items[0]).length);
+      // console.log(itemReferenced);
+      // console.log(contextState.items);
+      setContextLoaded(true);
+      setIsLoading(false);
+    } else if (
+      itemReferenced === null &&
+      contextState.items.length === 0 &&
+      contextLoaded
+    ) {
+      // console.log(itemReferenced);
+      // console.log(contextState.items);
+      // console.log(contextLoaded);
+      // debugger;
+      setContextLoaded(true);
+      setIsLoading(false);
+    }
   }, [contextState.items, itemInViewId, contextLoaded]);
 
   // Show loading state while waiting for data (Using HeroUI Spinner)
@@ -96,48 +112,54 @@ const SingleItemGallery = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto m-10 z-0 flex flex-col justify-center items-center gap-10 relative">
+      <div className=" w-full mt-10 mb-20 z-0 flex flex-col justify-center items-center gap-10 relative">
         <Button
           onPress={() => navigate(-1)}
           className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-blue-500"
         >
           Back
         </Button>
-        <Card
-          shadow="sm"
-          className="w-full h-max max-w-[300px] sm:max-w-[400px] max-h-[400px] sm:max-h-[500px]"
-        >
-          <CardBody className="w-full h-max max-w-full p-4 max-h-full items-center justify-normal">
-            <Image
-              alt={itemInView?.title ?? "image"}
-              className="object-cover object-right-top w-full h-full max-h-full"
-              src={itemInView?.path}
-            />
-          </CardBody>
-          <CardFooter className="flex flex-col gap-3 items-start w-full pb-6 overflow-visible cursor-auto">
-            <p className="font-inter font-semibold text-left antialiased">
-              {itemInView?.title}
-            </p>
-            <div className="flex justify-between flex-wrap gap-4 items-center w-full">
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-default-400 text-small text-left">
-                  {itemInView?.user_fullnames}
-                </span>
-                <i className="text-default-400 text-small text-left">
-                  @{itemInView?.user_name}
-                </i>
+        <div className="w-full flex flex-col sm:flex-row gap-8 h-max max-h-full sm:max-h-[500px] overflow-hidden">
+          <Card
+            shadow="sm"
+            className="w-full m-4 h-max max-w-[300px] sm:max-w-[400px] max-h-full sm:max-h-full"
+          >
+            <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] sm:max-h-[350px] items-center justify-normal ">
+              <Image
+                alt={itemInView?.title ?? "image"}
+                className="object-cover object-right-top w-full h-full max-h-full overflow-y-auto"
+                src={itemInView?.path}
+              />
+            </CardBody>
+            <CardFooter className="flex flex-col gap-3 items-start w-full pb-6 overflow-visible cursor-auto">
+              <p className="font-inter font-semibold text-left antialiased">
+                {itemInView?.title}
+              </p>
+              <div className="flex justify-between flex-wrap gap-4 items-center w-full">
+                <div className="flex flex-col gap-1">
+                  <span className="font-semibold text-default-400 text-small text-left">
+                    {itemInView?.user_fullnames}
+                  </span>
+                  <i className="text-default-400 text-small text-left">
+                    @{itemInView?.user_name}
+                  </i>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-semibold text-default-400 text-small text-left">
+                    Date Posted
+                  </span>
+                  <i className="text-default-400 text-small text-left">
+                    {itemInView?.created_at.split("T")[0]}
+                  </i>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-default-400 text-small text-left">
-                  Date Posted
-                </span>
-                <i className="text-default-400 text-small text-left">
-                  {itemInView?.created_at.split("T")[0]}
-                </i>
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
+            </CardFooter>
+          </Card>
+          <div className=" w-full flex flex-col max-h-full sm:max-h-full overflow-auto">
+            <CommentInput postId={Number(itemInView.id)} />
+            <CommentsSection postId={Number(itemInView.id)} />
+          </div>
+        </div>
       </div>
     </DefaultLayout>
   );
