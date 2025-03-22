@@ -155,10 +155,10 @@ const SingleItemGallery = () => {
               </div>
             </CardFooter>
           </Card>
-          <CardBody className="p-0 w-full container flex flex-col max-h-full overflow-auto m-4">
+          <div className="p-0 w-full flex flex-col max-h-full overflow-auto m-0">
             <CommentInput postId={Number(itemInView.id)} />
             <CommentsSection postId={Number(itemInView.id)} />
-          </CardBody>
+          </div>
         </div>
       </div>
     </DefaultLayout>
