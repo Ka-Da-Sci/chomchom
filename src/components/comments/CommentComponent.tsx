@@ -29,11 +29,11 @@ const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes; }> = ({ co
 
     setHideReplies();
 
-    return () => void 0;
+    return () => void 0;    
   }, [comment.revealReplies, comment]);
 
     return (
-      <Card className="border-l-2 pl-4 my-2 w-full">
+      <Card className="border-2 px-4 my-4 py-2 w-full shadow-none">
         <p className="font-bold">{comment.user_fullname}</p>
         <Card className="w-full flex items-start border-none shadow-none rounded-none" isPressable={pressable} onPress={() => {
           setShowReplies(!showReplies)
@@ -42,9 +42,7 @@ const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes; }> = ({ co
         </Card>
         <CommentInput postId={Number(comment.post_id)} parentId={comment.id} />
         {comment.replies?.map((reply) => (
-          showReplies && <Card key={reply.id}>
-            <CommentComponent key={reply.id} comment={reply} />
-          </Card>
+          showReplies && <CommentComponent key={reply.id} comment={reply} />
           
         ))}
 

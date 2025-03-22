@@ -1,6 +1,7 @@
 import { useState } from "react";
 import addComment from "./addComment";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { Button, Form, Input } from "@heroui/react";
 
 
 const CommentInput: React.FC<{ postId: number; parentId?: string }> = ({ postId, parentId }) => {
@@ -16,16 +17,16 @@ const CommentInput: React.FC<{ postId: number; parentId?: string }> = ({ postId,
     };
   
     return (
-      <form onSubmit={handleSubmit} className="my-2 w-full">
-        <input
+      <Form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
+        <Input
           type="text"
-          className="border p-2 w-full"
-          placeholder="Write a comment..."
+          className=" w-full"
+          placeholder={!parentId ? "Enter your comment" : "Enter your reply"}
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2">Post</button>
-      </form>
+        <Button type="submit" className="bg-blue-500 rounded-md text-white px-4 py-2 w-max">{!parentId ? "Comment" : "Reply"}</Button>
+      </Form>
     );
   };
   

@@ -119,12 +119,12 @@ const SingleItemGallery = () => {
         >
           Back
         </Button>
-        <div className="w-full flex flex-col sm:flex-row gap-8 h-max max-h-full sm:max-h-[500px] overflow-hidden">
+        <div className="w-full flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[500px] overflow-hidden">
           <Card
             shadow="sm"
-            className="w-full m-4 h-max max-w-[300px] sm:max-w-[400px] max-h-full sm:max-h-full"
+            className="w-full m-4 h-max max-w-[300px] md:max-w-[400px] max-h-full md:max-h-full"
           >
-            <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] sm:max-h-[350px] items-center justify-normal ">
+            <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] md:max-h-[350px] items-center justify-normal ">
               <Image
                 alt={itemInView?.title ?? "image"}
                 className="object-cover object-right-top w-full h-full max-h-full overflow-y-auto"
@@ -155,10 +155,10 @@ const SingleItemGallery = () => {
               </div>
             </CardFooter>
           </Card>
-          <div className=" w-full flex flex-col max-h-full sm:max-h-full overflow-auto">
+          <CardBody className="p-0 w-full container flex flex-col max-h-full overflow-auto m-4">
             <CommentInput postId={Number(itemInView.id)} />
             <CommentsSection postId={Number(itemInView.id)} />
-          </div>
+          </CardBody>
         </div>
       </div>
     </DefaultLayout>

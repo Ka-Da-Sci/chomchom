@@ -1,12 +1,6 @@
-// import { Comment } from "@/types/utilityTypes";
-import { Database } from "@/types/database.types";
+import { CommentsTableColumnTypes } from "@/types/utilityTypes";
 
 /* eslint-disable no-console */
-
-type CommentReplyTypes = {
-  replies?: CommentsTableColumnTypes[];
-};
-type CommentsTableColumnTypes = Database["public"]["Tables"]["comments"]["Row"] & CommentReplyTypes;
 
 const organizeComments = (comments: CommentsTableColumnTypes[]): CommentsTableColumnTypes[] => {
   const postMap = new Map<string, CommentsTableColumnTypes>();
@@ -33,7 +27,7 @@ const organizeComments = (comments: CommentsTableColumnTypes[]): CommentsTableCo
     }
   }
 
-  // debugger
+  // debugger;
   return result;
 }
 

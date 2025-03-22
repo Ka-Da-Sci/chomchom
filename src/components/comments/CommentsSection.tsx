@@ -35,15 +35,17 @@ const CommentsSection: React.FC<{ postId: number }> = ({ postId }) => {
             const addReply = (comments: CommentsTableColumnTypes[]): CommentsTableColumnTypes[] => {
               return comments.map(comment => {
               if (comment.id === payload.new.parent_id) {
+                const  { replies: oldReplies, ...updatedCommentObj } = comment;
+                // debugger;
                 return {
-                  replies: [...(comment.replies || []), { ...payload.new as CommentsTableColumnTypes, replies: [] } ],
-                ...comment,
+                  replies: [{ ...payload.new as CommentsTableColumnTypes, replies: [] }, ...(oldReplies || []) ],
+                ...updatedCommentObj,
                 revealReplies: true,
                 };
               } else if (comment.replies) {
                 return {
+                  ...comment,
                   replies: addReply(comment.replies),
-                ...comment,
                 };
               }
               return comment;
@@ -62,7 +64,7 @@ const CommentsSection: React.FC<{ postId: number }> = ({ postId }) => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-2">
       {comments.map((comment) => (
         <CommentComponent key={comment.id} comment={comment} />
       ))}
