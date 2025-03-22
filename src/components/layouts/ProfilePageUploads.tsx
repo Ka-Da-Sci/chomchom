@@ -83,7 +83,7 @@ const ProfilePageUploads = () => {
           Fotox
         </h1>
         <Button
-          className="bg-white  rounded-md border border-solid border-primary-500 px-3 sm:px-6 text-default-500 font-semibold font-montserrat"
+          className="bg-white  rounded-md border border-solid border-default-500 px-3 sm:px-6 text-default-500 font-semibold font-montserrat"
           onPress={() => {
             setToggleForm(true);
             navigate("/my-fotox");

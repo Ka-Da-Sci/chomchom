@@ -84,7 +84,7 @@ const SingleItemGallery = () => {
   }, [contextState.items, itemInViewId, contextLoaded]);
 
   // Show loading state while waiting for data (Using HeroUI Spinner)
-  if (isLoading || !contextLoaded) {
+  if (isLoading || !contextLoaded || itemInView?.path.trim() === "") {
     return (
       <DefaultLayout>
         <div className="flex justify-center items-center h-screen">
@@ -122,7 +122,7 @@ const SingleItemGallery = () => {
         <div className="w-full flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[500px] overflow-hidden">
           <Card
             shadow="sm"
-            className="w-full m-4 h-max max-w-[300px] md:max-w-[400px] max-h-full md:max-h-full"
+            className="w-full m-4 ml-1 h-max max-w-[300px] md:max-w-[400px] max-h-full md:max-h-full"
           >
             <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] md:max-h-[350px] items-center justify-normal ">
               <Image

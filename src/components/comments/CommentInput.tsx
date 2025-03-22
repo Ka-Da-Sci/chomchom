@@ -6,7 +6,7 @@ import { Button, Form, Input } from "@heroui/react";
 
 const CommentInput: React.FC<{ postId: number; parentId?: string }> = ({ postId, parentId }) => {
     const [content, setContent] = useState("");
-    const { session } =useAuthContext();
+    const { session } = useAuthContext();
     // debugger
   
     const handleSubmit = async (e: React.FormEvent) => {
@@ -19,13 +19,14 @@ const CommentInput: React.FC<{ postId: number; parentId?: string }> = ({ postId,
     return (
       <Form onSubmit={handleSubmit} className="w-full flex flex-col gap-2">
         <Input
+        disabled={!session}
           type="text"
           className=" w-full"
           placeholder={!parentId ? "Enter your comment" : "Enter your reply"}
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
-        <Button type="submit" className="bg-blue-500 rounded-md text-white px-4 py-2 w-max">{!parentId ? "Comment" : "Reply"}</Button>
+        <Button disabled={!session} type="submit" className={`rounded-md text-white px-4 py-2 w-max ${session ? "bg-default-600" : "bg-default-400"}`}>{!parentId ? "Comment" : "Reply"}</Button>
       </Form>
     );
   };

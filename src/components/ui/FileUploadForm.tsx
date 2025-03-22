@@ -286,7 +286,7 @@ const ReUploadAlert = () => {
             <div className="relative w-full">
               <Button
                 isLoading={isUploading}
-                className="self-center w-full disabled:bg-default-500"
+                className="self-center w-full bg-default-600 disabled:bg-default-500"
                 color="primary"
                 type="submit"
                 disabled={!session}
