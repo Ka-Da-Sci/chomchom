@@ -1,9 +1,9 @@
 import { CommentsTableColumnTypes } from "@/types/utilityTypes";
 import CommentInput from "./CommentInput";
-import { Card, CardBody } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { useEffect, useState } from "react";
 
-/* eslint-disable no-console */
+// /* eslint-disable no-console */
 const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes; }> = ({ comment }) => {
   const [showReplies, setShowReplies] = useState(false);
   const [pressable, setPressable] = useState(false);
@@ -40,7 +40,7 @@ const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes; }> = ({ co
         }}>
           {comment.content}
         </Card>
-        <CommentInput postId={Number(comment.post_id)} parentId={comment.id} />
+        <CommentInput parentId={comment.id} />
         {comment.replies?.map((reply) => (
           showReplies && <CommentComponent key={reply.id} comment={reply} />
           

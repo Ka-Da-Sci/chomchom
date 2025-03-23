@@ -13,11 +13,14 @@ import NotFound from "./NotFound";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
 import CommentInput from "../comments/CommentInput";
 import CommentsSection from "../comments/CommentsSection";
+import useCommentsContext from "@/hooks/useCommentsContext";
+// import useOrganizeComments from "@/hooks/useOrganizeComments";
 
 // /* eslint-disable no-console */
 const SingleItemGallery = () => {
   const navigate = useNavigate();
   const { id: itemInViewId } = useParams();
+  const {dispatch} = useCommentsContext()
 
   const {
     state: contextState,
@@ -46,6 +49,12 @@ const SingleItemGallery = () => {
   });
 
   useEffect(() => {
+    if (dispatch) {
+      itemInViewId !== undefined && dispatch({type: "setPostId", payLoad: Number(itemInView?.id)});
+    }
+  }, [itemInView?.id]);
+
+  useEffect(() => {
     if (contextState.items.length !== 0) {
       setContextLoaded(false);
     }
@@ -64,9 +73,7 @@ const SingleItemGallery = () => {
       contextState.items.length !== 0 &&
       Object.keys(contextState.items[0]).length !== 1
     ) {
-      // console.log(Object.keys(contextState.items[0]).length);
-      // console.log(itemReferenced);
-      // console.log(contextState.items);
+
       setContextLoaded(true);
       setIsLoading(false);
     } else if (
@@ -74,9 +81,7 @@ const SingleItemGallery = () => {
       contextState.items.length === 0 &&
       contextLoaded
     ) {
-      // console.log(itemReferenced);
-      // console.log(contextState.items);
-      // console.log(contextLoaded);
+
       // debugger;
       setContextLoaded(true);
       setIsLoading(false);
@@ -115,7 +120,7 @@ const SingleItemGallery = () => {
       <div className=" w-full mt-10 mb-20 z-0 flex flex-col justify-center items-center gap-10 relative">
         <Button
           onPress={() => navigate(-1)}
-          className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-blue-500"
+          className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-default-500"
         >
           Back
         </Button>
@@ -156,8 +161,8 @@ const SingleItemGallery = () => {
             </CardFooter>
           </Card>
           <div className="p-0 w-full flex flex-col max-h-full overflow-auto m-0">
-            <CommentInput postId={Number(itemInView.id)} />
-            <CommentsSection postId={Number(itemInView.id)} />
+            <CommentInput />
+            <CommentsSection />
           </div>
         </div>
       </div>

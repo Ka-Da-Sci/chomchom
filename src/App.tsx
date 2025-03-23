@@ -9,6 +9,7 @@ import { Spinner } from "@heroui/react";
 const PublicGallery = lazy(() => import("./components/routes/Index"));
 // import PublicGallery from "./components/routes/Index";
 
+
 const PrivateGallery = lazy(() => import("./components/routes/PrivateGallery"));
 const NotFound = lazy(() => import("./components/routes/NotFound"));
 const Profile = lazy(() => import("./components/routes/Profile"));
@@ -27,6 +28,7 @@ const App = () => {
   });
   const [latestChangeType, setLatestChangeType] = useState("");
   const [latestUpdatedItemId, setLatestUlatestUpdatedItemId] = useState();
+
 
   // Handle real-time updates and dispatch changes
   const handleRealtimeUpdate = (payloadData: any) => {
@@ -61,7 +63,9 @@ const App = () => {
     readDatabaseItems().then(() => {
       console.log("Fetched items:", state.items);
     });
+
   }, []);
+
 
   // Handle changes to state.items based on real-time updates
   useEffect(() => {

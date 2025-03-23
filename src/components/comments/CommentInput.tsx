@@ -1,18 +1,38 @@
 import { useState } from "react";
-import addComment from "./addComment";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { Button, Form, Input } from "@heroui/react";
+import useCommentsContext from "@/hooks/useCommentsContext";
+import SupaBaseDataBase from "@/handlers/supadatabase";
 
 
-const CommentInput: React.FC<{ postId: number; parentId?: string }> = ({ postId, parentId }) => {
+const CommentInput: React.FC<{ parentId?: string }> = ({ parentId }) => {
     const [content, setContent] = useState("");
     const { session } = useAuthContext();
+    const { commentsContextState } = useCommentsContext();
+    const { postId } = commentsContextState;
+
+    const addComment = async (
+      postId: number,
+      parentId: string | null,
+      userId: string,
+      content: string
+    ) => {
+    
+      const { writeDoc } = SupaBaseDataBase;
+      await writeDoc({
+        post_id: postId,
+        parent_id: parentId,
+        user_id: userId,
+        content: content,
+        tableName: "comments",
+      });
+    };
     // debugger
   
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!content.trim()) return;
-      await addComment(postId, parentId || null, session?.user?.id, content);
+      postId && await addComment(postId, parentId || null, session?.user?.id, content);
       setContent("");
     };
   
