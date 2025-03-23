@@ -49,9 +49,8 @@ const SingleItemGallery = () => {
   });
 
   useEffect(() => {
-    if (dispatch) {
-      itemInViewId !== undefined && dispatch({type: "setPostId", payLoad: Number(itemInView?.id)});
-    }
+    itemInViewId !== undefined && dispatch({type: "setPostId", payLoad: Number(itemInView?.id)});
+    dispatch({type: "setComments", payLoad: []});
   }, [itemInView?.id]);
 
   useEffect(() => {
