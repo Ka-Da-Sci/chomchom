@@ -126,12 +126,12 @@ const SingleItemGallery = () => {
         >
           Back
         </Button>
-        <div className="w-full p-[1px] sm:p-0 flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[545px] overflow-hidden">
+        <div className="w-full p-[1px] sm:p-0 flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[500px] overflow-hidden">
           <Card
             shadow="sm"
             className="w-full sm:m-4 sm:mt-1 sm:ml-1 h-max max-w-[400px] max-h-full md:max-h-full"
           >
-            <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] md:max-h-[350px] items-center justify-normal ">
+            <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] md:max-h-[342px] items-center justify-normal ">
               <Image
                 alt={itemInView?.title ?? "image"}
                 className="object-cover sm:object-right-top w-full h-full max-h-full overflow-y-auto"
@@ -139,9 +139,9 @@ const SingleItemGallery = () => {
               />
             </CardBody>
             <CardFooter className="flex flex-col gap-3 items-start w-full pb-6 overflow-visible cursor-auto">
-              <p className="font-inter font-semibold text-left antialiased">
+              {/* <p className="font-inter font-semibold text-left antialiased">
                 {itemInView?.title}
-              </p>
+              </p> */}
               <CompatibleFooter item={{ ...itemInView }} />
             </CardFooter>
           </Card>
