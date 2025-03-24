@@ -12,6 +12,7 @@ type State = {
     file: File | null;
     user_name: string;
     user_fullnames: string;
+    user_id: string;
     created_at: string;
   }[];
   placeholderItems: {
@@ -21,6 +22,7 @@ type State = {
     file: File | null;
     user_name: string;
     user_fullnames: string;
+    user_id: string;
     created_at: string;
   }[];
 };

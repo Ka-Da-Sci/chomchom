@@ -60,8 +60,8 @@ const DefaultNavbar = () => {
           {session && (
             <NavbarItem className="hidden sm:block ">
               <NavBarLink
-                pathName="/profile"
-                toProp="/profile"
+                pathName="/profile/me"
+                toProp="/profile/me"
                 lintText="Account"
               />
             </NavbarItem>
@@ -80,7 +80,7 @@ const DefaultNavbar = () => {
                 isBordered
                 as="button"
                 className="transition-transform w-full h-full max-w-8 max-h-8"
-                color={`${pathname === "/profile" ? "primary" : "default"}`}
+                color={`${pathname === "/profile/me" ? "primary" : "default"}`}
                 name={session ? session?.user?.user_metadata.name : ""}
                 src={
                   session
@@ -154,8 +154,8 @@ const DefaultNavbar = () => {
                   textValue="account"
                 >
                   <NavBarLink
-                    pathName="/profile"
-                    toProp="/profile"
+                    pathName="/profile/me"
+                    toProp="/profile/me"
                     lintText="Account"
                   />
                 </DropdownItem>

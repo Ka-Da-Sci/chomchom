@@ -60,6 +60,13 @@ export type Database = {
             referencedRelation: "stocks"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "safe_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       comments_duplicate: {
@@ -112,6 +119,13 @@ export type Database = {
             referencedRelation: "stocks"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "comments_duplicate_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "safe_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       stocks: {
@@ -146,6 +160,30 @@ export type Database = {
       }
     }
     Views: {
+      safe_profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string | null
+          last_sign_in_at: string | null
+          raw_user_meta_data: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id?: string | null
+          last_sign_in_at?: string | null
+          raw_user_meta_data?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: string | null
+          last_sign_in_at?: string | null
+          raw_user_meta_data?: Json | null
+        }
+        Relationships: []
+      }
       safe_stocks: {
         Row: {
           created_at: string | null
@@ -153,6 +191,7 @@ export type Database = {
           path: string | null
           title: string | null
           user_fullnames: string | null
+          user_id: string | null
           user_name: string | null
         }
         Insert: {
@@ -161,6 +200,7 @@ export type Database = {
           path?: string | null
           title?: string | null
           user_fullnames?: string | null
+          user_id?: string | null
           user_name?: string | null
         }
         Update: {
@@ -169,6 +209,7 @@ export type Database = {
           path?: string | null
           title?: string | null
           user_fullnames?: string | null
+          user_id?: string | null
           user_name?: string | null
         }
         Relationships: []

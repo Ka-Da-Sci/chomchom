@@ -2,6 +2,7 @@ import { Button, CardFooter } from "@heroui/react";
 import useFileManagementContext from "./useFileManagementContext";
 import supabase from "@/lib/supabase.config";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 // import '../styles/globals.css';
 
 type Item = {
@@ -11,6 +12,7 @@ type Item = {
   user_fullnames?: string;
   user_name?: string;
   created_at?: string;
+  user_id: string;
 };
 
 export const useGalleryFooter = () => {
@@ -88,14 +90,14 @@ export const useGalleryFooter = () => {
             {item.title}
           </p>
           <div className="flex justify-between flex-wrap gap-4 items-center w-full">
-            <div className="flex flex-col gap-1">
+            <Link to={`/profile/user/${item.user_id}`} className="flex flex-col gap-1">
               <span className="font-semibold text-default-400 text-small text-left">
                 {item.user_fullnames}
               </span>
               <i className="text-default-400 text-small text-left">
                 @{item.user_name}
               </i>
-            </div>
+            </Link>
             <div className="flex flex-col gap-1">
               <span className="font-semibold text-default-400 text-small text-left">
                 Date Posted

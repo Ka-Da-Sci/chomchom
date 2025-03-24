@@ -32,6 +32,7 @@ const ProfilePageUploads = () => {
       user_name: string;
       user_fullnames: string;
       created_at: string;
+      user_id: string;
     }>
   >([]);
 

@@ -14,6 +14,7 @@ import useFileManagementContext from "@/hooks/useFileManagementContext";
 import CommentInput from "../comments/CommentInput";
 import CommentsSection from "../comments/CommentsSection";
 import useCommentsContext from "@/hooks/useCommentsContext";
+import useGalleryFooter from "@/hooks/useGalleryFooter";
 // import useOrganizeComments from "@/hooks/useOrganizeComments";
 
 // /* eslint-disable no-console */
@@ -21,6 +22,7 @@ const SingleItemGallery = () => {
   const navigate = useNavigate();
   const { id: itemInViewId } = useParams();
   const {dispatch} = useCommentsContext()
+  const { CompatibleFooter } = useGalleryFooter();
 
   const {
     state: contextState,
@@ -38,6 +40,7 @@ const SingleItemGallery = () => {
     user_name: string;
     user_fullnames: string;
     created_at: string;
+    user_id: string;
   } | null>({
     id: 0,
     title: "",
@@ -46,6 +49,7 @@ const SingleItemGallery = () => {
     user_name: "",
     user_fullnames: "",
     created_at: "",
+    user_id: "",
   });
 
   useEffect(() => {
@@ -139,24 +143,7 @@ const SingleItemGallery = () => {
               <p className="font-inter font-semibold text-left antialiased">
                 {itemInView?.title}
               </p>
-              <div className="flex justify-between flex-wrap gap-4 items-center w-full">
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-default-400 text-small text-left">
-                    {itemInView?.user_fullnames}
-                  </span>
-                  <i className="text-default-400 text-small text-left">
-                    @{itemInView?.user_name}
-                  </i>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-default-400 text-small text-left">
-                    Date Posted
-                  </span>
-                  <i className="text-default-400 text-small text-left">
-                    {itemInView?.created_at.split("T")[0]}
-                  </i>
-                </div>
-              </div>
+            <CompatibleFooter item={{...itemInView}} />
             </CardFooter>
           </Card>
           <div className="p-0 w-full flex flex-col max-h-full overflow-auto m-0">

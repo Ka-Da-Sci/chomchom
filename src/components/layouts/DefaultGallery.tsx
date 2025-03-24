@@ -19,6 +19,7 @@ type Item = {
   user_fullnames: string;
   user_name: string;
   created_at: string;
+  user_id: string;
 };
 
 const DefaultGallery = ({ items }: { items: Item[] }) => {
@@ -48,6 +49,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
     id: number | string | null;
     title: string;
     path: string;
+    user_id: string;
   }[] =
     totalPages === 1
       ? items
