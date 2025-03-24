@@ -146,7 +146,7 @@ const SingleItemGallery = () => {
             <CompatibleFooter item={{...itemInView}} />
             </CardFooter>
           </Card>
-          <div className="p-2 pr-0 w-full max-h-full overflow-hidden m-0 rounded-md bg-default-600 shadow-xl">
+          <div className="p-2 md:pr-0 w-full max-h-full overflow-hidden m-0 rounded-md bg-default-600 shadow-xl">
           <div className="sm:pr-2 w-full flex flex-col max-h-full overflow-auto m-0 rounded-md">
             <CommentInput />
             <CommentsSection />
