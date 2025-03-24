@@ -46,7 +46,7 @@ const CommentInput: React.FC<{ parentId?: string }> = ({ parentId }) => {
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
-        <Button disabled={!session} type="submit" className={`rounded-md text-white px-4 py-2 w-max ${session ? "bg-default-600" : "bg-default-400"}`}>{!parentId ? "Comment" : "Reply"}</Button>
+        <Button disabled={!session} type="submit" className={`rounded-md text-white px-4 py-2 w-max ${session && !parentId ? "bg-default-500" : session && parentId ? "bg-default-600" : !session && !parentId ? "bg-default-400" : "bg-default-500"}`}>{!parentId ? "Comment" : "Reply"}</Button>
       </Form>
     );
   };

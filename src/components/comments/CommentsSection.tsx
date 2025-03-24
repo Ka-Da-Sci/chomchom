@@ -11,7 +11,7 @@ const CommentsSection = () => {
   useOrganizeComments();
 
   return (
-    <div className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-6">
       {/* <CommentInput /> */}
       {postComments && postComments.map((comment) => (
         <CommentComponent key={comment.id} comment={comment} />

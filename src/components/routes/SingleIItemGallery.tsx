@@ -21,7 +21,7 @@ import useGalleryFooter from "@/hooks/useGalleryFooter";
 const SingleItemGallery = () => {
   const navigate = useNavigate();
   const { id: itemInViewId } = useParams();
-  const {dispatch} = useCommentsContext()
+  const { dispatch } = useCommentsContext();
   const { CompatibleFooter } = useGalleryFooter();
 
   const {
@@ -53,8 +53,9 @@ const SingleItemGallery = () => {
   });
 
   useEffect(() => {
-    itemInViewId !== undefined && dispatch({type: "setPostId", payLoad: Number(itemInView?.id)});
-    dispatch({type: "setComments", payLoad: []});
+    itemInViewId !== undefined &&
+      dispatch({ type: "setPostId", payLoad: Number(itemInView?.id) });
+    dispatch({ type: "setComments", payLoad: [] });
   }, [itemInView?.id]);
 
   useEffect(() => {
@@ -76,7 +77,6 @@ const SingleItemGallery = () => {
       contextState.items.length !== 0 &&
       Object.keys(contextState.items[0]).length !== 1
     ) {
-
       setContextLoaded(true);
       setIsLoading(false);
     } else if (
@@ -84,7 +84,6 @@ const SingleItemGallery = () => {
       contextState.items.length === 0 &&
       contextLoaded
     ) {
-
       // debugger;
       setContextLoaded(true);
       setIsLoading(false);
@@ -143,14 +142,14 @@ const SingleItemGallery = () => {
               <p className="font-inter font-semibold text-left antialiased">
                 {itemInView?.title}
               </p>
-            <CompatibleFooter item={{...itemInView}} />
+              <CompatibleFooter item={{ ...itemInView }} />
             </CardFooter>
           </Card>
           <div className="p-2 md:pr-0 w-full max-h-full overflow-hidden m-0 rounded-md bg-default-600 shadow-xl">
-          <div className="sm:pr-2 w-full flex flex-col max-h-full overflow-auto m-0 rounded-md">
-            <CommentInput />
-            <CommentsSection />
-          </div>
+            <div className="sm:pr-2 w-full flex flex-col gap-8 max-h-full overflow-auto m-0 rounded-md">
+              <CommentInput />
+              <CommentsSection />
+            </div>
           </div>
         </div>
       </div>

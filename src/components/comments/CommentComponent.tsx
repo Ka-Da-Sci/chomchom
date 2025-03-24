@@ -33,7 +33,7 @@ const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes; }> = ({ co
   }, [comment.revealReplies, comment]);
 
     return (
-      <Card className="border-2 px-4 my-4 py-2 w-full shadow-none">
+      <Card className="border-2 px-4 py-2 w-full shadow-none">
         <p className="font-bold">{comment.user_fullname}</p>
         <Card className="w-full flex items-start border-none shadow-none rounded-none" isPressable={pressable} onPress={() => {
           setShowReplies(!showReplies)
