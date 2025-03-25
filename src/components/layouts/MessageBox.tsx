@@ -61,6 +61,7 @@ const MessagesBox = ({
       tableName: "messages",
     });
     setNewMessage("");
+    messageTextAreaRef.current?.focus();
   };
 
   return (
