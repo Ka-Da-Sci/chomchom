@@ -7,6 +7,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   Textarea,
+  Form,
 } from "@heroui/react";
 
 import MessageIcon from "../ui/MessageIcon";
@@ -50,18 +51,26 @@ const MessagesBox = ({
     };
 
     setTextInputs();
-  };
+};
 
-  const handleSendMessage = async () => {
+const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    alert("Rubbish");
     if (!newMessage.trim()) return;
-    await writeDoc({
-      senderId,
-      receiverId,
-      content: newMessage,
-      tableName: "messages",
-    });
+    
+    
     setNewMessage("");
-    messageTextAreaRef.current?.focus();
+    const dispatchMessage = async() => {
+        await writeDoc({
+            senderId,
+            receiverId,
+            content: newMessage,
+            tableName: "messages",
+        });
+    };
+
+    dispatchMessage();
+    // messageTextAreaRef.current?.focus();
   };
 
   return (
@@ -76,20 +85,19 @@ const MessagesBox = ({
       </div>
       <Drawer
         classNames={{
-            body: "p-1 pb-0 m-0",
-            header: "p-1 m-0",
-            footer: "p-1 pt-0 m-0",
-
-         }}
+          body: "p-1 pb-0 m-0",
+          header: "p-1 m-0",
+          footer: "p-1 pt-0 m-0",
+        }}
         radius="none"
-        className="rounded-md"
+        className="rounded-md w-full"
         isDismissable={false}
         isOpen={isOpen}
-        size={"xl"}
+        size={"lg"}
         hideCloseButton={true}
         onClose={onClose}
       >
-        <DrawerContent >
+        <DrawerContent>
           {() => (
             <>
               <DrawerHeader className="flex items-center gap-4">
@@ -123,24 +131,26 @@ const MessagesBox = ({
                       {msg.content}
                     </p>
                   ))}
-                    {/* <div ref={bottomRef} ></div> */}
+                  {/* <div ref={bottomRef} ></div> */}
                 </div>
               </DrawerBody>
               <DrawerFooter className="items-end">
-                <Textarea
-                  type="text"
-                  className="w-full p-2 border rounded mt-2"
-                  value={newMessage}
-                  ref={messageTextAreaRef}
-                  onChange={handleMessageTextChange}
-                  placeholder="Type a message..."
-                />
-                <Button
-                  onPress={handleSendMessage}
-                  className="mt-2 p-2 bg-default-500 text-white rounded"
-                >
-                  Send
-                </Button>
+                <Form onSubmit={handleSendMessage} className="w-full flex items-end flex-row justify-between">
+                    <Textarea
+                    type="text"
+                    className="w-full p-2 border rounded mt-2"
+                    value={newMessage}
+                    ref={messageTextAreaRef}
+                    onChange={handleMessageTextChange}
+                    placeholder="Type a message..."
+                    />
+                    <Button
+                    type="submit"
+                    className="mt-2 p-2 bg-default-500 text-white rounded"
+                    >
+                    Send
+                    </Button>
+                </Form>
               </DrawerFooter>
             </>
           )}
