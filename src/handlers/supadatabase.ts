@@ -67,7 +67,7 @@ const SupaBaseDataBase = {
               content: inputs.content,
             };
 
-            debugger;
+            // debugger;
             break;
           default:
             throw new Error("Invalid table name or table input data");
@@ -104,7 +104,7 @@ const SupaBaseDataBase = {
       .order("created_at", { ascending: true });
   
     if (error) throw error;
-    return data;
+    return data.reverse();
   },
 };
 

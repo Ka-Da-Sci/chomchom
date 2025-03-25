@@ -10,7 +10,7 @@ type MessagePayload = {
 }
 
 const useRealtimeMessages = (senderId: string, receiverId: string) => {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [message, setMessage] = useState({});
 
   useEffect(() => {
 
@@ -24,7 +24,7 @@ const useRealtimeMessages = (senderId: string, receiverId: string) => {
             (payload.new.sender_id === senderId && payload.new.receiver_id === receiverId) ||
             (payload.new.sender_id === receiverId && payload.new.receiver_id === senderId)
           ) {
-            setMessages((prev: any[]) => [...prev, payload.new]);
+            setMessage(payload.new);
           }
         }
       )
@@ -35,7 +35,7 @@ const useRealtimeMessages = (senderId: string, receiverId: string) => {
     };
   }, [senderId, receiverId]);
 
-  return messages;
+  return message;
 };
 
 export default useRealtimeMessages;
