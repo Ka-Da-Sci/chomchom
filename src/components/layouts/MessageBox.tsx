@@ -118,12 +118,12 @@ const MessagesBox = ({
               <DrawerBody>
                 <div className="h-full overflow-y-auto p-2 bg-white shadow flex flex-col gap-2">
                   {messages.map((msg) => (
-                    <div
+                    <p
                       key={msg.id}
-                      className={`p-2 my-1 w-max rounded ${msg.sender_id === senderId ? "bg-blue-500 text-white self-end" : "bg-gray-300 text-black self-start"}`}
+                      className={`p-2 my-1 w-max max-w-full rounded text-wrap ${msg.sender_id === senderId ? "bg-blue-500 text-white self-end" : "bg-gray-300 text-black self-start"}`}
                     >
                       {msg.content}
-                    </div>
+                    </p>
                   ))}
                 </div>
               </DrawerBody>
