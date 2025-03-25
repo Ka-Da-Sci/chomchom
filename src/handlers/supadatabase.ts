@@ -9,6 +9,10 @@ type WriteDocInputs = Partial<CommentsTableColumnTypes> & {
   user_name?: string;
   user_fullnames?: string;
   tableName?: string;
+  senderId?: string;
+  receiverId?: string;
+  newMessage?: string;
+  content?: any;
 };
 
 /* eslint-disable no-console */
@@ -31,7 +35,7 @@ const SupaBaseDataBase = {
 
   writeDoc: (...args: [WriteDocInputs]) => {
     const [inputs] = args;
-    const targetTable: "comments" | "stocks" = inputs.tableName ? inputs.tableName as "comments" | "stocks" : "stocks";
+    const targetTable: "messages" | "comments" | "stocks" = inputs.tableName ? inputs.tableName as "messages" | "comments" | "stocks" : "stocks";
       
     return new Promise(async (resolve) => {
       try {
@@ -55,6 +59,15 @@ const SupaBaseDataBase = {
               user_id: inputs.user_id,
               content: inputs.content,
             };
+            break;
+          case "messages":
+            updatedInputData = {
+              sender_id: inputs.senderId, 
+              receiver_id: inputs.receiverId, 
+              content: inputs.content,
+            };
+
+            debugger;
             break;
           default:
             throw new Error("Invalid table name or table input data");
@@ -80,7 +93,19 @@ const SupaBaseDataBase = {
   
     if (error) console.error(error);
     return data as CommentsTableColumnTypes[];
-  }
+  },
+
+  getMessages: async (senderId: string, receiverId: string) => {
+    // debugger;
+    const { data, error } = await supabase
+      .from("messages")
+      .select("*")
+      .or(`and(sender_id.eq.${senderId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${senderId})`)
+      .order("created_at", { ascending: true });
+  
+    if (error) throw error;
+    return data;
+  },
 };
 
 export default SupaBaseDataBase;
