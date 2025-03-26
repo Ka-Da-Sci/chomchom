@@ -70,7 +70,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
 
     dispatchMessage();
     setNewMessage("");
-    messageTextAreaRef.current?.focus();
+    // messageTextAreaRef.current?.focus();
   };
 
   return (
