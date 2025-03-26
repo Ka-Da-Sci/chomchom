@@ -54,12 +54,12 @@ const MessagesBox = ({
 };
 
 const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
+    messageTextAreaRef.current?.focus();
     event.preventDefault();
+    messageTextAreaRef.current?.focus();
     alert("Rubbish");
     if (!newMessage.trim()) return;
     
-    
-    setNewMessage("");
     const dispatchMessage = async() => {
         await writeDoc({
             senderId,
@@ -70,7 +70,8 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     };
 
     dispatchMessage();
-    // messageTextAreaRef.current?.focus();
+    setNewMessage("");
+    messageTextAreaRef.current?.focus();
   };
 
   return (
