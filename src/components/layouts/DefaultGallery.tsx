@@ -79,7 +79,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
   console.log(pathname, items);
 
   return (
-    <div className="w-full mx-auto sm:container">
+    <div className="w-full mx-auto ">
       <div className="w-full place-items-center gap-4 grid [@media(max-width:499px)]:grid-cols-1 custom-grid-col2-400-min md:grid-cols-3 lg:grid-cols-4">
         {currentItems.map((item, index) => (
           item.path.trim().length !== 0 && <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-w-[600px] max-h-[500px] [@media(min-width:500px)]:max-h-[350px]">

@@ -58,7 +58,7 @@ const Profile = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto flex flex-col gap-12 items-center justify-center mt-20">
+      <div className="w-full mx-auto flex flex-col gap-12 items-center justify-center mt-20">
         <div className="w-full flex justify-between gap-4">
           <div className="flex self-start items-start gap-4 flex-col sm:flex-row">
             <div className="flex items-center justify-center flex-col gap-4 rounded-sm shadow-lg px-4 sm:px-8 py-2 sm:py-4">
