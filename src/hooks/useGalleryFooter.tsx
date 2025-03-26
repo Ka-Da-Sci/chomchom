@@ -2,13 +2,14 @@ import { Button, CardFooter } from "@heroui/react";
 import useFileManagementContext from "./useFileManagementContext";
 import supabase from "@/lib/supabase.config";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { StockItemsColumnTypes } from "@/types/utilityTypes";
 import UserCard from "@/components/ui/UserCard";
 
 export const useGalleryFooter = () => {
   const { access } = useFileManagementContext();
   const deleteButtonUseRef = useRef<HTMLButtonElement | null>(null);
+  const { pathname } = useLocation();
 
   /* eslint-disable no-console*/
   const handleOnClickDeleteButton = async (itemPath?: string) => {
@@ -50,7 +51,7 @@ export const useGalleryFooter = () => {
     private: ({ item }: { item: StockItemsColumnTypes }) => {
       return (
         <CardFooter className="flex flex-col gap-3 items-start w-full overflow-visible cursor-auto">
-          <p className="font-inter font-semibold text-left antialiased">
+            <p className={`font-inter font-semibold text-left antialiased text-ellipsis overflow-hidden ${pathname === `/fotox/${item.id}` ? "" : "[@media(min-width:500px)]:line-clamp-1"}`}>
             {item.title}
           </p>
           <div className="flex justify-between gap-1 items-center w-full">
@@ -77,13 +78,13 @@ export const useGalleryFooter = () => {
     public: ({ item }: { item: StockItemsColumnTypes }) => {
       return (
         <CardFooter className="flex flex-col gap-6 items-start w-full overflow-visible cursor-auto">
-          <p className="font-inter font-semibold text-left antialiased">
+            <p className={`font-inter font-semibold text-left antialiased text-ellipsis overflow-hidden ${pathname === `/fotox/${item.id}` ? "" : "[@media(min-width:500px)]:line-clamp-1"}`}>
             {item.title}
           </p>
           <div className="flex justify-between gap-4 items-center w-full">
             <Link
               to={`/profile/user/${item.user_id}`}
-              className="max-w-40"
+              className="overflow-hidden max-w-40"
             >
               {/* <Image src={`${item?.user_data?.avatar_url}`} className="rounded-full max-w-10" />
               <p className="font-semibold text-default-700 text-small hover:underline text-left text-ellipsis whitespace-nowrap overflow-hidden">

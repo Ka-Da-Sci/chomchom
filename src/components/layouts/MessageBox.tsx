@@ -125,7 +125,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                 {/* <p className="font-bold font-poppins text-default-700 text-base">
                   Messages
                 </p> */}
-                <div className="max-w-40">
+                <div className="max-w-40 overflow-hidden">
                     <UserCard userFullnames={`${receiver_names}`} srcTxt={receiver_avatar_url} />
                 </div>
               </DrawerHeader>

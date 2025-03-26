@@ -92,12 +92,12 @@ const DefaultGallery = ({ items }: { items: StockItemsColumnTypes[] }) => {
     <div className="w-full mx-auto ">
       <div className="w-full place-items-center gap-4 grid [@media(max-width:499px)]:grid-cols-1 custom-grid-col2-400-min md:grid-cols-3 lg:grid-cols-4">
         {currentItems.map((item, index) => (
-          item?.path?.trim().length !== 0 && <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-w-[600px] max-h-[500px] [@media(min-width:500px)]:max-h-[350px]">
+          item?.path?.trim().length !== 0 && <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-w-[600px] max-h-[700px] [@media(min-width:500px)]:max-h-[350px]">
             <Button
               onPress={() => {
                 navigate(`/fotox/${item.id}`);
               }}
-              className="overflow-hidden w-full h-full max-w-full max-h-full p-2 rounded-none flex items-center justify-normal bg-transparent"
+              className="overflow-hidden [@media(min-width:500px)]:min-h-[70%] w-full h-full max-w-full max-h-full p-2 rounded-none flex items-center justify-normal bg-transparent"
             >
               <CardBody className="overflow-hidden p-0 w-full h-full max-w-full max-h-full items-center justify-normal">
                 <Image

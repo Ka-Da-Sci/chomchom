@@ -119,10 +119,10 @@ const SingleItemGallery = () => {
         >
           Back
         </Button>
-        <div className="w-full p-[1px] sm:p-0 flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[500px] overflow-hidden">
+        <div className="w-full p-[1px] sm:p-0 flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[645px] overflow-hidden">
           <Card
             shadow="sm"
-            className="w-full sm:mb-4 sm:mt-1 sm:ml-1 h-max max-w-[400px] max-h-full md:max-h-full"
+            className="w-full md:mb-[2px] md:mt-1 md:ml-1 h-max max-w-[400px] max-h-full md:max-h-full"
           >
             <CardBody className="w-full h-max max-w-full p-1 max-h-[400px] md:max-h-[342px] items-center justify-normal ">
               <Image
@@ -131,7 +131,7 @@ const SingleItemGallery = () => {
                 src={`${itemInView?.path}`}
               />
             </CardBody>
-            <CardFooter className="flex flex-col gap-3 items-start w-full pb-1 overflow-visible cursor-auto">
+            <CardFooter className="flex flex-col gap-3 items-start w-full pb-1 overflow-visible cursor-auto p-0">
               {/* <p className="font-inter font-semibold text-left antialiased">
                 {itemInView?.title}
               </p> */}
