@@ -7,6 +7,7 @@ import authenticateUser from "@/handlers/supabase-authentication";
 import Upload from "../ui/Upload";
 import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
+import { StockItemsColumnTypes } from "@/types/utilityTypes";
 
 
 /* eslint-disable no-console */
@@ -23,16 +24,7 @@ const PrivateGallery = () => {
   } = useFileManagementContext();
 
   const [myStocks, setMyStocks] = useState<
-    Array<{
-      id: string | number | null;
-      title: string;
-      path: string;
-      file: File | null;
-      user_name: string;
-      user_fullnames: string;
-      created_at: string;
-      user_id: string;
-    }>
+    Array<StockItemsColumnTypes>
   >([]);
 
   useEffect(() => {

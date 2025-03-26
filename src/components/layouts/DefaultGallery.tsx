@@ -11,18 +11,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useGalleryFooter from "@/hooks/useGalleryFooter";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
+import { StockItemsColumnTypes } from "@/types/utilityTypes";
 
-type Item = {
-  id: string | number | null;
-  title: string;
-  path: string;
-  user_fullnames: string;
-  user_name: string;
-  created_at: string;
-  user_id: string;
-};
+// type Item = {
+//   id: string | number | null;
+//   title: string;
+//   path: string;
+//   user_fullnames: string;
+//   user_name: string;
+//   created_at: string;
+//   user_id: string;
+//   user_data: object;
+// };
 
-const DefaultGallery = ({ items }: { items: Item[] }) => {
+const DefaultGallery = ({ items }: { items: StockItemsColumnTypes[] }) => {
   const { pathname } = useLocation();
   const { isLoading, setIsLoading, contextLoaded } = useFileManagementContext();
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,13 +46,21 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
     }
   }, [contextLoaded]);
 
+  // // Get items for the current page
+  // let currentItems: {
+  //   id: number | string | null;
+  //   title: string;
+  //   path: string;
+  //   user_id: string;
+  // }[] =
+  //   totalPages === 1
+  //     ? items
+  //     : items.slice(
+  //         (currentPage - 1) * itemsPerPage,
+  //         currentPage * itemsPerPage
+  //       );
   // Get items for the current page
-  let currentItems: {
-    id: number | string | null;
-    title: string;
-    path: string;
-    user_id: string;
-  }[] =
+  let currentItems: StockItemsColumnTypes[] =
     totalPages === 1
       ? items
       : items.slice(
@@ -82,7 +92,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
     <div className="w-full mx-auto ">
       <div className="w-full place-items-center gap-4 grid [@media(max-width:499px)]:grid-cols-1 custom-grid-col2-400-min md:grid-cols-3 lg:grid-cols-4">
         {currentItems.map((item, index) => (
-          item.path.trim().length !== 0 && <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-w-[600px] max-h-[500px] [@media(min-width:500px)]:max-h-[350px]">
+          item?.path?.trim().length !== 0 && <Card key={index} shadow="sm" radius="sm" className="w-full h-full max-w-[600px] max-h-[500px] [@media(min-width:500px)]:max-h-[350px]">
             <Button
               onPress={() => {
                 navigate(`/fotox/${item.id}`);
@@ -93,7 +103,7 @@ const DefaultGallery = ({ items }: { items: Item[] }) => {
                 <Image
                   alt={item && item.title ? item.title : "image"}
                   className="object-cover object-right-top w-full h-full"
-                  src={item.path}
+                  src={`${item.path}`}
                 />
               </CardBody>
             </Button>

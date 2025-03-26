@@ -1,30 +1,13 @@
 import { createContext, useReducer, useState } from "react";
 import SupaBaseDataBase from "@/handlers/supadatabase";
+import { StockItemsColumnTypes } from "@/types/utilityTypes";
 
 /* eslint-disable no-console */
 
 type State = {
   input: { title: string | null; file: File | null; path: string | null };
-  items: {
-    id: number | string | null;
-    title: string;
-    path: string;
-    file: File | null;
-    user_name: string;
-    user_fullnames: string;
-    user_id: string;
-    created_at: string;
-  }[];
-  placeholderItems: {
-    id: number | string | null;
-    title: string;
-    path: string;
-    file: File | null;
-    user_name: string;
-    user_fullnames: string;
-    user_id: string;
-    created_at: string;
-  }[];
+  items: StockItemsColumnTypes[];
+  placeholderItems: StockItemsColumnTypes[];
 };
 
 type Action = {
@@ -121,10 +104,12 @@ const ContextProvider: React.FC<React.PropsWithChildren<{}>> = ({
     const searchInputText = searchInput.trim().toLowerCase();
     const searchList = state.placeholderItems.flat();
     console.log(searchList.length);
-    const searchResult = searchList.filter((searchItem: { title: string }) => {
-      console.log(searchItem);
-      const searchItemTitle = searchItem.title.toLowerCase();
-      return searchItemTitle.indexOf(searchInputText) > -1;
+    const searchResult = searchList.filter((searchItem: StockItemsColumnTypes) => {
+      if (typeof searchItem.title === "string") {
+        const searchItemTitle = searchItem.title.toLowerCase();
+        return searchItemTitle.indexOf(searchInputText) > -1;
+      }
+      return false;
     });
 
     dispatch({

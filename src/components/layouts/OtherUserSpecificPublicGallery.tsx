@@ -4,6 +4,7 @@ import { Spinner } from "@heroui/react";
 import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
 import { useParams } from "react-router-dom";
+import { StockItemsColumnTypes } from "@/types/utilityTypes";
 
 
 /* eslint-disable no-console */
@@ -19,17 +20,21 @@ const OtherUserSpecificPublicGallery = () => {
   } = useFileManagementContext();
 
   const [userStocks, setUserStocks] = useState<
-    Array<{
-      id: string | number | null;
-      title: string;
-      path: string;
-      file: File | null;
-      user_name: string;
-      user_fullnames: string;
-      created_at: string;
-      user_id: string;
-    }>
+    Array<StockItemsColumnTypes>
   >([]);
+//   const [userStocks, setUserStocks] = useState<
+//     Array<{
+//       id: string | number | null;
+//       title: string;
+//       path: string;
+//       file: File | null;
+//       user_name: string;
+//       user_fullnames: string;
+//       created_at: string;
+//       user_id: string;
+//       user_data?: object;
+//     }>
+//   >([]);
 
   useEffect(() => {
 

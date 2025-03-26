@@ -15,6 +15,7 @@ import CommentInput from "../comments/CommentInput";
 import CommentsSection from "../comments/CommentsSection";
 import useCommentsContext from "@/hooks/useCommentsContext";
 import useGalleryFooter from "@/hooks/useGalleryFooter";
+import { StockItemsColumnTypes } from "@/types/utilityTypes";
 // import useOrganizeComments from "@/hooks/useOrganizeComments";
 
 // /* eslint-disable no-console */
@@ -32,16 +33,7 @@ const SingleItemGallery = () => {
     setContextLoaded,
   } = useFileManagementContext();
 
-  const [itemInView, setItemInView] = useState<{
-    id: string | number | null;
-    title: string;
-    path: string;
-    file: File | null;
-    user_name: string;
-    user_fullnames: string;
-    created_at: string;
-    user_id: string;
-  } | null>({
+  const [itemInView, setItemInView] = useState<StockItemsColumnTypes | null>({
     id: 0,
     title: "",
     path: "",
@@ -50,6 +42,7 @@ const SingleItemGallery = () => {
     user_fullnames: "",
     created_at: "",
     user_id: "",
+    user_data: {},
   });
 
   useEffect(() => {
@@ -91,7 +84,7 @@ const SingleItemGallery = () => {
   }, [contextState.items, itemInViewId, contextLoaded]);
 
   // Show loading state while waiting for data (Using HeroUI Spinner)
-  if (isLoading || !contextLoaded || itemInView?.path.trim() === "") {
+  if (isLoading || !contextLoaded || itemInView?.path?.trim() === "") {
     return (
       <DefaultLayout>
         <div className="flex justify-center items-center h-screen">
@@ -129,20 +122,20 @@ const SingleItemGallery = () => {
         <div className="w-full p-[1px] sm:p-0 flex flex-col md:flex-row gap-8 h-max max-h-full md:max-h-[500px] overflow-hidden">
           <Card
             shadow="sm"
-            className="w-full sm:m-4 sm:mt-1 sm:ml-1 h-max max-w-[400px] max-h-full md:max-h-full"
+            className="w-full sm:mb-4 sm:mt-1 sm:ml-1 h-max max-w-[400px] max-h-full md:max-h-full"
           >
-            <CardBody className="w-full h-max max-w-full p-4 max-h-[400px] md:max-h-[342px] items-center justify-normal ">
+            <CardBody className="w-full h-max max-w-full p-1 max-h-[400px] md:max-h-[342px] items-center justify-normal ">
               <Image
                 alt={itemInView?.title ?? "image"}
                 className="object-cover sm:object-right-top w-full h-full max-h-full overflow-y-auto"
-                src={itemInView?.path}
+                src={`${itemInView?.path}`}
               />
             </CardBody>
-            <CardFooter className="flex flex-col gap-3 items-start w-full pb-6 overflow-visible cursor-auto">
+            <CardFooter className="flex flex-col gap-3 items-start w-full pb-1 overflow-visible cursor-auto">
               {/* <p className="font-inter font-semibold text-left antialiased">
                 {itemInView?.title}
               </p> */}
-              <CompatibleFooter item={{ ...itemInView }} />
+              <CompatibleFooter item={{ ...itemInView, user_data: itemInView?.user_data ?? {} }} />
             </CardFooter>
           </Card>
           <div className="p-2 md:pr-0 w-full max-h-full overflow-hidden m-0 rounded-md bg-default-600 shadow-xl">

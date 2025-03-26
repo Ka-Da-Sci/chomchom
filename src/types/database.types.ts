@@ -94,65 +94,6 @@ export type Database = {
           },
         ]
       }
-      comments_duplicate: {
-        Row: {
-          content: string
-          created_at: string | null
-          id: string
-          parent_id: string | null
-          post_id: number | null
-          user_fullname: string | null
-          user_id: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          id?: string
-          parent_id?: string | null
-          post_id?: number | null
-          user_fullname?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          id?: string
-          parent_id?: string | null
-          post_id?: number | null
-          user_fullname?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "comments_duplicate_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_duplicate_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "safe_stocks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_duplicate_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "stocks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_duplicate_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "safe_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       messages: {
         Row: {
           content: string
@@ -198,6 +139,7 @@ export type Database = {
           id: number
           path: string
           title: string | null
+          user_data: Json | null
           user_fullnames: string
           user_id: string | null
           user_name: string
@@ -207,6 +149,7 @@ export type Database = {
           id?: number
           path?: string
           title?: string | null
+          user_data?: Json | null
           user_fullnames?: string
           user_id?: string | null
           user_name?: string
@@ -216,11 +159,20 @@ export type Database = {
           id?: number
           path?: string
           title?: string | null
+          user_data?: Json | null
           user_fullnames?: string
           user_id?: string | null
           user_name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "stocks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "safe_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -254,29 +206,20 @@ export type Database = {
           id: number | null
           path: string | null
           title: string | null
+          user_data: Json | null
           user_fullnames: string | null
           user_id: string | null
           user_name: string | null
         }
-        Insert: {
-          created_at?: string | null
-          id?: number | null
-          path?: string | null
-          title?: string | null
-          user_fullnames?: string | null
-          user_id?: string | null
-          user_name?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number | null
-          path?: string | null
-          title?: string | null
-          user_fullnames?: string | null
-          user_id?: string | null
-          user_name?: string | null
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "stocks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "safe_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {
