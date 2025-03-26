@@ -17,7 +17,7 @@ const PublicGallery = () => {
   return(
     <DefaultLayout>
         <section>
-            <div className="w-full max-w-full h-full flex flex-col gap-4 items-center py-8 sm:py-20">
+            <div className="w-full max-w-full h-full flex flex-col gap-4 items-center pt-4 pb-12">
                 <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold font-montserrat antialiased">Public Fotox</h1>
                 <Suspense fallback={<Spinner />}>
                     <DefaultGallery items={[...contextState.items]} />

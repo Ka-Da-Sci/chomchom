@@ -119,7 +119,7 @@ const SingleItemGallery = () => {
 
   return (
     <DefaultLayout>
-      <div className=" w-full mt-10 mb-20 z-0 flex flex-col justify-center items-center gap-10 relative">
+      <div className=" w-full mt-4 mb-20 z-0 flex flex-col justify-center items-center gap-10 relative">
         <Button
           onPress={() => navigate(-1)}
           className="self-start px-8 bg-white text-blue-500 rounded-lg shadow-sm border border-solid border-default-500"

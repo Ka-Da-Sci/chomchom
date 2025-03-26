@@ -9,7 +9,7 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
         <DefaultNavbar />
       </CardHeader>
 
-      <div className="container mx-auto max-w-7xl px-4 sm:px-6 pt-24">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 pt-20">
         {children}
       </div>
 
