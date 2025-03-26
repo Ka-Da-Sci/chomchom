@@ -56,7 +56,7 @@ const MessagesBox = ({
 const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     messageTextAreaRef.current?.focus();
     event.preventDefault();
-    // messageTextAreaRef.current?.focus();
+    messageTextAreaRef.current?.focus();
     if (!newMessage.trim()) return;
     
     const dispatchMessage = async() => {
@@ -70,7 +70,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
 
     dispatchMessage();
     setNewMessage("");
-    // messageTextAreaRef.current?.focus();
+    messageTextAreaRef.current?.focus();
   };
 
   return (
