@@ -57,7 +57,6 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     messageTextAreaRef.current?.focus();
     event.preventDefault();
     messageTextAreaRef.current?.focus();
-    alert("Rubbish");
     if (!newMessage.trim()) return;
     
     const dispatchMessage = async() => {
