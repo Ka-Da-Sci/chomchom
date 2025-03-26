@@ -77,7 +77,7 @@ const ThirdPartyUserPublicProfile = () => {
     setIsLoading(false);
   }, [userId]);
 
-  if (isLoading || !contextLoaded) {
+  if (isLoading || !contextLoaded || !currentThirdPartyUser?.created_at || !currentThirdPartyUser?.raw_user_meta_data.avatar_url || !currentThirdPartyUser?.raw_user_meta_data.full_name) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner size="lg" color="current" />
@@ -123,7 +123,7 @@ const ThirdPartyUserPublicProfile = () => {
             </div>
           </div>
 
-          <MessageBox senderId={ currentUserId ?? ""} receiverId={userId ?? ''}/>
+          <MessageBox senderId={ currentUserId ?? ""} receiver_avatar_url={`${currentThirdPartyUser?.raw_user_meta_data.avatar_url}`} receiver_names={`${currentThirdPartyUser?.raw_user_meta_data.full_name}`} receiverId={userId ?? ''}/>
 
         </div>
         {/* <h1 className="text-left w-full capitalize text-2xl">Uploads</h1> */}

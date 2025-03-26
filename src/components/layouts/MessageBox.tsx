@@ -14,13 +14,18 @@ import MessageIcon from "../ui/MessageIcon";
 import { useState, useEffect, useRef } from "react";
 import useRealtimeMessages from "@/hooks/useRealtimeMessages";
 import SupaBaseDataBase from "@/handlers/supadatabase";
+import UserCard from "../ui/UserCard";
 
 const MessagesBox = ({
   senderId,
   receiverId,
+  receiver_names,
+  receiver_avatar_url,
 }: {
   senderId: string;
   receiverId: string;
+  receiver_avatar_url: string;
+  receiver_names: string;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [messages, setMessages] = useState<any[]>([]);
@@ -117,9 +122,12 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                     </svg>
                   </Button>
                 </div>
-                <p className="font-bold font-poppins text-default-700 text-base">
+                {/* <p className="font-bold font-poppins text-default-700 text-base">
                   Messages
-                </p>
+                </p> */}
+                <div className="max-w-40">
+                    <UserCard userFullnames={`${receiver_names}`} srcTxt={receiver_avatar_url} />
+                </div>
               </DrawerHeader>
               <DrawerBody >
                 <div className="h-full overflow-y-auto overflow-hidden p-2 bg-white shadow flex flex-col-reverse gap-2">
