@@ -30,7 +30,7 @@ const Profile = () => {
     setIsLoading(false);
   }, [session]);
 
-  if ( session !== null && isLoading || !contextLoaded || !currentUser?.user_metadata.full_name || currentUser?.updated_at) {
+  if ( session !== null && isLoading || !contextLoaded || !currentUser?.user_metadata.full_name || !currentUser?.updated_at) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner size="lg" color="current" />
