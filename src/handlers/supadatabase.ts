@@ -86,7 +86,7 @@ const SupaBaseDataBase = {
 
   fetchComments: async (postId: number) => {
     const { data, error } = await supabase
-      .from("comments")
+      .from("advanced_comments_data")
       .select("*")
       .eq("post_id", postId)
       .order("created_at", { ascending: false });

@@ -43,6 +43,7 @@ const useOrganizeComments = () => {
             parent_id: payload.new.parent_id,
             post_id: payload.new.post_id,
             user_fullname: payload.new.user_fullname,
+            user_data: payload.new.user_data,
             user_id: payload.new.user_id,
             replies: payload.new.replies || []
           };
@@ -113,7 +114,7 @@ const useOrganizeComments = () => {
 
     // Initialize the map with all posts
     for (const comment of clonedComments) {
-      postMap.set(comment.id, comment);
+      postMap.set(`${comment.id}`, comment);
     }
 
     // Organize into a nested structure
