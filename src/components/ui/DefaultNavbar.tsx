@@ -30,7 +30,7 @@ const DefaultNavbar = () => {
 
   return (
     <Navbar maxWidth="full" className="bg-white z-40">
-      <NavbarContent className="md:container md:mx-auto">
+      <NavbarContent>
         <NavbarContent className="w-full overflow-hidden" justify="start">
           <NavbarBrand>
             <Link className="flex w-full items-center" to="/">

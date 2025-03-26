@@ -5,7 +5,7 @@ import { Link } from "react-router";
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Card className="relative w-full max-w-[1440px] mx-auto flex flex-col font-poppins h-screen justify-between overflow-y-scroll">
-      <CardHeader className="fixed pt-0">
+      <CardHeader className="fixed z-40 pt-0 inset-x-0 w-full max-w-full">
         <DefaultNavbar />
       </CardHeader>
 
