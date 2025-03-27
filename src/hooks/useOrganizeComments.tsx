@@ -35,17 +35,17 @@ const useOrganizeComments = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "comments" },
         (payload) => {
-          debugger;
+          // debugger;
           const newComment: CommentsTableColumnTypes = {
-            content: payload.new.content,
-            created_at: payload.new.created_at,
-            id: payload.new.id,
-            parent_id: payload.new.parent_id,
-            post_id: payload.new.post_id,
-            user_fullname: payload.new.user_fullname,
-            user_data: payload.new.user_data,
-            user_id: payload.new.user_id,
-            replies: payload.new.replies || []
+            content: (payload.new as CommentsTableColumnTypes).content,
+            created_at: (payload.new as CommentsTableColumnTypes).created_at,
+            id: (payload.new as CommentsTableColumnTypes).id,
+            parent_id: (payload.new as CommentsTableColumnTypes).parent_id,
+            post_id: (payload.new as CommentsTableColumnTypes).post_id,
+            user_fullname: (payload.new as CommentsTableColumnTypes).user_fullname,
+            user_data: (payload.new as CommentsTableColumnTypes).user_data,
+            user_id: (payload.new as CommentsTableColumnTypes).user_id,
+            replies: (payload.new as CommentsTableColumnTypes).replies || []
           };
           setNewPayload(newComment);
         }
