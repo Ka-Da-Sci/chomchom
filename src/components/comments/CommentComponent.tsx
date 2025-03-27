@@ -38,7 +38,7 @@ const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes }> = ({
 
   return (
     <Card className="border-2 px-4 py-2 w-full shadow-none ">
-      <Link to={`/profile/user/${comment.user_id}`}>
+      <Link className="w-max max-w-full" to={`/profile/user/${comment.user_id}`}>
         <UserCard
           srcTxt={`${comment.user_data.avatar_url}`}
           userFullnames={`${comment.user_fullname}`}
