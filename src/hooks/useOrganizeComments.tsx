@@ -33,7 +33,7 @@ const useOrganizeComments = () => {
       .channel("comments")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "comments" },
+        { event: "*", schema: "public", table: "comments" },
         (payload) => {
           // debugger;
           const newComment: CommentsTableColumnTypes = {
