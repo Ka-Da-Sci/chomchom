@@ -134,7 +134,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                   {messages.map((msg) => (
                     <p
                       key={msg.id}
-                      className={`p-2 my-1 w-max max-w-full rounded text-wrap ${msg.sender_id === senderId ? "bg-blue-500 text-white self-end" : "bg-gray-300 text-black self-start"}`}
+                      className={`px-3 py-1 my-1 max-w-full hyphens-auto break-words rounded text-wrap ${msg.sender_id === senderId ? "bg-blue-400 text-white self-end rounded-tr-2xl" : "bg-gray-300 text-black self-start rounded-tl-2xl"}`}
                     >
                       {msg.content}
                     </p>
