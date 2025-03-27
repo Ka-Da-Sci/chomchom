@@ -42,6 +42,7 @@ export type Database = {
           id: string
           parent_id: string | null
           post_id: number | null
+          user_data: Json | null
           user_fullname: string | null
           user_id: string | null
         }
@@ -51,6 +52,7 @@ export type Database = {
           id?: string
           parent_id?: string | null
           post_id?: number | null
+          user_data?: Json | null
           user_fullname?: string | null
           user_id?: string | null
         }
@@ -60,6 +62,7 @@ export type Database = {
           id?: string
           parent_id?: string | null
           post_id?: number | null
+          user_data?: Json | null
           user_fullname?: string | null
           user_id?: string | null
         }
@@ -146,7 +149,6 @@ export type Database = {
           id: number
           path: string
           title: string | null
-          user_data: Json | null
           user_fullnames: string
           user_id: string | null
           user_name: string
@@ -156,7 +158,6 @@ export type Database = {
           id?: number
           path?: string
           title?: string | null
-          user_data?: Json | null
           user_fullnames?: string
           user_id?: string | null
           user_name?: string
@@ -166,7 +167,6 @@ export type Database = {
           id?: number
           path?: string
           title?: string | null
-          user_data?: Json | null
           user_fullnames?: string
           user_id?: string | null
           user_name?: string

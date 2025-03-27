@@ -35,7 +35,7 @@ const useOrganizeComments = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "comments" },
         (payload) => {
-          // debugger;
+          debugger;
           const newComment: CommentsTableColumnTypes = {
             content: payload.new.content,
             created_at: payload.new.created_at,
