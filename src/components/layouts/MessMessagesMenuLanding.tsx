@@ -15,7 +15,6 @@ import {
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import UserCard from "../ui/UserCard";
 import SupaBaseDataBase from "@/handlers/supadatabase";
-import { useLocation } from "react-router-dom";
 import useRealtimeMessages from "@/hooks/useRealtimeMessages";
 import React from "react";
 
@@ -31,7 +30,6 @@ const MessagesMenuLanding = React.memo(() => {
   const [newMessage, setNewMessage] = useState("");
   const { writeDoc, getMessages } = SupaBaseDataBase;
   const messageTextAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { pathname } = useLocation();
   const [currentUserId, setCurrentUserId] = useState<string>();
   const [receiverId, setReceiverId] = useState<string>();
   const [senderId, setSenderId] = useState<string>();
@@ -75,7 +73,11 @@ const MessagesMenuLanding = React.memo(() => {
     if (error) {
       console.error("Error fetching latest messages:", error);
     } else {
-      setGenMessages(data as MessagesTableColumnTypes[]);
+      const sortedGenMessages = data.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      setGenMessages(sortedGenMessages as MessagesTableColumnTypes[]);
     }
   };
 
@@ -166,7 +168,7 @@ const MessagesMenuLanding = React.memo(() => {
             />
             <div className="flex-1 flex flex-col items-start justify-between">
               <div className="flex items-center gap-4 w-full justify-between">
-                <h3 className="font-semibold">
+                <h3 className="font-semibo</div>ld">
                   {`${msg.receiver_id === msg.sender_id ? msg.receiver_user_data?.full_name : msg.receiver_id === currentUserId ? msg.sender_user_data?.full_name : msg.receiver_user_data?.full_name}`}
                 </h3>
                 <i className="text-sm text-gray-500">
