@@ -57,7 +57,7 @@ const MessagesMenu = ({ children }: { children: ReactNode }) => {
                       </svg>
                     </Button>
                   </div>
-                  <p className="font-bold font-poppins text-default-700 text-base">
+                  <p className="font-bold font-poppins text-default-700 text-base antialiased">
                     Messages
                   </p>
 

@@ -129,8 +129,10 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                 {/* <p className="font-bold font-poppins text-default-700 text-base">
                   Messages
                 </p> */}
-                <div className="max-w-40 overflow-hidden">
+                <div className="max-w-40 overflow-hidden flex items-center gap-[2px]">
                     <UserCard userFullnames={`${receiver_names}`} srcTxt={receiver_avatar_url} />
+                    {receiverId === senderId && (<p className="antialiased text-primary-500 text-base font-medium font-poppins">(You)</p>)}
+
                 </div>
               </DrawerHeader>
               <DrawerBody >
@@ -139,7 +141,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                     <p
                       // key={msg.id}
                       key={`${crypto.randomUUID()}`}
-                      className={`px-3 py-1 my-1 max-w-full hyphens-auto break-words rounded text-wrap ${msg.sender_id === senderId ? "bg-blue-400 text-white self-end rounded-tr-2xl" : "bg-gray-300 text-black self-start rounded-tl-2xl"}`}
+                      className={`px-3 py-1 my-1 max-w-full hyphens-auto break-words rounded text-wrap antialiased font-inter font-semibold ${msg.sender_id === senderId ? "bg-blue-400 text-white self-end rounded-tr-2xl" : "bg-gray-300 text-black self-start rounded-tl-2xl"}`}
                     >
                       {msg.content}
                     </p>
@@ -151,7 +153,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                 <Form onSubmit={handleSendMessage} className="w-full flex items-end flex-row justify-between">
                     <Textarea
                     type="text"
-                    className="w-full p-2 border rounded mt-2"
+                    className="w-full p-2 border rounded mt-2 text-sm sm:text-base antialiased font-inter font-semibold"
                     value={newMessage}
                     ref={messageTextAreaRef}
                     onChange={handleMessageTextChange}
@@ -159,7 +161,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                     />
                     <Button
                     type="submit"
-                    className="mt-2 p-2 bg-default-500 text-white rounded"
+                    className="mt-2 p-2 bg-default-500 text-white rounded antialiased font-semibold text-base"
                     >
                     Send
                     </Button>

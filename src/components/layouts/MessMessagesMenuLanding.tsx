@@ -17,11 +17,16 @@ import UserCard from "../ui/UserCard";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 import useRealtimeMessages from "@/hooks/useRealtimeMessages";
 import React from "react";
+import { Link } from "react-router-dom";
 
 /* eslint-disable no-console */
 const MessagesMenuLanding = React.memo(() => {
-  const [genMessages, setGenMessages] = useState<MessagesTableColumnTypes[]>([]);
-  const [specMessages, setSpecMessages] = useState<MessagesTableColumnTypes[]>([]);
+  const [genMessages, setGenMessages] = useState<MessagesTableColumnTypes[]>(
+    []
+  );
+  const [specMessages, setSpecMessages] = useState<MessagesTableColumnTypes[]>(
+    []
+  );
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [newMessage, setNewMessage] = useState("");
   const { writeDoc, getMessages } = SupaBaseDataBase;
@@ -29,13 +34,23 @@ const MessagesMenuLanding = React.memo(() => {
   const [currentUserId, setCurrentUserId] = useState<string>();
   const [receiverId, setReceiverId] = useState<string>();
   const [senderId, setSenderId] = useState<string>();
-  const [selectedMessage, setSelectedMessage] = useState<MessagesTableColumnTypes | null>(null);
+  const [selectedMessage, setSelectedMessage] =
+    useState<MessagesTableColumnTypes | null>(null);
 
-  const realtimeMessages = useRealtimeMessages(`${senderId}`, `${receiverId}`) as MessagesTableColumnTypes | null;
+  const realtimeMessages = useRealtimeMessages(
+    `${senderId}`,
+    `${receiverId}`
+  ) as MessagesTableColumnTypes | null;
 
   // Fetch specific conversation messages
   useEffect(() => {
-    if (!senderId || !receiverId || senderId.trim() === "" || receiverId.trim() === "") return;
+    if (
+      !senderId ||
+      !receiverId ||
+      senderId.trim() === "" ||
+      receiverId.trim() === ""
+    )
+      return;
     getMessages(senderId, receiverId).then((fetchedMessages) => {
       console.log("Fetched specMessages:", fetchedMessages);
       setSpecMessages(fetchedMessages as MessagesTableColumnTypes[]);
@@ -47,8 +62,15 @@ const MessagesMenuLanding = React.memo(() => {
     if (realtimeMessages) {
       console.log("Realtime spec message update:", realtimeMessages);
       setSpecMessages((prev) => {
-        const newMessages = [realtimeMessages, ...prev.filter((msg) => msg.id !== realtimeMessages?.id)];
-        return newMessages.sort((a, b) => new Date(`${b.created_at}`).getTime() - new Date(`${a.created_at}`).getTime());
+        const newMessages = [
+          realtimeMessages,
+          ...prev.filter((msg) => msg.id !== realtimeMessages?.id),
+        ];
+        return newMessages.sort(
+          (a, b) =>
+            new Date(`${b.created_at}`).getTime() -
+            new Date(`${a.created_at}`).getTime()
+        );
       });
     }
   }, [realtimeMessages]);
@@ -60,17 +82,18 @@ const MessagesMenuLanding = React.memo(() => {
 
     const userId = user.data.user.id;
     setCurrentUserId(userId);
-    
+
     const { data, error } = await supabase.rpc("get_latest_messages", {
       user_id: userId,
     });
-    
+
     if (error) {
       console.error("Error fetching latest messages:", error);
     } else {
       console.log("Fetched genMessages:", data);
       const sortedGenMessages = data.sort(
-        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
       setGenMessages(sortedGenMessages as MessagesTableColumnTypes[]);
     }
@@ -85,7 +108,9 @@ const MessagesMenuLanding = React.memo(() => {
     const updateGenMessages = (newMessage: MessagesTableColumnTypes) => {
       setGenMessages((prev) => {
         // Create a unique key for each conversation
-        const conversationKey = [newMessage.sender_id, newMessage.receiver_id].sort().join("-");
+        const conversationKey = [newMessage.sender_id, newMessage.receiver_id]
+          .sort()
+          .join("-");
         const existingIndex = prev.findIndex((msg) => {
           const msgKey = [msg.sender_id, msg.receiver_id].sort().join("-");
           return msgKey === conversationKey;
@@ -94,7 +119,10 @@ const MessagesMenuLanding = React.memo(() => {
         let updatedMessages;
         if (existingIndex >= 0) {
           // Replace the existing message if the new one is more recent
-          if (new Date(`${newMessage.created_at}`) > new Date(`${prev[existingIndex].created_at}`)) {
+          if (
+            new Date(`${newMessage.created_at}`) >
+            new Date(`${prev[existingIndex].created_at}`)
+          ) {
             updatedMessages = [...prev];
             updatedMessages[existingIndex] = newMessage;
           } else {
@@ -105,7 +133,11 @@ const MessagesMenuLanding = React.memo(() => {
           updatedMessages = [newMessage, ...prev];
         }
 
-        return updatedMessages.sort((a, b) => new Date(`${b.created_at}`).getTime() - new Date(`${a.created_at}`).getTime());
+        return updatedMessages.sort(
+          (a, b) =>
+            new Date(`${b.created_at}`).getTime() -
+            new Date(`${a.created_at}`).getTime()
+        );
       });
     };
 
@@ -181,7 +213,8 @@ const MessagesMenuLanding = React.memo(() => {
 
   const handleMessageClick = useCallback(
     (msg: MessagesTableColumnTypes) => {
-      const isMessagingSelf = msg.sender_id === msg.receiver_id && msg.sender_id === currentUserId;
+      const isMessagingSelf =
+        msg.sender_id === msg.receiver_id && msg.sender_id === currentUserId;
 
       setReceiverId(
         isMessagingSelf
@@ -206,7 +239,8 @@ const MessagesMenuLanding = React.memo(() => {
 
   const memoizedMessages = useMemo(() => {
     return genMessages.map((msg) =>
-      msg.receiver_user_data?.full_name && msg.receiver_user_data?.avatar_url ? (
+      msg.receiver_user_data?.full_name &&
+      msg.receiver_user_data?.avatar_url ? (
         <div key={msg.id} className="w-full">
           <Card
             isPressable
@@ -220,14 +254,24 @@ const MessagesMenuLanding = React.memo(() => {
             />
             <div className="flex-1 flex flex-col items-start justify-between">
               <div className="flex items-center gap-4 w-full justify-between">
-                <h3 className="font-semibold line-clamp-1 text-left">
-                  {`${msg.receiver_id === msg.sender_id ? msg.receiver_user_data?.full_name : msg.receiver_id === currentUserId ? msg.sender_user_data?.full_name : msg.receiver_user_data?.full_name}`}
-                </h3>
-                <i className="text-sm text-gray-500 text-left">
-                  {new Date(`${msg.created_at}`).toLocaleDateString("en-GB").replace(/\//g, "-")}
+                <div className="flex items-center gap-[2px]">
+                  <h3 className="font-semibold line-clamp-1 text-left antialiased font-poppins">
+                    {`${msg.receiver_id === msg.sender_id ? msg.receiver_user_data?.full_name : msg.receiver_id === currentUserId ? msg.sender_user_data?.full_name : msg.receiver_user_data?.full_name}`}
+                  </h3>
+                  {msg.receiver_id === msg.sender_id && (
+                    <p className="text-primary-500 text-base antialiased font-medium font-poppins">(You)</p>
+                  )}
+                </div>
+
+                <i className="text-sm text-gray-500 text-left antialiased font-montserrat font-medium">
+                  {new Date(`${msg.created_at}`)
+                    .toLocaleDateString("en-GB")
+                    .replace(/\//g, "-")}
                 </i>
               </div>
-              <p className="text-gray-600 text-sm line-clamp-1 text-left">{msg.content}</p>
+              <p className="text-gray-600 text-sm line-clamp-1 text-left antialiased font-inter font-medium">
+                {msg.content}
+              </p>
             </div>
           </Card>
         </div>
@@ -240,6 +284,11 @@ const MessagesMenuLanding = React.memo(() => {
 
     return (
       <Drawer
+        classNames={{
+          body: "p-1 pb-0 m-0",
+          header: "p-1 m-0",
+          footer: "p-1 pt-0 m-0",
+        }}
         radius="none"
         className="rounded-md"
         // isDismissable={false}
@@ -248,7 +297,7 @@ const MessagesMenuLanding = React.memo(() => {
         hideCloseButton={true}
         onClose={onClose}
       >
-        <DrawerContent>
+        <DrawerContent className="">
           {() => (
             <>
               <DrawerHeader className="flex items-center gap-4">
@@ -257,18 +306,36 @@ const MessagesMenuLanding = React.memo(() => {
                     className="w-min max-w-10 p-0 m-0 bg-transparent"
                     color="danger"
                     variant="light"
-                    onPress={onClose}
+                    onPress={() => {
+                      setSpecMessages([]);
+                      onClose();
+                    }}
                   >
-                    <svg viewBox="0 0 24 24" aria-hidden="true" className="fill-[rgb(239, 243, 244)]">
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      className="fill-[rgb(239, 243, 244)]"
+                    >
                       <path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path>
                     </svg>
                   </Button>
                 </div>
                 <div className="max-w-40 overflow-hidden">
-                  <UserCard
-                    userFullnames={`${selectedMessage.receiver_id === selectedMessage.sender_id ? selectedMessage.receiver_user_data?.full_name : selectedMessage.receiver_id === currentUserId ? selectedMessage.sender_user_data?.full_name : selectedMessage.receiver_user_data?.full_name}`}
-                    srcTxt={`${selectedMessage.receiver_id === selectedMessage.sender_id ? selectedMessage.receiver_user_data?.avatar_url : selectedMessage.receiver_id === currentUserId ? selectedMessage.sender_user_data?.avatar_url : selectedMessage.receiver_user_data?.avatar_url}`}
-                  />
+                  <Link
+                    to={`/profile/user/${receiverId}`}
+                    className="flex items-center gap-1"
+                  >
+                    <UserCard
+                      userFullnames={`${selectedMessage.receiver_id === selectedMessage.sender_id ? selectedMessage.receiver_user_data?.full_name : selectedMessage.receiver_id === currentUserId ? selectedMessage.sender_user_data?.full_name : selectedMessage.receiver_user_data?.full_name}`}
+                      srcTxt={`${selectedMessage.receiver_id === selectedMessage.sender_id ? selectedMessage.receiver_user_data?.avatar_url : selectedMessage.receiver_id === currentUserId ? selectedMessage.sender_user_data?.avatar_url : selectedMessage.receiver_user_data?.avatar_url}`}
+                    />
+                    {selectedMessage.receiver_id ===
+                      selectedMessage.sender_id && (
+                      <p className="antialiased text-primary-500 text-base font-medium font-poppins">
+                        (You)
+                      </p>
+                    )}
+                  </Link>
                 </div>
               </DrawerHeader>
               <DrawerBody>
@@ -276,7 +343,7 @@ const MessagesMenuLanding = React.memo(() => {
                   {specMessages.map((specMsg) => (
                     <p
                       key={`${specMsg.id || crypto.randomUUID()}`}
-                      className={`px-3 py-1 my-1 max-w-full hyphens-auto break-words rounded text-wrap ${
+                      className={`px-3 py-1 my-1 max-w-full hyphens-auto break-words rounded text-wrap antialiased font-inter font-medium text-sm sm:text-base ${
                         specMsg.sender_id === senderId
                           ? "bg-blue-400 text-white self-end rounded-tr-2xl"
                           : "bg-gray-300 text-black self-start rounded-tl-2xl"
@@ -294,7 +361,7 @@ const MessagesMenuLanding = React.memo(() => {
                 >
                   <Textarea
                     type="text"
-                    className="w-full p-2 border rounded mt-2"
+                    className="w-full p-2 border rounded mt-2 font-poppins antialiased font-normal"
                     value={newMessage}
                     ref={messageTextAreaRef}
                     onChange={handleMessageTextChange}
@@ -302,7 +369,7 @@ const MessagesMenuLanding = React.memo(() => {
                   />
                   <Button
                     type="submit"
-                    className="mt-2 p-2 bg-default-500 text-white rounded"
+                    className="mt-2 p-2 bg-default-500 text-white rounded font-semibold antialiased font-poppins"
                   >
                     Send
                   </Button>
