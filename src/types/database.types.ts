@@ -110,21 +110,27 @@ export type Database = {
           created_at: string | null
           id: string
           receiver_id: string | null
+          receiver_user_data: Json | null
           sender_id: string | null
+          sender_user_data: Json | null
         }
         Insert: {
           content: string
           created_at?: string | null
           id?: string
           receiver_id?: string | null
+          receiver_user_data?: Json | null
           sender_id?: string | null
+          sender_user_data?: Json | null
         }
         Update: {
           content?: string
           created_at?: string | null
           id?: string
           receiver_id?: string | null
+          receiver_user_data?: Json | null
           sender_id?: string | null
+          sender_user_data?: Json | null
         }
         Relationships: [
           {
@@ -286,6 +292,20 @@ export type Database = {
           column_type: string
         }
         Returns: undefined
+      }
+      get_latest_messages: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          created_at: string
+          receiver_user_data: Json
+          sender_user_data: Json
+        }[]
       }
     }
     Enums: {

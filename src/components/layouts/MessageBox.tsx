@@ -35,6 +35,10 @@ const MessagesBox = ({
 
   const realtimeMessages = useRealtimeMessages(senderId, receiverId);
 
+  // useEffect(() => {
+  //   onOpen(); // Open the drawer when the component mounts
+  // }, []);
+
   useEffect(() => {
     if (
       !senderId ||
@@ -133,7 +137,8 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
                 <div className="h-full overflow-y-auto overflow-hidden p-2 bg-white shadow flex flex-col-reverse gap-2">
                   {messages.map((msg) => (
                     <p
-                      key={msg.id}
+                      // key={msg.id}
+                      key={`${crypto.randomUUID()}`}
                       className={`px-3 py-1 my-1 max-w-full hyphens-auto break-words rounded text-wrap ${msg.sender_id === senderId ? "bg-blue-400 text-white self-end rounded-tr-2xl" : "bg-gray-300 text-black self-start rounded-tl-2xl"}`}
                     >
                       {msg.content}

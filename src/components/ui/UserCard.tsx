@@ -5,6 +5,11 @@ const UserCard: React.FC<{ srcTxt: string; userFullnames: string }> = ({
   srcTxt,
   userFullnames,
 }) => {
+
+  /* eslint-disable no-console */
+
+  console.log(userFullnames, srcTxt);
+
   return (
     <div className="flex items-center gap-3 overflow-hidden w-full">
       <Image src={srcTxt} className="rounded-full max-w-10" />

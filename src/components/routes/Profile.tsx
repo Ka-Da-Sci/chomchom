@@ -6,7 +6,8 @@ import ProfilePageUploads from "../layouts/ProfilePageUploads";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
-import Messages from "../layouts/MessagesMenu";
+import MessagesMenu from "../layouts/MessagesMenu";
+import MessagesMenuLanding from "../layouts/MessMessagesMenuLanding";
 
 // /* eslint-disable no-console */
 const Profile = () => {
@@ -76,9 +77,9 @@ const Profile = () => {
             </div>
           </div>
 
-          <Messages />
-
-
+          <MessagesMenu>
+            <MessagesMenuLanding />
+          </MessagesMenu>
           
         </div>
         {/* <h1 className="text-left w-full capitalize text-2xl">Uploads</h1> */}
