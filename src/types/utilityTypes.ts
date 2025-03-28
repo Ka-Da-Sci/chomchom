@@ -24,6 +24,7 @@ type MessageAuxTypes = {
     full_name?: string;
     [key: string]: any;
   };
+
 };
 export type MessagesTableColumnTypes = Database["public"]["Tables"]["messages"]["Row"] & MessageAuxTypes;
 

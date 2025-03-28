@@ -5,7 +5,6 @@ import {
   Button,
   useDisclosure,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   Divider,
 } from "@heroui/react";
@@ -16,14 +15,7 @@ import { ReactNode } from "react";
 
 const MessagesMenu = ({ children }: { children: ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  //   const [size, setSize] = React.useState("md");
-
-  //   const sizes = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "full"];
-
-  //   const handleOpen = () => {
-  //     // setSize(size);
-  //     onOpen();
-  //   };
+  
 
   return (
     <>
@@ -86,14 +78,6 @@ const MessagesMenu = ({ children }: { children: ReactNode }) => {
                 <Divider />
               </DrawerHeader>
               <DrawerBody className="px-0 mx-0 w-full">{children}</DrawerBody>
-              <DrawerFooter>
-                {/* <Button color="danger" variant="light" onPress={onClose}>
-                            Close
-                          </Button>
-                          <Button color="primary" onPress={onClose}>
-                            Action
-                          </Button> */}
-              </DrawerFooter>
             </>
           )}
         </DrawerContent>
