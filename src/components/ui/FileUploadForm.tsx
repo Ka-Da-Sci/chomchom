@@ -245,6 +245,8 @@ const ReUploadAlert = () => {
             placeholder="Title"
             type="text"
             ref={titleRef}
+            max={250}
+            min={3}
             disabled={!session}
             validate={(value) => {
               if (value.length < 3 && validate) {
@@ -269,7 +271,7 @@ const ReUploadAlert = () => {
             }
             type="file"
             ref={fileRef}
-            accept="image/*"
+            accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
             disabled={!session}
             onChange={(event) => {
               handleOnChange(event);

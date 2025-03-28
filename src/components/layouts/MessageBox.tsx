@@ -100,7 +100,7 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
         }}
         radius="none"
         className="rounded-md w-full"
-        isDismissable={false}
+        // isDismissable={false}
         isOpen={isOpen}
         size={"lg"}
         hideCloseButton={true}

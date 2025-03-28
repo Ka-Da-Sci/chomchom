@@ -220,14 +220,14 @@ const MessagesMenuLanding = React.memo(() => {
             />
             <div className="flex-1 flex flex-col items-start justify-between">
               <div className="flex items-center gap-4 w-full justify-between">
-                <h3 className="font-semibold">
+                <h3 className="font-semibold line-clamp-1 text-left">
                   {`${msg.receiver_id === msg.sender_id ? msg.receiver_user_data?.full_name : msg.receiver_id === currentUserId ? msg.sender_user_data?.full_name : msg.receiver_user_data?.full_name}`}
                 </h3>
-                <i className="text-sm text-gray-500">
+                <i className="text-sm text-gray-500 text-left">
                   {new Date(`${msg.created_at}`).toLocaleDateString("en-GB").replace(/\//g, "-")}
                 </i>
               </div>
-              <p className="text-gray-600 text-sm truncate">{msg.content}</p>
+              <p className="text-gray-600 text-sm line-clamp-1 text-left">{msg.content}</p>
             </div>
           </Card>
         </div>
@@ -242,7 +242,7 @@ const MessagesMenuLanding = React.memo(() => {
       <Drawer
         radius="none"
         className="rounded-md"
-        isDismissable={false}
+        // isDismissable={false}
         isOpen={isOpen}
         size={"lg"}
         hideCloseButton={true}

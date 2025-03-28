@@ -30,7 +30,7 @@ const MessagesMenu = ({ children }: { children: ReactNode }) => {
       <Drawer
         radius="none"
         className="rounded-md"
-        isDismissable={false}
+        // isDismissable={false}
         isOpen={isOpen}
         size={"lg"}
         hideCloseButton={true}
