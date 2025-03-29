@@ -171,7 +171,7 @@ const DefaultNavbar = () => {
                     base: "my-0 mx-2 mr-2 p-0 hover:outline-none",
                     wrapper: "m-0 p-0 hover:outline-none",
                   }}
-                  className="antialiased block sm:hidden max-h-min w-full max-w-[95%]"
+                  className="antialiased mt-2 block sm:hidden max-h-min w-full max-w-[95%]"
                   key="home"
                   textValue="home"
                 >
@@ -222,7 +222,7 @@ const DefaultNavbar = () => {
                   textValue="signout"
                   key="signout"
                   color="danger"
-                  className="mt-auto mb-2 w-full max-w-[95%]" // Push to bottom with slight margin
+                  className="mt-4 mb-2 w-full max-w-[95%]" // Push to bottom with slight margin
                 >
                   <Button
                     color="danger"
