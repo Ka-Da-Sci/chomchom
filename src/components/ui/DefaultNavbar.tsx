@@ -125,7 +125,7 @@ const DefaultNavbar = () => {
             <DropdownMenu
               aria-label="Profile Actions"
               variant="flat"
-              className={`h-screen w-full min-w-[200px] p-2 flex flex-col ${
+              className={`h-screen w-full min-w-[200px] py-2 gap-4 flex flex-col ${
                 session ? "" : "justify-center"
               }`}
             >
@@ -159,7 +159,7 @@ const DefaultNavbar = () => {
                 <DropdownItem
                   key="divider"
                   textValue="divider"
-                  className="pointer-events-none -mt-2"
+                  className="pointer-events-none"
                 >
                   <Divider key="hrule" />
                 </DropdownItem>
