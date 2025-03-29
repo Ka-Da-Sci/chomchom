@@ -13,7 +13,7 @@ const NavBarLink = ({ pathName, lintText, toProp }: NavBarLinkProps) => {
 
     return (
         <Link
-        className={`font-normal text-inherit antialiased ${pathname === `${pathName}` ? "text-primary-500" : ""}`}
+        className={`w-full block p-2 font-poppins font-normal text-inherit antialiased ${pathname === `${pathName}` ? "text-primary-500" : ""}`}
         to={`${toProp}`}
       >
         {lintText}

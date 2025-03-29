@@ -130,9 +130,13 @@ const DefaultNavbar = () => {
               }`}
             >
               <DropdownItem
+                classNames={{
+                  base: "my-0 mx-2 p-0 hover:outline-none",
+                  wrapper: "m-0 p-0 hover:outline-none",
+                }}
                 key="user"
                 textValue="user"
-                className={`gap-2 max-h-min ${session ? "pointer-events-none" : ""}`}
+                className={`gap-2 max-h-min w-full max-w-[95%] ${session ? "pointer-events-none" : ""}`}
               >
                 {!session && (
                   <Button
@@ -163,7 +167,11 @@ const DefaultNavbar = () => {
 
               {session && (
                 <DropdownItem
-                  className="antialiased block sm:hidden max-h-min"
+                  classNames={{
+                    base: "my-0 mx-2 mr-2 p-0 hover:outline-none",
+                    wrapper: "m-0 p-0 hover:outline-none",
+                  }}
+                  className="antialiased block sm:hidden max-h-min w-full max-w-[95%]"
                   key="home"
                   textValue="home"
                 >
@@ -172,7 +180,11 @@ const DefaultNavbar = () => {
               )}
               {session && (
                 <DropdownItem
-                  className="antialiased block sm:hidden max-h-min"
+                  classNames={{
+                    base: "my-0 mx-2 p-0 hover:outline-none",
+                    wrapper: "m-0 p-0 hover:outline-none",
+                  }}
+                  className="antialiased block sm:hidden max-h-min w-full max-w-[95%]"
                   key="my fotox"
                   textValue="my fotox"
                 >
@@ -185,7 +197,11 @@ const DefaultNavbar = () => {
               )}
               {session && (
                 <DropdownItem
-                  className="antialiased block sm:hidden max-h-min"
+                  classNames={{
+                    base: "my-0 mx-2 p-0 hover:outline-none",
+                    wrapper: "m-0 p-0 hover:outline-none",
+                  }}
+                  className="antialiased block sm:hidden max-h-min w-full max-w-[95%]"
                   key="account"
                   textValue="account"
                 >
@@ -199,10 +215,14 @@ const DefaultNavbar = () => {
 
               {session && (
                 <DropdownItem
+                  classNames={{
+                    base: "my-0 mx-2 p-0 hover:outline-none",
+                    wrapper: "m-0 p-0 hover:outline-none",
+                  }}
                   textValue="signout"
                   key="signout"
                   color="danger"
-                  className="mt-auto mb-2" // Push to bottom with slight margin
+                  className="mt-auto mb-2 w-full max-w-[95%]" // Push to bottom with slight margin
                 >
                   <Button
                     color="danger"
@@ -228,7 +248,6 @@ const DefaultNavbar = () => {
 
 export default DefaultNavbar;
 
-
 // @layer base {
 //   body.dropdown-open {
 //     @apply overflow-hidden;
@@ -250,4 +269,3 @@ export default DefaultNavbar;
 //     @apply relative h-full;
 //   }
 // }
-
