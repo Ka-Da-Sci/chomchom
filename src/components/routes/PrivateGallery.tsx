@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import DefaultGallery from "@/components/layouts/DefaultGallery";
 import DefaultLayout from "../layouts/DefaultLayout";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import { Button, Spinner } from "@heroui/react";
-import authenticateUser from "@/handlers/supabase-authentication";
+import { Spinner } from "@heroui/react";
 import Upload from "../ui/Upload";
 import useAssignAccessLevel from "@/hooks/useAssignAccessLevel";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
 import { StockItemsColumnTypes } from "@/types/utilityTypes";
+import { useNavigate } from "react-router-dom";
 
 
 /* eslint-disable no-console */
 const PrivateGallery = () => {
     useAssignAccessLevel('private');
-  const { signInWithGooglePopup } = authenticateUser;
+  const navigate = useNavigate();
   const { session } = useAuthContext(); 
 
   const {
@@ -50,25 +50,10 @@ const PrivateGallery = () => {
   }
 
   // ✅ Handle case where user is not logged in AFTER hooks execution
-  if (!session) {
-    return (
-      <DefaultLayout>
-        <section>
-          <div className="flex flex-col gap-8 justify-center items-center h-3/4 max-h-screen">
-            <h1>You must be logged in!</h1>
-            <Button
-              className="capitalize px-8 font-poppins"
-              onPress={async () => {
-                await signInWithGooglePopup();
-              }}
-            >
-              Sign in
-            </Button>
-          </div>
-        </section>
-      </DefaultLayout>
-    );
-  }
+  if (!session && contextLoaded) {
+    navigate("/login");
+    return null;
+  };
 
   return (
     <DefaultLayout>

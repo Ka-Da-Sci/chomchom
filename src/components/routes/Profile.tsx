@@ -1,20 +1,20 @@
 import DefaultLayout from "../layouts/DefaultLayout";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { Button, Image, Spinner } from "@heroui/react";
+import { Image, Spinner } from "@heroui/react";
 import ProfilePageUploads from "../layouts/ProfilePageUploads";
-import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
 import MessagesMenu from "../layouts/MessagesMenu";
 import MessagesMenuLanding from "../layouts/MessMessagesMenuLanding";
+import { useNavigate } from "react-router-dom";
 
 // /* eslint-disable no-console */
 const Profile = () => {
     const { session } = useAuthContext();
-  const { signInWithGooglePopup } = authenticateUser;
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const { isLoading, contextLoaded, setIsLoading } = useFileManagementContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!session) return;
@@ -31,6 +31,11 @@ const Profile = () => {
     setIsLoading(false);
   }, [session]);
 
+  if (!session && contextLoaded) {
+    navigate("/login");
+    return null;
+  };
+
   if ( session !== null && isLoading || !contextLoaded || !currentUser?.user_metadata.full_name || !currentUser?.updated_at) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -39,23 +44,7 @@ const Profile = () => {
     );
   }
 
-  if (!session) {
-    return (
-      <DefaultLayout>
-        <div className="flex flex-col gap-8 justify-center items-center max-h-screen">
-          <h1>You must be logged in!</h1>
-          <Button
-            className="capitalize px-8 font-poppins"
-            onPress={async () => {
-              await signInWithGooglePopup();
-            }}
-          >
-            Sign in
-          </Button>
-        </div>
-      </DefaultLayout>
-    );
-  }
+
 
   return (
     <DefaultLayout>

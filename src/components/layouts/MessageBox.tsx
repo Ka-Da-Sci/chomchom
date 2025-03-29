@@ -15,6 +15,9 @@ import { useState, useEffect, useRef } from "react";
 import useRealtimeMessages from "@/hooks/useRealtimeMessages";
 import SupaBaseDataBase from "@/handlers/supadatabase";
 import UserCard from "../ui/UserCard";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import useFileManagementContext from "@/hooks/useFileManagementContext";
 
 const MessagesBox = ({
   senderId,
@@ -32,6 +35,11 @@ const MessagesBox = ({
   const [newMessage, setNewMessage] = useState("");
   const { writeDoc, getMessages } = SupaBaseDataBase;
   const messageTextAreaRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
+  const { contextLoaded } = useFileManagementContext();
+  const pathname = useLocation().pathname;
+
+  const { session } = useAuthContext();
 
   const realtimeMessages = useRealtimeMessages(senderId, receiverId);
 
@@ -87,7 +95,14 @@ const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
       <div className="flex gap-3 h-10 w-10 overflow-hidden justify-center">
         <Button
           className="p-0 m-0 rounded-none h-auto w-auto max-w-full max-h-full bg-transparent"
-          onPress={onOpen}
+          onPress={() => {
+            if (!session && contextLoaded && pathname === `/profile/user/${receiverId}`) {
+              navigate("/login");
+              return null;
+            };
+
+            onOpen();
+          }}
         >
           <MessageIcon />
         </Button>

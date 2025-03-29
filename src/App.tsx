@@ -7,6 +7,7 @@ import { realtimeDatabaseSubscription } from "./lib/supabase.config";
 import useFileManagementContext from "./hooks/useFileManagementContext";
 import { Spinner } from "@heroui/react";
 import ThirdPartyUserPublicProfile from "./components/routes/ThirdPartyUserPublicProfile";
+import SignUpSignIn from "./components/routes/SignUpSignIn";
 const PublicGallery = lazy(() => import("./components/routes/Index"));
 // import PublicGallery from "./components/routes/Index";
 
@@ -115,6 +116,7 @@ const App = () => {
         <Route element={<SingleItemGallery />} path={"/fotox/:id/"} />
         <Route element={<PrivateGallery />} path={"/my-fotox/"} />
         <Route element={<Profile />} path="/profile/me/" />
+        <Route element={<SignUpSignIn />} path="/login" />
         <Route element={<ThirdPartyUserPublicProfile />} path={"/profile/user/:userId"} />
         <Route element={<NotFound />} path="*" />
       </Routes>
