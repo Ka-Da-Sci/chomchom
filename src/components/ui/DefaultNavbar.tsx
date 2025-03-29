@@ -106,7 +106,7 @@ const DefaultNavbar = () => {
           className="items-center px-2 [@media(min-width:350px)]:min-w-[200px] [@media(max-width:490px)]:min-w-0"
           justify="end"
         >
-          {!pathname.includes("/fotox/") ? <Search /> : ""}
+          {!pathname.includes("/fotox/") && !pathname.includes("/login") ? <Search /> : ""}
           <Dropdown className="rounded-sm">
             <DropdownTrigger className="dropdown-trigger">
               <Avatar
