@@ -11,7 +11,6 @@ import {
   Divider,
   Button,
 } from "@heroui/react";
-// import clsx from "clsx";
 import BrandLogo from "./BrandLogo";
 import authenticateUser from "@/handlers/supabase-authentication";
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -19,6 +18,7 @@ import userIcon from "@/assets/images/user-icon.jpeg";
 import { Link, useLocation } from "react-router-dom";
 import NavBarLink from "./NavBarLink";
 import Search from "./Search";
+import { useEffect } from "react";
 
 const { signInWithGooglePopup, signOutGoogle } = authenticateUser;
 
@@ -28,15 +28,48 @@ const DefaultNavbar = () => {
   const { pathname } = useLocation();
   console.log(session?.user);
 
+  // Prevent overflow flash on dropdown close
+  useEffect(() => {
+    const handleDropdownOpen = () => {
+      document.body.classList.add("dropdown-open");
+    };
+    const handleDropdownClose = () => {
+      document.body.classList.add("dropdown-closing");
+      setTimeout(() => {
+        document.body.classList.remove("dropdown-closing");
+        document.body.classList.remove("dropdown-open");
+      }, 300); // Match your dropdown's animation duration
+    };
+
+    const dropdownTrigger = document.querySelector(".dropdown-trigger");
+    if (dropdownTrigger) {
+      dropdownTrigger.addEventListener("click", handleDropdownOpen);
+    }
+    document.addEventListener("click", (e) => {
+      if (!dropdownTrigger?.contains(e.target as Node)) {
+        handleDropdownClose();
+      }
+    });
+
+    return () => {
+      if (dropdownTrigger) {
+        dropdownTrigger.removeEventListener("click", handleDropdownOpen);
+      }
+      document.removeEventListener("click", handleDropdownClose);
+    };
+  }, []);
+
   return (
-    <Navbar maxWidth="full" className="bg-white z-40">
+    <Navbar maxWidth="full" className="bg-white z-40 overflow-hidden">
       <NavbarContent>
         <NavbarContent className="w-full overflow-hidden" justify="start">
           <NavbarBrand>
             <Link className="flex w-full items-center" to="/">
               <BrandLogo />
               <p
-                className={`hidden md:block font-normal text-inherit antialiased ${pathname === "/" ? "text-primary-500" : ""}`}
+                className={`hidden md:block font-normal text-inherit antialiased ${
+                  pathname === "/" ? "text-primary-500" : ""
+                }`}
               >
                 Fotox
               </p>
@@ -45,11 +78,11 @@ const DefaultNavbar = () => {
         </NavbarContent>
 
         <NavbarContent justify="center" className="px-4 flex gap-3">
-          <NavbarItem className="hidden sm:block ">
+          <NavbarItem className="hidden sm:block">
             <NavBarLink pathName="/" toProp="/" lintText="Home" />
           </NavbarItem>
           {session && (
-            <NavbarItem className="hidden sm:block ">
+            <NavbarItem className="hidden sm:block">
               <NavBarLink
                 pathName="/my-fotox"
                 toProp="/my-fotox"
@@ -58,7 +91,7 @@ const DefaultNavbar = () => {
             </NavbarItem>
           )}
           {session && (
-            <NavbarItem className="hidden sm:block ">
+            <NavbarItem className="hidden sm:block">
               <NavBarLink
                 pathName="/profile/me"
                 toProp="/profile/me"
@@ -70,12 +103,12 @@ const DefaultNavbar = () => {
 
         <NavbarContent
           as="div"
-          className="items-center px-2  [@media(min-width:350px)]:min-w-[200px] [@media(max-width:490px)]:min-w-0"
+          className="items-center px-2 [@media(min-width:350px)]:min-w-[200px] [@media(max-width:490px)]:min-w-0"
           justify="end"
         >
           {!pathname.includes("/fotox/") ? <Search /> : ""}
-          <Dropdown className="rounded-sm h-screen relative mt-2">
-            <DropdownTrigger>
+          <Dropdown className="rounded-sm">
+            <DropdownTrigger className="dropdown-trigger">
               <Avatar
                 isBordered
                 as="button"
@@ -92,7 +125,9 @@ const DefaultNavbar = () => {
             <DropdownMenu
               aria-label="Profile Actions"
               variant="flat"
-              className={`h-full relative  ${session ? "" : "flex flex-col justify-center"}`}
+              className={`h-screen w-full min-w-[200px] p-2 flex flex-col ${
+                session ? "" : "justify-center"
+              }`}
             >
               <DropdownItem
                 key="user"
@@ -116,13 +151,15 @@ const DefaultNavbar = () => {
                   </div>
                 )}
               </DropdownItem>
-              {session && <DropdownItem
-                key="divider"
-                textValue="divider"
-                className="pointer-events-none -mt-2"
-              >
-                <Divider key="hrule" />
-              </DropdownItem>}
+              {session && (
+                <DropdownItem
+                  key="divider"
+                  textValue="divider"
+                  className="pointer-events-none -mt-2"
+                >
+                  <Divider key="hrule" />
+                </DropdownItem>
+              )}
 
               {session && (
                 <DropdownItem
@@ -146,7 +183,6 @@ const DefaultNavbar = () => {
                   />
                 </DropdownItem>
               )}
-
               {session && (
                 <DropdownItem
                   className="antialiased block sm:hidden max-h-min"
@@ -166,7 +202,7 @@ const DefaultNavbar = () => {
                   textValue="signout"
                   key="signout"
                   color="danger"
-                  className="mb-28 h-min absolute bottom-0 left-0"
+                  className="mt-auto mb-2" // Push to bottom with slight margin
                 >
                   <Button
                     color="danger"
@@ -191,3 +227,27 @@ const DefaultNavbar = () => {
 };
 
 export default DefaultNavbar;
+
+
+// @layer base {
+//   body.dropdown-open {
+//     @apply overflow-hidden;
+//   }
+//   body.dropdown-closing {
+//     @apply overflow-hidden !important; /* Note: !important here for precedence */
+//   }
+// }
+
+// /* Components layer: Styled UI components */
+// @layer components {
+//   .dropdown-menu {
+//     @apply transition-opacity duration-300 ease-in-out relative overflow-y-auto;
+//   }
+//   .dropdown-menu[aria-hidden="true"] {
+//     @apply opacity-0 pointer-events-none;
+//   }
+//   .dropdown-menu > div {
+//     @apply relative h-full;
+//   }
+// }
+
