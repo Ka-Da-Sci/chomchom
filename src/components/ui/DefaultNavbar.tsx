@@ -17,7 +17,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import userIcon from "@/assets/images/user-icon.jpeg";
 import { Link, useLocation } from "react-router-dom";
 import NavBarLink from "./NavBarLink";
-import Search from "./Search";
+import Search from "../layouts/Search";
 import { useEffect } from "react";
 
 const { signInWithGooglePopup, signOutGoogle } = authenticateUser;

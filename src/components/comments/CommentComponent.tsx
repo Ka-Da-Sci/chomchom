@@ -45,7 +45,7 @@ const CommentComponent: React.FC<{ comment: CommentsTableColumnTypes }> = ({
         />
       </Link>
       <Card
-        className="w-full mt-3 mb-1 flex items-start border-none shadow-none rounded-none"
+        className="w-full mt-3 mb-1 text-left flex items-start border-none shadow-none rounded-none"
         isPressable={pressable}
         onPress={() => {
           setShowReplies(!showReplies);

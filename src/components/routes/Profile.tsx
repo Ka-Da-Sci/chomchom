@@ -31,7 +31,7 @@ const Profile = () => {
     setIsLoading(false);
   }, [session]);
 
-  if (!session && contextLoaded) {
+  if (!session && !contextLoaded) {
     navigate("/login");
     return null;
   };

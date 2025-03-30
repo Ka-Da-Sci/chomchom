@@ -1,5 +1,5 @@
 import { Input } from "@heroui/input";
-import SearchIcon from "./SearchIcon";
+import SearchIcon from "../ui/SearchIcon";
 import { useEffect, useRef } from "react";
 import useFileManagementContext from "@/hooks/useFileManagementContext";
 

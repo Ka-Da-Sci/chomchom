@@ -1,4 +1,3 @@
-// import type { NavigateOptions } from "react-router-dom";
 
 import { HeroUIProvider as Provider } from "@heroui/system";
 import React from "react";

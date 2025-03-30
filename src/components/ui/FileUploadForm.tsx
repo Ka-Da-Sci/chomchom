@@ -254,6 +254,10 @@ const ReUploadAlert = () => {
                 return "File name/title must be atleast 3 characters long.";
               }
 
+              if (value.length > 250){
+                return "Text must not exceed 250 characters";
+              }
+
               return value === "admin" ? "Nice try!" : null;
             }}
             onChange={handleOnChange}

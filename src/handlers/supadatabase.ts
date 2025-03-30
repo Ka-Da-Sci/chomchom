@@ -15,6 +15,7 @@ type WriteDocInputs = Partial<CommentsTableColumnTypes> & {
   content?: any;
 };
 
+
 /* eslint-disable no-console */
 const SupaBaseDataBase = {
   readDocs: (...args: string[]) => {

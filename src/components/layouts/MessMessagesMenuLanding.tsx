@@ -259,7 +259,9 @@ const MessagesMenuLanding = React.memo(() => {
                     {`${msg.receiver_id === msg.sender_id ? msg.receiver_user_data?.full_name : msg.receiver_id === currentUserId ? msg.sender_user_data?.full_name : msg.receiver_user_data?.full_name}`}
                   </h3>
                   {msg.receiver_id === msg.sender_id && (
-                    <p className="text-primary-500 text-base antialiased font-medium font-poppins">(You)</p>
+                    <p className="text-primary-500 text-base antialiased font-medium font-poppins">
+                      (You)
+                    </p>
                   )}
                 </div>
 
